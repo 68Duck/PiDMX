@@ -6,22 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
-    <height>192</height>
+    <width>360</width>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+background-color: #292C34;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="passwordLabel">
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>80</y>
+      <y>100</y>
       <width>81</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+background-color: #0000ff;
+color: white;
+border: 1px solid black;
+border-radius: 5px;
+
+}</string>
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Password:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -31,13 +45,20 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>20</y>
-      <width>191</width>
-      <height>31</height>
+      <y>40</y>
+      <width>211</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QLabel{}</string>
+     <string notr="true">QLabel{
+background-color: #0000ff;
+color: white;
+border: 1px solid black;
+border-radius: 5px;
+  outline: none;
+  padding: 5px 10px;
+}</string>
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Raspberry Pi Log In&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -46,8 +67,8 @@
    <widget class="QLineEdit" name="passwordInput">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>80</y>
+      <x>160</x>
+      <y>100</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -56,23 +77,51 @@
    <widget class="QPushButton" name="submitButton">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>120</y>
-      <width>75</width>
-      <height>23</height>
+      <x>200</x>
+      <y>140</y>
+      <width>81</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+  border: 1px solid black;
+  background-color: #0000ff;
+  color: white;
+  border-radius: 5px;
+  outline: none;
+  padding: 5px 10px;
+}</string>
     </property>
     <property name="text">
      <string>Submit</string>
     </property>
    </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>20</y>
+      <width>251</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+   </widget>
+   <zorder>tableWidget</zorder>
+   <zorder>passwordLabel</zorder>
+   <zorder>mainLabel</zorder>
+   <zorder>passwordInput</zorder>
+   <zorder>submitButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>341</width>
+     <width>360</width>
      <height>22</height>
     </rect>
    </property>
