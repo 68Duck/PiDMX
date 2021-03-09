@@ -17,8 +17,9 @@ from errorWindow import ErrorWindow
 from lightDisplayWindow import LightDisplayWindow
 
 class LogonWindow(QMainWindow,uic.loadUiType("logon.ui")[0]):
-    def __init__(self,lightDisplay):
+    def __init__(self,lightDisplay,app):
         super().__init__()
+        self.app = app
         self.setupUi(self)
         self.tabs.setCurrentIndex(0)
         self.lightDisplay = lightDisplay
@@ -104,6 +105,7 @@ class LogonWindow(QMainWindow,uic.loadUiType("logon.ui")[0]):
 
     def openLightDisplay(self):
         self.lightDisplay = LightDisplayWindow(self.lightDisplay,self.dataBaseManager)
+        self.app.installEventFilter(self.lightDisplay)
         self.lightDisplay.show()
 
 

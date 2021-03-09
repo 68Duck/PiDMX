@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
@@ -18,18 +18,22 @@ from displayLightTypes import DisplayLight,DisplayLight2,DisplayLight3
 from sliderPannelWindow import SliderPannelWindow
 from inputPlaybackNameWindow import InputPlaybackNameWindow
 
-class LightDisplayWindow(QWidget):  #creates a class window
+class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0]):  #creates a class window
     def __init__(self,lightDisplay,dataBaseManager):
         self.lightDisplay = lightDisplay
+        super(QMainWindow).__init__()     #use super class of QMainWindow
+        super(uic.loadUiType("lightDisplayWindow.ui")[0]).__init__()     #use super class of QMainWindow
         super().__init__()     #use super class of QMainWindow
+        self.setupUi(self)
+        self.setMouseTracking(True)
         self.dataBaseManager = dataBaseManager
-        self.xpos = 0
-        self.width = 1900
-        self.ypos = 0
-        self.height = 1000
-        self.setGeometry(int(self.xpos),int(self.ypos),int(self.width),int(self.height)) #sets window parameters top left is (0,0)
+        # self.xpos = 0
+        # self.width = 1900
+        # self.ypos = 0
+        # self.height = 1000
+        # self.setGeometry(int(self.xpos),int(self.ypos),int(self.width),int(self.height)) #sets window parameters top left is (0,0)
         self.setWindowTitle("Lighting Display") #sets window title
-        self.setStyleSheet("background-color:black")
+        # self.setStyleSheet("background-color:black")
         self.creatingLight = False
         self.creatingLightInformation = False
         self.creatingChannel = 0
@@ -76,86 +80,85 @@ class LightDisplayWindow(QWidget):  #creates a class window
         self.createBar("L",25,400,200,570,False)
         self.createBar("L",25,400,1700,570,False)
 
-        self.patchButton = QtWidgets.QPushButton(self)
-        self.patchButton.setText("Patch Light")
-        self.patchButton.setFixedWidth(100)
-        self.patchButton.move(20,10)
-        self.patchButton.setText("Patch Light")
-        self.patchButton.setStyleSheet("background-color:white")
-        self.patchButton.clicked.connect(self.patchButtonClicked)
+        # self.patchButton = QtWidgets.QPushButton(self)
+        # self.patchButton.setText("Patch Light")
+        # self.patchButton.setFixedWidth(100)
+        # self.patchButton.move(20,10)
+        # self.patchButton.setText("Patch Light")
+        # self.patchButton.setStyleSheet("color:white;")
+        self.patchButton.triggered.connect(self.patchButtonClicked)
 
-        self.selectButton = QtWidgets.QPushButton(self)
-        self.selectButton.setFixedWidth(100)
-        self.selectButton.move(130,10)
-        self.selectButton.setText("Select Lights")
-        self.selectButton.setStyleSheet("background-color:white")
-        self.selectButton.setCheckable(True)
-        self.selectButton.clicked.connect(self.selectButtonClicked)
+        # self.selectButton = QtWidgets.QPushButton(self)
+        # self.selectButton.setFixedWidth(100)
+        # self.selectButton.move(130,10)
+        # self.selectButton.setText("Select Lights")
+        # self.selectButton.setStyleSheet("background-color:white")
+        # self.selectButton.setCheckable(True)
+        self.selectButton.triggered.connect(self.selectButtonClicked)
 
-        self.effectsButton = QtWidgets.QPushButton(self)
-        self.effectsButton.setFixedWidth(100)
-        self.effectsButton.move(240,10)
-        self.effectsButton.setText("Effects")
-        self.effectsButton.setStyleSheet("background-color:white")
-        self.effectsButton.clicked.connect(self.effectsButtonClicked)
+        # self.effectsButton = QtWidgets.QPushButton(self)
+        # self.effectsButton.setFixedWidth(100)
+        # self.effectsButton.move(240,10)
+        # self.effectsButton.setText("Effects")
+        # self.effectsButton.setStyleSheet("background-color:white")
+        self.effectsButton.triggered.connect(self.effectsButtonClicked)
 
-        self.openButton = QtWidgets.QPushButton(self)
-        self.openButton.setFixedWidth(100)
-        self.openButton.move(350,10)
-        self.openButton.setText("Open Rig")
-        self.openButton.setStyleSheet("background-color:white")
-        self.openButton.clicked.connect(self.openButtonClicked)
+        # self.openButton = QtWidgets.QPushButton(self)
+        # self.openButton.setFixedWidth(100)
+        # self.openButton.move(350,10)
+        # self.openButton.setText("Open Rig")
+        # self.openButton.setStyleSheet("background-color:white")
+        self.openButton.triggered.connect(self.openButtonClicked)
 
-        self.saveButton = QtWidgets.QPushButton(self)
-        self.saveButton.setFixedWidth(100)
-        self.saveButton.move(460,10)
-        self.saveButton.setText("Save Rig")
-        self.saveButton.setStyleSheet("background-color:white")
-        self.saveButton.clicked.connect(self.saveButtonClicked)
+        # self.saveButton = QtWidgets.QPushButton(self)
+        # self.saveButton.setFixedWidth(100)
+        # self.saveButton.move(460,10)
+        # self.saveButton.setText("Save Rig")
+        # self.saveButton.setStyleSheet("background-color:white")
+        self.saveButton.triggered.connect(self.saveButtonClicked)
 
-        self.defaultSaveButton = QPushButton(self)
-        self.defaultSaveButton.setFixedWidth(100)
-        self.defaultSaveButton.move(570,10)
-        self.defaultSaveButton.setText("Auto Save")
-        self.defaultSaveButton.setStyleSheet("background-color:white")
-        self.defaultSaveButton.clicked.connect(self.defaultSaveButtonClicked)
+        # self.defaultSaveButton = QPushButton(self)
+        # self.defaultSaveButton.setFixedWidth(100)
+        # self.defaultSaveButton.move(570,10)
+        # self.defaultSaveButton.setText("Auto Save")
+        # self.defaultSaveButton.setStyleSheet("background-color:white")
+        self.defaultSaveButton.triggered.connect(self.defaultSaveButtonClicked)
 
-        self.recordPlayback = QPushButton(self)
-        self.recordPlayback.setFixedWidth(150)
-        self.recordPlayback.move(680,10)
-        self.recordPlayback.setText("Record Playback")
-        self.recordPlayback.setStyleSheet("background-color:white")
-        self.recordPlayback.clicked.connect(self.recordPlaybackClicked)
+        # self.recordPlayback = QPushButton(self)
+        # self.recordPlayback.setFixedWidth(150)
+        # self.recordPlayback.move(680,10)
+        # self.recordPlayback.setText("Record Playback")
+        # self.recordPlayback.setStyleSheet("background-color:white")
+        self.recordPlayback.triggered.connect(self.recordPlaybackClicked)
 
-        self.playbackButton = QPushButton(self)
-        self.playbackButton.setFixedWidth(100)
-        self.playbackButton.move(840,10)
-        self.playbackButton.setText("Playbacks")
-        self.playbackButton.setStyleSheet("background-color:white")
-        self.playbackButton.clicked.connect(self.playbackButtonClicked)
+        # self.playbackButton = QPushButton(self)
+        # self.playbackButton.setFixedWidth(100)
+        # self.playbackButton.move(840,10)
+        # self.playbackButton.setText("Playbacks")
+        # self.playbackButton.setStyleSheet("background-color:white")
+        self.playbackButton.triggered.connect(self.playbackButtonClicked)
 
-        self.sequenceButton = QPushButton(self)
-        self.sequenceButton.setFixedWidth(150)
-        self.sequenceButton.move(950,10)
-        self.sequenceButton.setText("Sequence Window")
-        self.sequenceButton.setStyleSheet("background-color:white")
-        self.sequenceButton.clicked.connect(self.sequenceButtonClicked)
+        # self.sequenceButton = QPushButton(self)
+        # self.sequenceButton.setFixedWidth(150)
+        # self.sequenceButton.move(950,10)
+        # self.sequenceButton.setText("Sequence Window")
+        # self.sequenceButton.setStyleSheet("background-color:white")
+        self.sequenceButton.triggered.connect(self.sequenceButtonClicked)
 
-        self.openSequenceButton = QPushButton(self)
-        self.openSequenceButton.setFixedWidth(150)
-        self.openSequenceButton.move(1110,10)
-        self.openSequenceButton.setText("Open Sequence")
-        self.openSequenceButton.setStyleSheet("background-color:white")
-        self.openSequenceButton.clicked.connect(self.openSequenceButtonClicked)
+        # self.openSequenceButton = QPushButton(self)
+        # self.openSequenceButton.setFixedWidth(150)
+        # self.openSequenceButton.move(1110,10)
+        # self.openSequenceButton.setText("Open Sequence")
+        # self.openSequenceButton.setStyleSheet("background-color:white")
+        self.openSequenceButton.triggered.connect(self.openSequenceButtonClicked)
 
-        self.snakeButton = QPushButton(self)
-        self.snakeButton.setFixedWidth(100)
-        self.snakeButton.move(1270,10)
-        self.snakeButton.setText("Snake Game")
-        self.snakeButton.setStyleSheet("background-color:white")
-        self.snakeButton.clicked.connect(self.snakeButtonClicked)
+        # self.snakeButton = QPushButton(self)
+        # self.snakeButton.setFixedWidth(100)
+        # self.snakeButton.move(1270,10)
+        # self.snakeButton.setText("Snake Game")
+        # self.snakeButton.setStyleSheet("background-color:white")
+        self.snakeButton.triggered.connect(self.snakeButtonClicked)
 
-        self.setMouseTracking(True)
 
     def snakeButtonClicked(self):
         self.snakeWindow = SnakeWindow(self.lightDisplay,self)
@@ -292,17 +295,33 @@ class LightDisplayWindow(QWidget):  #creates a class window
         else:
             self.tempLight = DisplayLight(xPos,yPos,channel,self.lightDisplay,self)
 
+    #
+    # def mouseMoveEvent(self,e):
+    #     print("test")
+    #     self.x = e.x()
+    #     self.y = e.y()
+    #     if self.creatingLight:
+    #         print("test")
+    #         self.previewLight(self.x,self.y)
 
-    def mouseMoveEvent(self,e):
-        self.x = e.x()
-        self.y = e.y()
-        if self.creatingLight:
-            self.previewLight(self.x,self.y)
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.MouseMove:
+            if self.creatingLight:
+                self.x = event.x()
+                self.y = event.y()
+                if self.x != 0 and self.y != 0: #gets rid of the random 0's that appear for some reason
+                    self.previewLight(self.x,self.y)
+        if event.type() == QEvent.MouseButtonPress:
+            if event.buttons() == Qt.LeftButton:
+                self.x = event.x()
+                self.y = event.y()
+                self.mousePressed(self.x,self.y)
+        return super(LightDisplayWindow, self).eventFilter(source, event)
 
-    def mousePressEvent(self,e,resetMode = False):
+    def mousePressed(self,x,y,resetMode = False):
         if not resetMode:
-            self.x = e.x()
-            self.y = e.y()
+            self.x = x
+            self.y = y
             if self.selectingLights:
                 lightClicked = False
                 for light in self.lightList:
@@ -405,10 +424,10 @@ class LightDisplayWindow(QWidget):  #creates a class window
             selectButton = self.sender()
             if selectButton.isChecked():
                 self.selectingLights = True
-                selectButton.setStyleSheet("background-color:grey")
+                # selectButton.setStyleSheet("background-color:grey")
             else:
                 self.selectingLights = False
-                selectButton.setStyleSheet("background-color:white")
+                # selectButton.setStyleSheet("background-color:white")
 
     def effectsButtonClicked(self):
         self.effectsWindow.checkNumberOfLights()

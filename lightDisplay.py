@@ -18,8 +18,9 @@ from sshRunFile import SSHRunFile
 from logonWindow import LogonWindow
 
 class LightDisplay(QWidget):
-    def __init__(self,lights = [],interval = 1):
+    def __init__(self,lights = [],interval = 1,app=None):
         super().__init__()
+        self.app = app
         self.lights = lights
         self.interval = interval
         self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True)]
@@ -48,7 +49,7 @@ class LightDisplay(QWidget):
     def sshPasswordInputed(self):
         self.universeChanged()
         self.sshRunFile = SSHRunFile(password = self.password)
-        self.logonWindow = LogonWindow(self)
+        self.logonWindow = LogonWindow(self,self.app)
         self.logonWindow.show()
 
 
