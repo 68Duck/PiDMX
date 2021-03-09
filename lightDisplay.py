@@ -11,7 +11,6 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from pydmx import PyDMX
-from dmxOffMode import DMXOffMode
 from lightTypes import RGB6Channel,RGBLight,GenericDimmer,LEDBar24ChannelMode
 from databaseManager import DataBaseManager
 from sshUpdateDatabase import SSHUpdateDatabase

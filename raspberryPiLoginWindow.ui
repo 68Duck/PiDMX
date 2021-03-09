@@ -30,10 +30,7 @@ background-color: #292C34;
     </property>
     <property name="styleSheet">
      <string notr="true">QLabel{
-background-color: #0000ff;
-color: white;
-border: 1px solid black;
-border-radius: 5px;
+color: black;
 
 }</string>
     </property>
@@ -100,10 +97,10 @@ border-radius: 5px;
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>20</y>
-      <width>251</width>
-      <height>171</height>
+      <x>30</x>
+      <y>0</y>
+      <width>301</width>
+      <height>201</height>
      </rect>
     </property>
     <property name="styleSheet">
