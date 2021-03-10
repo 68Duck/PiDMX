@@ -13,23 +13,32 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget{
+background-color:#292C34;
+color:white;
+}</string>
+  </property>
   <widget class="QPushButton" name="openButton">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>100</y>
+     <x>280</x>
+     <y>110</y>
      <width>89</width>
      <height>28</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-  border: 1px solid black;
-  background-color: #0000ff;
-  color: white;
-  border-radius: 5px;
-  outline: none;
-  padding: 5px 10px;
+border: 1px solid white;
+border-radius: 5px;
+background-color: #292C34;
+color: white;
 }</string>
    </property>
    <property name="text">
@@ -39,20 +48,23 @@
   <widget class="QPushButton" name="deleteButton">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>100</y>
+     <x>130</x>
+     <y>110</y>
      <width>131</width>
      <height>28</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">QPushButton{
-  border: 1px solid black;
-  background-color: #0000ff;
-  color: white;
-  border-radius: 5px;
-  outline: none;
-  padding: 5px 10px;
+border: 1px solid white;
+border-radius: 5px;
+background-color: #292C34;
+color: white;
 }</string>
    </property>
    <property name="text">
@@ -62,11 +74,25 @@
   <widget class="QComboBox" name="dropDown">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>40</x>
      <y>40</y>
-     <width>131</width>
-     <height>25</height>
+     <width>171</width>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox{
+border: 1px solid white;
+border-radius: 5px;
+background-color: #292C34;
+color: white;
+padding: 5px;
+}</string>
    </property>
   </widget>
  </widget>
