@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
+from errorWindow import ErrorWindow
+
 class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui")[0]):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay):
         super().__init__()
