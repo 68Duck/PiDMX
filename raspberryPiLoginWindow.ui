@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>360</width>
-    <height>236</height>
+    <height>206</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@ background-color: #292C34;
    <widget class="QLabel" name="passwordLabel">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>80</x>
       <y>100</y>
       <width>81</width>
       <height>21</height>
@@ -30,35 +30,37 @@ background-color: #292C34;
     </property>
     <property name="styleSheet">
      <string notr="true">QLabel{
-color: black;
+color: white;
 
 }</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Password:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Password:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="mainLabel">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>40</y>
-      <width>211</width>
+      <x>80</x>
+      <y>30</y>
+      <width>191</width>
       <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">QLabel{
-background-color: #0000ff;
 color: white;
-border: 1px solid black;
+border: 1px solid white;
 border-radius: 5px;
-  outline: none;
-  padding: 5px 10px;
+text-align: center;
+
 }</string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Raspberry Pi Log In&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Raspberry pi log in&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="passwordInput">
@@ -74,44 +76,29 @@ border-radius: 5px;
    <widget class="QPushButton" name="submitButton">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>190</x>
       <y>140</y>
       <width>81</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton{
-  border: 1px solid black;
-  background-color: #0000ff;
-  color: white;
-  border-radius: 5px;
-  outline: none;
-  padding: 5px 10px;
+border: 1px solid white;
+border-radius: 5px;
+background-color: #292C34;
+color: white;
 }</string>
     </property>
     <property name="text">
      <string>Submit</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>0</y>
-      <width>301</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-   </widget>
-   <zorder>tableWidget</zorder>
-   <zorder>passwordLabel</zorder>
-   <zorder>mainLabel</zorder>
-   <zorder>passwordInput</zorder>
-   <zorder>submitButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
