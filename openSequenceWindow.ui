@@ -92,7 +92,7 @@ color: white;
 }</string>
    </property>
    <property name="text">
-    <string>Delete Table</string>
+    <string>Delete Sequence</string>
    </property>
   </widget>
  </widget>
