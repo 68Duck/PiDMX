@@ -9,7 +9,6 @@ from saveSequenceWindow import SaveSequenceWindow
 from openSequenceWindow import OpenSequenceWindow
 from errorWindow import ErrorWindow
 from sequencePlaybackWindow import SequencePlaybackWindow
-from chooseLightForSequenceWindow import ChooseLightForSequenceWindow
 from editSequenceWindow import EditSequenceWindow
 
 class SequenceWindow(QWidget):
