@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
@@ -6,34 +6,35 @@ from PyQt5.QtCore import*
 from errorWindow import ErrorWindow
 from confirmWindow import ConfirmWindow
 
-class PlaybackWindow(QWidget):
+class PlaybackWindow(QWidget,uic.loadUiType("playbackWindow.ui")[0]):
     def __init__(self,visualLightDisplay,dataBaseManager,lightDisplay):
         super().__init__()
+        self.setupUi(self)
         self.visualLightDisplay = visualLightDisplay
         self.dataBaseManager = dataBaseManager
         self.lightDisplay = lightDisplay
-        self.setGeometry(200,200,1000,800)
+        # self.setGeometry(200,200,1000,800)
         self.setWindowTitle("Playbacks")
         self.initUI()
 
     def initUI(self):
-        self.runButton  = QPushButton(self)
-        self.runButton.move(300,200)
-        self.runButton.setFixedWidth(100)
-        self.runButton.setText("Open")
+        # self.runButton  = QPushButton(self)
+        # self.runButton.move(300,200)
+        # self.runButton.setFixedWidth(100)
+        # self.runButton.setText("Open")
         self.runButton.clicked.connect(self.runButtonClicked)
 
-        self.deleteButton = QPushButton(self)
-        self.deleteButton.move(300,100)
-        self.deleteButton.setFixedWidth(100)
-        self.deleteButton.setText("Delete Playback")
+        # self.deleteButton = QPushButton(self)
+        # self.deleteButton.move(300,100)
+        # self.deleteButton.setFixedWidth(100)
+        # self.deleteButton.setText("Delete Playback")
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
 
         self.savedPlaybacks = self.dataBaseManager.getCurrentRigsPlaybacks(self.visualLightDisplay.rigID)
 
-        self.dropDown = QComboBox(self)
-        self.dropDown.move(50,50)
-        self.dropDown.setMinimumWidth(200)
+        # self.dropDown = QComboBox(self)
+        # self.dropDown.move(50,50)
+        # self.dropDown.setMinimumWidth(200)
         for playback in self.savedPlaybacks:
             self.dropDown.addItem(playback[3])  #playback[3] is the playback name
 
