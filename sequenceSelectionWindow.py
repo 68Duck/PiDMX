@@ -1,11 +1,12 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
-class SequenceSelectionWindow(QWidget):
+class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui")[0]):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay):
         super().__init__()
+        self.setupUi(self)
         self.dataBaseManager = dataBaseManager
         self.lightDisplay = lightDisplay
         self.visualLightDisplay = visualLightDisplay
@@ -13,17 +14,17 @@ class SequenceSelectionWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.openButton = QPushButton(self)
-        self.openButton.move(300,200)
-        self.openButton.setFixedWidth(100)
-        self.openButton.setText("Open")
+        # self.openButton = QPushButton(self)
+        # self.openButton.move(300,200)
+        # self.openButton.setFixedWidth(100)
+        # self.openButton.setText("Open")
         self.openButton.clicked.connect(self.openButtonClicked)
 
         self.savedSequences = self.dataBaseManager.getAllData("Sequences")
 
-        self.dropDown = QComboBox(self)
-        self.dropDown.move(50,50)
-        self.dropDown.setMinimumWidth(200)
+        # self.dropDown = QComboBox(self)
+        # self.dropDown.move(50,50)
+        # self.dropDown.setMinimumWidth(200)
         for sequence in self.savedSequences:
             if self.visualLightDisplay.rigID == sequence[4]:  #checks is the rigID is the same
                 self.dropDown.addItem(sequence[2])  #sequence[2] is the name of the sequence
