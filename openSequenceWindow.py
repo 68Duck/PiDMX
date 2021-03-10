@@ -1,13 +1,14 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from errorWindow import ErrorWindow
 
-class OpenSequenceWindow(QWidget):
+class OpenSequenceWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
         super().__init__()
+        self.setupUi(self)
         self.sequenceWindow = sequenceWindow
         self.dataBaseManager = dataBaseManager
         self.sequenceOpened = False
@@ -16,23 +17,23 @@ class OpenSequenceWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.openButton = QPushButton(self)
-        self.openButton.move(300,200)
-        self.openButton.setFixedWidth(100)
-        self.openButton.setText("Open")
+        # self.openButton = QPushButton(self)
+        # self.openButton.move(300,200)
+        # self.openButton.setFixedWidth(100)
+        # self.openButton.setText("Open")
         self.openButton.clicked.connect(self.openButtonClicked)
 
-        self.deleteButton = QPushButton(self)
-        self.deleteButton.move(300,100)
-        self.deleteButton.setFixedWidth(100)
-        self.deleteButton.setText("Delete Sequence")
+        # self.deleteButton = QPushButton(self)
+        # self.deleteButton.move(300,100)
+        # self.deleteButton.setFixedWidth(100)
+        # self.deleteButton.setText("Delete Sequence")
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
 
         self.savedSequences = self.dataBaseManager.getAllData("Sequences")
 
-        self.dropDown = QComboBox(self)
-        self.dropDown.move(50,50)
-        self.dropDown.setMinimumWidth(200)
+        # self.dropDown = QComboBox(self)
+        # self.dropDown.move(50,50)
+        # self.dropDown.setMinimumWidth(200)
         for sequence in self.savedSequences:
             if self.sequenceWindow.rigID == sequence[4]:  #checks is the rigID is the same
                 self.dropDown.addItem(sequence[2])  #sequence[2] is the name of the sequence
