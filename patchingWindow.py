@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
+from errorWindow import ErrorWindow
+
 class PatchingWindow(QWidget):
     def __init__(self,lightDisplay,displayWindow = False):
         super().__init__()
