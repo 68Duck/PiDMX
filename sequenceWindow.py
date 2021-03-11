@@ -207,10 +207,18 @@ class SequenceWindow(QWidget):
                     displayLightChannel+=1
                 if int(displayLightChannel) == int(channel):
                     displayLight.changeColourRGB(red=channelValue)
+
                 if int(displayLightChannel)+1 == int(channel):
                     displayLight.changeColourRGB(green=channelValue)
                 if int(displayLightChannel)+2 == int(channel):
                     displayLight.changeColourRGB(blue=channelValue)
+                if displayLight.lightType == "Miniscan":
+                    for i in range(7):
+                        if int(displayLightChannel+i) == int(channel):
+                            print(playbackID)
+                            self.lightDisplay.universeChannelValues[channel] = channelValue
+                            displayLight.changeColourAccordingToFixture()
+
         self.updateChannels()
 
 

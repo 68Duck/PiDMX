@@ -282,7 +282,9 @@ class SequenceDisplayLight4(SequenceParentDisplayLight): #miniscan
         for fixture in self.lightDisplay.lights:
             if channelNumber == fixture.startChannel:
                 intensity = fixture.intensity
+                print(self.lightDisplay.universeChannelValues)
                 self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{intensity});')
 
     def changeColourRGB(self,red=None,green=None,blue=None):
-        self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{self.red});')
+        # self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{self.red});')
+        pass
