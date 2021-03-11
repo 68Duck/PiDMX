@@ -10,6 +10,7 @@ from openSequenceWindow import OpenSequenceWindow
 from errorWindow import ErrorWindow
 from sequencePlaybackWindow import SequencePlaybackWindow
 from editSequenceWindow import EditSequenceWindow
+from sliderPannelWindow import SliderPannelWindowSequenceWindow
 
 class SequenceWindow(QWidget):
     def __init__(self,lightDisplay,visualLightDisplay,dataBaseManager,rigID):
@@ -334,6 +335,10 @@ class SequenceWindow(QWidget):
         elif lightType == "GenericDimmer":
             newDisplayLight = SequenceDisplayLight3(self.lightDisplay,self,light,xPos,yPos,lightType)
             self.displayLights.append(newDisplayLight)
+        elif lightType == "Miniscan":
+            newDisplayLight = SequenceDisplayLight4(self.lightDisplay,self,light,xPos,yPos,lightType)
+            self.displayLights.append(newDisplayLight)
+
         else:
             newDisplayLight = SequenceDisplayLight(self.lightDisplay,self,light,xPos,yPos,lightType)
             self.displayLights.append(newDisplayLight)
@@ -348,15 +353,26 @@ class SequenceWindow(QWidget):
             for light in self.displayLights:
                 if self.x > light.xPos-light.clickableLeft and self.x < light.xPos+light.clickableRight:
                     if self.y > light.yPos-light.clickableTop and self.y < light.yPos+light.clickableBottom:
-                        if self.colourModeSelected:
-                            light.changeColour(self.colour)
+                        if light.lightType == "Miniscan":
+                            channelNumber = int(light.lightName[len(light.lightType):len(light.lightName)])
+                            channelValid = False
+                            for fixture in self.lightDisplay.lights:
+                                if channelNumber == fixture.startChannel:
+                                    channelValid = True
+                                    self.sliderPannelWindow = SliderPannelWindowSequenceWindow(channelNumber,self.lightDisplay,fixture,light,self)
+                                    self.sliderPannelWindow.show()
+                            if not channelValid:
+                                self.errorWindow = ErrorWindow("Channel Error not valid")
                         else:
-                            self.colour = QColorDialog.getColor()
-                            if self.colour.isValid():
+                            if self.colourModeSelected:
                                 light.changeColour(self.colour)
                             else:
-                                self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")
-                        self.updateChannels()
+                                self.colour = QColorDialog.getColor()
+                                if self.colour.isValid():
+                                    light.changeColour(self.colour)
+                                else:
+                                    self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")
+                            self.updateChannels()
 
     def updateChannels(self):
         self.lightDisplay.universeLock = True

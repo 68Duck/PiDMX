@@ -11,7 +11,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from pydmx import PyDMX
-from lightTypes import RGB6Channel,RGBLight,GenericDimmer,LEDBar24ChannelMode
+from lightTypes import RGB6Channel,RGBLight,GenericDimmer,LEDBar24ChannelMode,Miniscan
 from databaseManager import DataBaseManager
 from sshUpdateDatabase import SSHUpdateDatabase
 from sshRunFile import SSHRunFile
@@ -23,8 +23,8 @@ class LightDisplay(QWidget):
         self.app = app
         self.lights = lights
         self.interval = interval
-        self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True)]
-        self.lightTypes = ["GenericDimmer","RGBLight","LEDBar24ChannelMode","RGB6Channel"]
+        self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True),Miniscan(0,True)]
+        self.lightTypes = ["GenericDimmer","RGBLight","LEDBar24ChannelMode","RGB6Channel","Miniscan"]
         self.runLoop = True
         self.chaseOn = False
         self.runningChaser = False

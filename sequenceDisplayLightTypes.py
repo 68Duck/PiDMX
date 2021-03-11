@@ -241,3 +241,48 @@ class SequenceDisplayLight3(SequenceParentDisplayLight):
 
     def changeColourRGB(self,red=None,green=None,blue=None):
         self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{self.red});')
+
+class SequenceDisplayLight4(SequenceParentDisplayLight): #miniscan
+    def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
+        SequenceParentDisplayLight.__init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType)
+
+    def createShapes(self):
+        self.border = self.createShape(self.xPos,self.yPos,35,75,border=True)
+        self.box = self.createShape(self.xPos,self.yPos,25,100)
+        self.indicator = self.createShape(self.xPos,self.yPos,25,100)
+        return [self.border,self.box,self.indicator]
+
+    def setClickableRegion(self):
+        self.clickableLeft = 0
+        self.clickableRight = 35
+        self.clickableTop = 0
+        self.clickableBottom = 75
+
+    def createShape(self,xPos,yPos,width,height,border=False):
+        self.shape = QLabel(self.sequenceWindow)
+        if border:
+            self.shape.setStyleSheet(f'background-color: white;')
+        else:
+            self.shape.setStyleSheet(f'background-color: black;')
+        self.shape.move(xPos,yPos)
+        self.shape.setFixedSize(width,height)
+        self.shape.show()
+        return self.shape
+
+    def move(self):
+        self.border.move(self.xPos,self.yPos)
+        self.box.move(self.xPos+5,self.yPos+5)
+        self.indicator.move(self.xPos+5,self.yPos)
+
+    def changeColour(self,colour):
+        pass
+
+    def changeColourAccordingToFixture(self):
+        channelNumber = int(self.lightName[len(self.lightType):len(self.lightName)])
+        for fixture in self.lightDisplay.lights:
+            if channelNumber == fixture.startChannel:
+                intensity = fixture.intensity
+                self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{intensity});')
+
+    def changeColourRGB(self,red=None,green=None,blue=None):
+        self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{self.red});')

@@ -49,6 +49,17 @@ class SequencePlaybackWindow(QMessageBox):
                 self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,light.red])
                 self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+1,light.green])
                 self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+2,light.blue])
+            elif light.lightType == "Miniscan":
+                for fixture in self.sequenceWindow.lightDisplay.lights:
+                    if channelNumber == fixture.startChannel:
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,fixture.colour])
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+1,fixture.goboRoation])
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+2,fixture.gobo])
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+3,fixture.intensity])
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+4,fixture.pan])
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+5,fixture.tilt])
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+6,fixture.effects])
+
             else:
                 self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,light.red])
                 self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+1,light.green])

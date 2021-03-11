@@ -14,7 +14,7 @@ from patchingWindow import PatchingWindow
 from confirmWindow import ConfirmWindow
 from saveRigWindow import SaveRigWindow
 from openRigWindow import OpenRigWindow
-from displayLightTypes import DisplayLight,DisplayLight2,DisplayLight3
+from displayLightTypes import *
 from sliderPannelWindow import SliderPannelWindow
 from inputPlaybackNameWindow import InputPlaybackNameWindow
 
@@ -268,6 +268,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
             self.newLight = DisplayLight2(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
         elif self.lightInformation.lightType == "GenericDimmer":
             self.newLight = DisplayLight3(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
+        elif self.lightInformation.lightType == "Miniscan":
+            self.newLight = DisplayLight4(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
         else:
             self.newLight = DisplayLight(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
         self.newLight.lightType = self.lightInformation.lightType
@@ -278,6 +280,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
             self.newLight = DisplayLight2(xpos,ypos,channel,self.lightDisplay,self)
         elif lightType == "GenericDimmer":
             self.newLight = DisplayLight3(xpos,ypos,channel,self.lightDisplay,self)
+        elif lightType == "Miniscan":
+            self.newLight = DisplayLight4(xpos,ypos,channel,self.lightDisplay,self)
         else:
             self.newLight = DisplayLight(xpos,ypos,channel,self.lightDisplay,self)
         self.newLight.lightType = lightType
@@ -290,8 +294,10 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         if self.lightInformation.lightType == "LEDBar24ChannelMode":
             self.tempLight = DisplayLight2(xPos,yPos,channel,self.lightDisplay,self)
         elif self.lightInformation.lightType == "GenericDimmer":
-
             self.tempLight = DisplayLight3(xPos,yPos,channel,self.lightDisplay,self)
+        elif self.lightInformation.lightType == "Miniscan":
+            self.tempLight = DisplayLight4(xPos,yPos,channel,self.lightDisplay,self)
+
         else:
             self.tempLight = DisplayLight(xPos,yPos,channel,self.lightDisplay,self)
 

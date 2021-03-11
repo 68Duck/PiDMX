@@ -51,6 +51,33 @@ class Light(object):
         self.updateChannelValues()
         self.changeUniverse()
 
+class Miniscan(Light):
+    def __init__(self,startChannel,infoMode = False):
+        Light.__init__(self,startChannel,infoMode)
+        self.lightType = "Miniscan"
+        self.dropdownName = "Miniscan"
+        self.colour = 0 #so open
+        self.goboRoation = 191 # so no rotation
+        self.gobo = 0 # so open
+        self.intensity = 255
+        self.pan = 255//2
+        self.tilt = 255//2
+        self.effects = 0 #so open
+        self.channels = ["Colour","Gobo Rotation","Gobo","Intensity","Pan","Tilt","Effects"]
+        self.channelValues = [self.colour,self.goboRoation,self.gobo,self.intensity,self.pan,self.tilt,self.effects]
+        self.previousValues = self.channelValues
+    def updateChannelValues(self):
+        self.colour = self.channelValues[0]
+        self.goboRoation = self.channelValues[1]
+        self.gobo = self.channelValues[2]
+        self.intensity = self.channelValues[3]
+        self.pan = self.channelValues[4]
+        self.tilt = self.channelValues[5]
+        self.effects = self.channelValues[6]
+    def generateNewLight(self,channel):
+        newLight = Miniscan(channel)  #where NewLight is the class name but newLight is the variable newLight
+        return newLight
+
 
 class RGB6Channel(Light):
     def __init__(self,startChannel,infoMode = False):

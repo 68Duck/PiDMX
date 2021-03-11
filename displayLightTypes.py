@@ -240,3 +240,51 @@ class DisplayLight3(DisplayLightParent):
             self.selectedShape.setStyleSheet("border: 1px solid orange; background-color:transparent")
             self.selectedShape.setFixedSize(45,85)
             self.selectedShape.show()
+
+
+class DisplayLight4(DisplayLightParent): #miniscan
+    def __init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow):
+        DisplayLightParent.__init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow)
+
+    def createShapes(self):
+        self.border = self.createShape(self.xPos,self.yPos,35,75,border=True)
+        self.box = self.createShape(self.xPos,self.yPos,25,100)
+        self.indicator = self.createShape(self.xPos,self.yPos,25,100)
+        return [self.border,self.box,self.indicator]
+
+    def setClickableRegion(self):
+        self.clickableLeft = 0
+        self.clickableRight = 35
+        self.clickableTop = 0
+        self.clickableBottom = 75
+
+    def changeColour(self):  #needs to be colour as this is how it is done in the parent class
+        intensity = self.light.intensity
+        self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{intensity});')
+    def move(self):
+        self.border.move(self.xPos,self.yPos)
+        self.box.move(self.xPos+5,self.yPos+5)
+        self.indicator.move(self.xPos+5,self.yPos)
+    def createShape(self,xPos,yPos,width,height,border=False):
+        self.shape = QLabel(self.parentWindow)
+        if border:
+            self.shape.setStyleSheet(f'background-color: white;')
+        else:
+            self.shape.setStyleSheet(f'background-color: black;')
+        self.shape.move(xPos,yPos)
+        self.shape.setFixedSize(width,height)
+        self.shape.show()
+        return self.shape
+
+    def toggleSelected(self):
+        if self.selected:
+            self.selected = False
+            finished = self.changeColourAccordingToFixture()
+            self.selectedShape.hide()
+        else:
+            self.selected = True
+            self.selectedShape = QLabel(self.parentWindow)
+            self.selectedShape.move(self.xPos-5,self.yPos-5)
+            self.selectedShape.setStyleSheet("border: 1px solid orange; background-color:transparent")
+            self.selectedShape.setFixedSize(45,85)
+            self.selectedShape.show()
