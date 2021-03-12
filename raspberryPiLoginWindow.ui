@@ -109,8 +109,26 @@ color: white;
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDMX_options">
+    <property name="title">
+     <string>DMX options</string>
+    </property>
+    <addaction name="runOnComputerAction"/>
+    <addaction name="runWithoutDMXAction"/>
+   </widget>
+   <addaction name="menuDMX_options"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="runOnComputerAction">
+   <property name="text">
+    <string>Run on computer</string>
+   </property>
+  </action>
+  <action name="runWithoutDMXAction">
+   <property name="text">
+    <string>Run without DMX</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

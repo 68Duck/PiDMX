@@ -17,6 +17,11 @@ class SSHUpdateDatabase(object):
         self.raspberryPiLoginWindow.show()
         self.counter = 0
 
+    def runComputerDMX(self):
+        self.lightDisplay.runComputerDMX()
+
+    def runWithoutDMX(self):
+        self.lightDisplay.runWithoutDMX()
 
     def login(self):
         password = self.raspberryPiLoginWindow.password

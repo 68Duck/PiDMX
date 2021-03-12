@@ -11,6 +11,16 @@ class RaspberryPiLoginWindow(QMainWindow,uic.loadUiType("raspberryPiLoginWindow.
         self.setWindowTitle("Raspberry Pi Login")
         self.passwordInput.setEchoMode(QLineEdit.Password)
         self.submitButton.clicked.connect(self.submitButtonPressed)
+        self.runOnComputerAction.triggered.connect(self.runComputerDMX)
+        self.runWithoutDMXAction.triggered.connect(self.runWithoutDMX)
+
+    def runComputerDMX(self):
+        self.parentWindow.runComputerDMX()
+        self.close()
+
+    def runWithoutDMX(self):
+        self.parentWindow.runWithoutDMX()
+        self.close()
 
     def submitButtonPressed(self):
         self.password = self.passwordInput.text()

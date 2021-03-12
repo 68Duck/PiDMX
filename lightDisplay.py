@@ -16,6 +16,7 @@ from databaseManager import DataBaseManager
 from sshUpdateDatabase import SSHUpdateDatabase
 from sshRunFile import SSHRunFile
 from logonWindow import LogonWindow
+from errorWindow import ErrorWindow
 
 class LightDisplay(QWidget):
     def __init__(self,lights = [],interval = 1,app=None):
@@ -29,6 +30,9 @@ class LightDisplay(QWidget):
         self.chaseOn = False
         self.runningChaser = False
         self.runningRainbow = False
+        self.raspberryPiDMXMode = False
+        self.computerDMXMode = False
+        self.dmxOffMode = False
         self.initialiseRainbow()
         self.rainbowChangeAmount = 10
         self.selectedLights = []
@@ -45,8 +49,33 @@ class LightDisplay(QWidget):
         self.password = None
         self.sshUpdateDatabase = SSHUpdateDatabase(self)
 
+    def runComputerDMX(self):
+        self.dmx = PyDMX('COM3')
+        if self.dmx.working:
+            pass
+        else:
+            self.errorWindow = ErrorWindow("DMX could not connect. It has been set to DMX OFF mode.")
+            print("The program has been set to DMX OFF mode.")
+            self.runWithoutDMX()
+            return
+        self.computerDMXMode = True
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.runDMX)
+        self.timer.start(1)
+        self.logonWindow = LogonWindow(self,self.app)
+        self.logonWindow.show()
+
+    def runDMX(self):
+        if not self.universeLock:
+            self.dmx.send()
+
+    def runWithoutDMX(self):
+        self.dmxOffMode = True
+        self.logonWindow = LogonWindow(self,self.app)
+        self.logonWindow.show()
 
     def sshPasswordInputed(self):
+        self.raspberryPiDMXMode = True
         self.universeChanged()
         self.sshRunFile = SSHRunFile(password = self.password)
         self.logonWindow = LogonWindow(self,self.app)
@@ -98,12 +127,23 @@ class LightDisplay(QWidget):
 
 
     def universeChanged(self):
-        self.databaseManager.deleteAllRows("universe")
-        records = []
-        for i in range(len(self.universeChannelValues)):
-            records.append((None,i,self.universeChannelValues[i]))
-        self.databaseManager.insertMultipleRecords("universe",records)
-        self.sshUpdateDatabase.updateDatabase()
+        if self.raspberryPiDMXMode:
+            self.databaseManager.deleteAllRows("universe")
+            records = []
+            for i in range(len(self.universeChannelValues)):
+                records.append((None,i,self.universeChannelValues[i]))
+            self.databaseManager.insertMultipleRecords("universe",records)
+            self.sshUpdateDatabase.updateDatabase()
+        elif self.computerDMXMode:
+            while self.universeLock:
+                pass
+            if not self.universeLock:
+                for i in range(len(self.universeChannelValues)):
+                    self.dmx.set_data(int(i),int(self.universeChannelValues[i]))  #should be int(i+1) Dont know why I have done it like this
+        elif self.dmxOffMode:
+            pass
+        else:
+            self.errorWindow = ErrorWindow("No dmx mode has been set")
 
 
     def createBlankUniverse(self):  ##needed for when closing a rig to open a new one
