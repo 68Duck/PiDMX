@@ -247,10 +247,11 @@ class DisplayLight4(DisplayLightParent): #miniscan
         DisplayLightParent.__init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow)
 
     def createShapes(self):
-        self.border = self.createShape(self.xPos,self.yPos,35,75,border=True)
-        self.box = self.createShape(self.xPos,self.yPos,25,100)
-        self.indicator = self.createShape(self.xPos,self.yPos,25,100)
-        return [self.border,self.box,self.indicator]
+        self.box = self.createShape(self.xPos,self.yPos,40,30,border=True)
+        self.topOfIndicator = self.createShape(self.xPos,self.yPos,25,5,border=True)
+        self.bottomOfIndicator = self.createShape(self.xPos,self.yPos,5,15,border=True)
+        self.indicator = self.createShape(self.xPos,self.yPos,10,10)
+        return [self.box,self.topOfIndicator,self.bottomOfIndicator,self.indicator]
 
     def setClickableRegion(self):
         self.clickableLeft = 0
@@ -262,9 +263,10 @@ class DisplayLight4(DisplayLightParent): #miniscan
         intensity = self.light.intensity
         self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{intensity});')
     def move(self):
-        self.border.move(self.xPos,self.yPos)
-        self.box.move(self.xPos+5,self.yPos+5)
-        self.indicator.move(self.xPos+5,self.yPos)
+        self.box.move(self.xPos,self.yPos)
+        self.topOfIndicator.move(self.xPos+40,self.yPos)
+        self.bottomOfIndicator.move(self.xPos+60,self.yPos+5)
+        self.indicator.move(self.xPos+50,self.yPos+5)
     def createShape(self,xPos,yPos,width,height,border=False):
         self.shape = QLabel(self.parentWindow)
         if border:
