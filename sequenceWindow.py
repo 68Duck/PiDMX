@@ -215,7 +215,6 @@ class SequenceWindow(QWidget):
                 if displayLight.lightType == "Miniscan":
                     for i in range(7):
                         if int(displayLightChannel+i) == int(channel):
-                            print(playbackID)
                             self.lightDisplay.universeChannelValues[channel] = channelValue
                             displayLight.changeColourAccordingToFixture()
 
@@ -232,7 +231,6 @@ class SequenceWindow(QWidget):
                 self.errorWindow = ErrorWindow("There are no playbacks in this sequence.")
                 return
             elif self.displayingPlaybackID == 0:
-                # print(sequenceData)
                 self.displayingPlaybackID = len(sequenceData)  #go to the end
             self.openPlayback()
 
