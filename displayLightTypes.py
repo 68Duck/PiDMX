@@ -255,9 +255,9 @@ class DisplayLight4(DisplayLightParent): #miniscan
 
     def setClickableRegion(self):
         self.clickableLeft = 0
-        self.clickableRight = 35
+        self.clickableRight = 70
         self.clickableTop = 0
-        self.clickableBottom = 75
+        self.clickableBottom = 30
 
     def changeColour(self):  #needs to be colour as this is how it is done in the parent class
         intensity = self.light.intensity
@@ -288,5 +288,5 @@ class DisplayLight4(DisplayLightParent): #miniscan
             self.selectedShape = QLabel(self.parentWindow)
             self.selectedShape.move(self.xPos-5,self.yPos-5)
             self.selectedShape.setStyleSheet("border: 1px solid orange; background-color:transparent")
-            self.selectedShape.setFixedSize(45,85)
+            self.selectedShape.setFixedSize(80,40)
             self.selectedShape.show()

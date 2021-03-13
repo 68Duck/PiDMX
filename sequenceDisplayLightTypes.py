@@ -255,9 +255,9 @@ class SequenceDisplayLight4(SequenceParentDisplayLight): #miniscan
 
     def setClickableRegion(self):
         self.clickableLeft = 0
-        self.clickableRight = 35
+        self.clickableRight = 70
         self.clickableTop = 0
-        self.clickableBottom = 75
+        self.clickableBottom = 30
 
     def createShape(self,xPos,yPos,width,height,border=False):
         self.shape = QLabel(self.sequenceWindow)
