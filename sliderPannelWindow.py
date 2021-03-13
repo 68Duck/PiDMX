@@ -307,8 +307,8 @@ class SliderPannelWindow(QWidget):  #creates a class window
     def updateChannelValues(self):
         for i in range(len(self.sliders)-1):
             self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel,True)
-
         self.lightDisplay.commitToChannel(len(self.sliders)-1,self.sliders[len(self.sliders)-1].value(),self.channel)
+
         if self.displayWindowLight:
             for light in self.displayWindow.lightList:
                 finished = light.changeColourAccordingToFixture()
@@ -375,8 +375,19 @@ class SliderPannelWindowSequenceWindow(QWidget):  #creates a class window
             yValue = 50+400*maths.floor(i/12)  #12 as this fits on the screen
             self.createSliderAndTextBoxAndLabel(100+(i%12)*150,yValue,"Enter "+str(self.light.channels[i]),0,255,True,str(self.light.channels[i]),self.light.returnChannelValues()[i],i)
 
+        if self.light.lightType == "Miniscan":
+            self.panTiltGridButton = QPushButton(self)
+            self.panTiltGridButton.setFixedWidth(150)
+            self.panTiltGridButton.move(520,10)
+            self.panTiltGridButton.setText("Pan/tilt grid")
+            self.panTiltGridButton.setStyleSheet("background-color:lightgrey")
+            self.panTiltGridButton.clicked.connect(self.panTiltGridButtonClicked)
 
         self.sliderChangedValue()
+
+    def panTiltGridButtonClicked(self):
+        self.panTiltGrid = PanTiltGridWindow(self)
+        self.panTiltGrid.show()
 
     def createSliderAndTextBoxAndLabel(self,startX,startY,textMessage,minVal,maxVal,isVertical,labelText,sliderStartValue,sliderNumber):
         if isVertical:
@@ -388,6 +399,7 @@ class SliderPannelWindowSequenceWindow(QWidget):  #creates a class window
             self.newSlider.move(startX,startY)
             self.newSlider.valueChanged[int].connect(self.sliderChangedValue)
             self.newSlider.sliderNumber = sliderNumber
+            self.newSlider.message = textMessage#for finding pan/tilt in pan/tilt grid
             self.sliders.append(self.newSlider)
 
             self.newTextBox = QLineEdit(self)
@@ -602,8 +614,10 @@ class SliderPannelWindowSequenceWindow(QWidget):  #creates a class window
         self.colourMode = False
 
     def updateChannelValues(self):
-        for i in range(len(self.sliders)):
-            self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel)
+        for i in range(len(self.sliders)-1):
+            self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel,True)
+        self.lightDisplay.commitToChannel(len(self.sliders)-1,self.sliders[len(self.sliders)-1].value(),self.channel)
+
         self.displayWindowLight.changeColourAccordingToFixture()
         # if self.displayWindowLight:
         #     for light in self.displayWindow.lightList:
