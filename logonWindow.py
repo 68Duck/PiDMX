@@ -17,16 +17,21 @@ from errorWindow import ErrorWindow
 from lightDisplayWindow import LightDisplayWindow
 
 class LogonWindow(QMainWindow,uic.loadUiType("logon.ui")[0]):
-    def __init__(self,lightDisplay,app):
+    def __init__(self,lightDisplay,app,devMode=False):
         super().__init__()
         self.app = app
-        self.setupUi(self)
-        self.tabs.setCurrentIndex(0)
+        self.devMode = devMode
         self.lightDisplay = lightDisplay
-        self.logonValid = False
-        self.logonDatabaseManager = DataBaseManager("logon.db")
-        self.setFixedSize(self.size())
-        self.initUI()
+        if not self.devMode:
+            self.setupUi(self)
+            self.tabs.setCurrentIndex(0)
+            self.logonValid = False
+            self.logonDatabaseManager = DataBaseManager("logon.db")
+            self.setFixedSize(self.size())
+            self.initUI()
+        else:
+            self.dataBaseManager = DataBaseManager("dmx.db")
+            self.openLightDisplay()
 
     def initUI(self):
         self.usernameInput.setPlaceholderText("Username")

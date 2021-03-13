@@ -19,8 +19,9 @@ from logonWindow import LogonWindow
 from errorWindow import ErrorWindow
 
 class LightDisplay(QWidget):
-    def __init__(self,lights = [],interval = 1,app=None):
+    def __init__(self,lights = [],interval = 1,app=None,devMode = False):
         super().__init__()
+        self.devMode = devMode
         self.app = app
         self.lights = lights
         self.interval = interval
@@ -48,6 +49,9 @@ class LightDisplay(QWidget):
         self.databaseManager = DataBaseManager("universeValues.db")
         self.password = None
         self.sshUpdateDatabase = SSHUpdateDatabase(self)
+        if self.devMode:
+            self.sshUpdateDatabase.raspberryPiLoginWindow.hide()
+            self.sshUpdateDatabase.runWithoutDMX()
 
     def runComputerDMX(self):
         self.dmx = PyDMX('COM3')
@@ -71,8 +75,9 @@ class LightDisplay(QWidget):
 
     def runWithoutDMX(self):
         self.dmxOffMode = True
-        self.logonWindow = LogonWindow(self,self.app)
-        self.logonWindow.show()
+        self.logonWindow = LogonWindow(self,self.app,devMode=self.devMode)
+        if not self.devMode:
+            self.logonWindow.show()
 
     def sshPasswordInputed(self):
         self.raspberryPiDMXMode = True
