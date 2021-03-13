@@ -17,7 +17,7 @@ class Light(object):
         self.channels = []
         self.channelValues = []
         self.previousValues = self.channels
-    def changeUniverse(self):
+    def changeUniverse(self,updateUniverse=True):
         if self.lightDisplay == False:
             self.errorWindow = ErrorWindow("ERROR LightDisplay has not been defined")
         else:
@@ -25,7 +25,8 @@ class Light(object):
             for i in range(len(self.channelValues)):
                 self.lightDisplay.universeChannelValues[self.startChannel+i] = self.channelValues[i]
             self.lightDisplay.universeLock = False
-            self.lightDisplay.universeChanged()
+            if updateUniverse:
+                self.lightDisplay.universeChanged()
     def updateChannelValuesFromUniverse(self):
         for i in range(len(self.channelValues)):
             self.channelValues[i] = self.lightDisplay.universeChannelValues[self.startChannel+i]

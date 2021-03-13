@@ -229,12 +229,15 @@ class LightDisplay(QWidget):
                 light.green = green
                 light.blue = blue
 
-    def commitToChannel(self,channelNumber,channelValue,startingChannelNumber): #channel number starts at 0
+    def commitToChannel(self,channelNumber,channelValue,startingChannelNumber,multipleChannelsChanged=False): #channel number starts at 0
         for light in self.lights:
             if light.startChannel == startingChannelNumber:
                 light.channelValues[channelNumber] = channelValue
+                # if not multipleChannelsChanged: #this is so if changing multiple channels then can be called only once if needed for performance i.e. not updating database 10 times
                 light.updateChannelValues()
-                light.changeUniverse()
+                light.changeUniverse(updateUniverse=False)
+        if not multipleChannelsChanged:
+            self.universeChanged()
 
 
     def changeIntensity(self,startingChannelNumber,intensity):

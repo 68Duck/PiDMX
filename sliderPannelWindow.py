@@ -5,6 +5,7 @@ from PyQt5.QtCore import*
 import math as maths
 
 from confirmWindow import ConfirmWindow
+from panTiltGridWindow import PanTiltGridWindow
 
 class SliderPannelWindow(QWidget):  #creates a class window
     def __init__(self,channelNumber,lightDisplay,light,displayWindowLight = False,displayWindow = False):
@@ -67,6 +68,18 @@ class SliderPannelWindow(QWidget):  #creates a class window
 
         self.sliderChangedValue()
 
+        if self.light.lightType == "Miniscan":
+            self.panTiltGridButton = QPushButton(self)
+            self.panTiltGridButton.setFixedWidth(150)
+            self.panTiltGridButton.move(520,10)
+            self.panTiltGridButton.setText("Pan/tilt grid")
+            self.panTiltGridButton.setStyleSheet("background-color:lightgrey")
+            self.panTiltGridButton.clicked.connect(self.panTiltGridButtonClicked)
+
+    def panTiltGridButtonClicked(self):
+        self.panTiltGrid = PanTiltGridWindow(self)
+        self.panTiltGrid.show()
+
     def createSliderAndTextBoxAndLabel(self,startX,startY,textMessage,minVal,maxVal,isVertical,labelText,sliderStartValue,sliderNumber):
         if isVertical:
             self.newSlider = QSlider(Qt.Vertical,self)
@@ -77,6 +90,7 @@ class SliderPannelWindow(QWidget):  #creates a class window
             self.newSlider.move(startX,startY)
             self.newSlider.valueChanged[int].connect(self.sliderChangedValue)
             self.newSlider.sliderNumber = sliderNumber
+            self.newSlider.message = textMessage#for finding pan/tilt in pan/tilt grid
             self.sliders.append(self.newSlider)
 
             self.newTextBox = QLineEdit(self)
@@ -291,8 +305,10 @@ class SliderPannelWindow(QWidget):  #creates a class window
         self.colourMode = False
 
     def updateChannelValues(self):
-        for i in range(len(self.sliders)):
-            self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel)
+        for i in range(len(self.sliders)-1):
+            self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel,True)
+
+        self.lightDisplay.commitToChannel(len(self.sliders)-1,self.sliders[len(self.sliders)-1].value(),self.channel)
         if self.displayWindowLight:
             for light in self.displayWindow.lightList:
                 finished = light.changeColourAccordingToFixture()
