@@ -4,6 +4,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from errorWindow import ErrorWindow
+from confirmWindow import ConfirmWindow
 
 class OpenSequenceWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
