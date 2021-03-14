@@ -1,29 +1,35 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
-class EditSequenceWindow(QWidget):
+from sortByTerm import sortByTerm
+
+class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
         super().__init__()
+        self.setupUi(self)
         self.dataBaseManager = dataBaseManager
         self.sequenceWindow = sequenceWindow
         self.setWindowTitle("Edit Sequence")
-        self.setGeometry(250,250,300,250)  #x,y,width,height
+        # self.setGeometry(250,250,300,250)  #x,y,width,height
 
         self.sequenceToOpen = self.dataBaseManager.getAllData("sequence"+str(self.sequenceWindow.sequenceID))
         self.initUI()
     def initUI(self):
-        self.updateButton = QPushButton(self)
-        self.updateButton.move(185,220)
+        # self.updateButton = QPushButton(self)
+        # self.updateButton.move(185,220)
         self.updateButton.clicked.connect(self.updateButtonClicked)
-        self.updateButton.setText("Update Sequence")
-        self.updateButton.setFixedWidth(100)
+        # self.updateButton.setText("Update Sequence")
+        # self.updateButton.setFixedWidth(100)
 
-        self.table = QTableWidget(self)
+        # self.table = QTableWidget(self)
         self.table.setRowCount(len(self.sequenceToOpen))
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["number","time delay"])
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        # self.table.setColumnCount(2)
+        # self.table.setHorizontalHeaderLabels(["number","time delay"])
         xPos = 0
         yPos = 0
         for i in range(len(self.sequenceToOpen)):
