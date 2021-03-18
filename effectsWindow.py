@@ -16,8 +16,8 @@ class EffectsWindow(QWidget):
         self.maxTimeDelayChaser = 2
         self.minTimeDelayChaser = 0.1
         self.chaserDelay = ((self.maxTimeDelayChaser-self.minTimeDelayChaser)/2+self.minTimeDelayChaser)//1
-        self.maxTimeDelayRainbow = 15
-        self.minTimeDelayRainbow = 1
+        self.maxTimeDelayRainbow = 1
+        self.minTimeDelayRainbow = 0.1
         self.rainbowDelay = ((self.maxTimeDelayRainbow-self.minTimeDelayRainbow)/2+self.minTimeDelayRainbow)//1
 
         self.visualLightDisplay = visualLightDisplay
