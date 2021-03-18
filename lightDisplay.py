@@ -70,6 +70,12 @@ class LightDisplay(QWidget):
         self.logonWindow.show()
 
     def runDMX(self):
+        self.counter += 1
+        if self.counter % 15 == 0:
+            self.displayLights()
+        self.sendEffectsToLights()
+
+    def displayLights(self):
         if not self.universeLock:
             self.dmx.send()
 
@@ -104,7 +110,7 @@ class LightDisplay(QWidget):
 
 
             if self.runningRainbow:
-                if self.effectLastRun + (self.selectedLights[0].parentWindow.effectsWindow.chaserDelay) < time.time(): #this could be a source of an error if selectedLights becomes 0 somehow
+                if self.effectLastRun + (self.selectedLights[0].parentWindow.effectsWindow.rainbowDelay) < time.time(): #this could be a source of an error if selectedLights becomes 0 somehow
                     self.effectLastRun = time.time()
                     self.runRainbow()
                     for displayLight in self.selectedLights:
