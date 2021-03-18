@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 import math as maths
+import time
 
 from effectsWindow import EffectsWindow
 from snakeWindow import SnakeWindow
@@ -322,6 +323,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                 self.x = event.x()
                 self.y = event.y()
                 self.mousePressed(self.x,self.y)
+                if self.creatingLight:
+                    return 1
         return super(LightDisplayWindow, self).eventFilter(source, event)
 
     def mousePressed(self,x,y,resetMode = False):
@@ -375,6 +378,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                                     self.sliderPannelWindow.show()
                             if not channelValid:
                                 self.errorWindow = ErrorWindow("Channel Error not valid")
+                            return
                 if not lightClicked:
                     if self.creatingLight:
                         if self.creatingMultipleLights:
@@ -388,6 +392,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                         self.numberOfLightsToCreate -= 1
                         if self.numberOfLightsToCreate == 0:
                             self.creatingLight = False
+                        return
 
     def removeLight(self,light):
         removed = False
