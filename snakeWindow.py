@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
@@ -6,34 +6,39 @@ import random
 
 from errorWindow import ErrorWindow
 
-class SnakeWindow(QWidget):
+class SnakeWindow(QWidget,uic.loadUiType("snakeWindow.ui")[0]):
     def __init__(self,lightDisplay,visualLightDisplay):
         super().__init__()
+        self.setupUi(self)
         self.setWindowTitle("Snake Game")
-        self.setGeometry(0,0,100,100)
-        self.firstChannel = 100  #this is the first channel of the first LED Bar
+        width = self.size().width()
+        height = self.size().height()
+        self.setGeometry(0,0,width,height)
         self.lightDisplay = lightDisplay
         self.visualLightDisplay = visualLightDisplay
+        self.initUI()
+
+    def initUI(self):
+        self.startGameButton.clicked.connect(self.startButtonPressed)
+        self.startChannelInput.setText(str(100))
+        self.channelGapInput.setText(str(0))
+        self.numberLEDBarsInput.setText(str(8))
+        self.firstChannel = int(self.startChannelInput.text())  #this is the first channel of the first LED Bar
+        self.channelGap = int(self.channelGapInput.text())
+        self.noBars = int(self.numberLEDBarsInput.text())
+
+    def startButtonPressed(self):
+        self.firstChannel = int(self.startChannelInput.text())  #this is the first channel of the first LED Bar
+        self.channelGap = int(self.channelGapInput.text())
+        self.noBars = int(self.numberLEDBarsInput.text())
         self.snake = Snake(self)
         self.timer = QTimer()
         self.timer.timeout.connect(self.moveSnake)
         self.snakeSpeed = 500
         self.timer.start(self.snakeSpeed)
-        self.pelletX = random.randint(0,7)
+        self.pelletX = random.randint(0,self.noBars)
         self.pelletY = random.randint(0,7)
         self.finished = False
-        self.initUI()
-
-    def initUI(self):
-        self.l = QLabel(self)
-        self.l.setText("Use the w,a,s,d")
-        self.l2 = QLabel(self)
-        self.l2.setText("keys to move the")
-        self.l3 = QLabel(self)
-        self.l3.setText("snake around the board")
-        self.l.move(5,0)
-        self.l2.move(5,20)
-        self.l3.move(5,40)
 
     def moveSnake(self):
         # print(self.snake.bodyPieces[0].xPos,self.snake.bodyPieces[0].yPos)
@@ -43,17 +48,17 @@ class SnakeWindow(QWidget):
     def updateSnakeBoard(self):
         if not self.finished:
             self.lightDisplay.universeLock = True
-            for i in range(24*8):
-                self.lightDisplay.universeChannelValues[i+self.firstChannel] = 10
+            for i in range(24*self.noBars):
+                self.lightDisplay.universeChannelValues[i+self.firstChannel+(i*self.channelGap)//24] = 10
             for bodyPiece in self.snake.bodyPieces:
-                redChannelNumber = self.firstChannel + bodyPiece.xPos*24 + bodyPiece.yPos*3
+                redChannelNumber = self.firstChannel + (bodyPiece.xPos)*(24) + bodyPiece.xPos*self.channelGap + bodyPiece.yPos*3
                 greenChannelNumber = redChannelNumber + 1
                 blueChannelNumber = greenChannelNumber + 1
                 self.lightDisplay.universeChannelValues[redChannelNumber] = 255
                 self.lightDisplay.universeChannelValues[greenChannelNumber] = 3
                 self.lightDisplay.universeChannelValues[blueChannelNumber] = 7
 
-            redChannelNumber = self.firstChannel + self.pelletX*24 + self.pelletY*3  #turn on pellet light
+            redChannelNumber = self.firstChannel + self.pelletX*(24) + self.pelletX*self.channelGap + self.pelletY*3  #turn on pellet light
             greenChannelNumber = redChannelNumber + 1
             blueChannelNumber = greenChannelNumber + 1
             self.lightDisplay.universeChannelValues[redChannelNumber] = 3
@@ -82,8 +87,8 @@ class SnakeWindow(QWidget):
 
     def closeEvent(self,*args,**kargs):
         self.lightDisplay.universeLock = True
-        for i in range(24*8):
-            self.lightDisplay.universeChannelValues[i+self.firstChannel] = 255
+        for i in range(24*self.noBars):
+            self.lightDisplay.universeChannelValues[i+self.firstChannel+(i*self.channelGap)//24] = 255
         for light in self.lightDisplay.lights:
             light.updateChannelValuesFromUniverse()
             light.updateChannelValues()
@@ -106,12 +111,12 @@ class Snake(object):
             self.bodyPieces[j].yPos = self.bodyPieces[j-1].yPos
         if self.heading == "r":
             self.bodyPieces[0].xPos += 1
-            if self.bodyPieces[0].xPos > 7:  #as zero indexed
+            if self.bodyPieces[0].xPos > self.window.noBars-1:  #as zero indexed
                 self.bodyPieces[0].xPos = 0
         elif self.heading == "l":
             self.bodyPieces[0].xPos -= 1
             if self.bodyPieces[0].xPos < 0:
-                self.bodyPieces[0].xPos = 7  #0 indexed
+                self.bodyPieces[0].xPos = self.window.noBars-1  #0 indexed
         elif self.heading == "u":
             self.bodyPieces[0].yPos -= 1
             if self.bodyPieces[0].yPos < 0:  #as zero indexed
@@ -140,7 +145,7 @@ class Snake(object):
                     self.increaseSize()
                     while pelletLocationValid == False:
                         pelletLocationValid = True
-                        self.window.pelletX = random.randint(0,7)
+                        self.window.pelletX = random.randint(0,self.window.noBars-1)
                         self.window.pelletY = random.randint(0,7)
                         for bodyPiece in self.bodyPieces:
                             if bodyPiece.xPos == self.window.pelletX:
