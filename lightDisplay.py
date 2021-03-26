@@ -11,7 +11,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from pydmx import PyDMX
-from lightTypes import RGB6Channel,RGBLight,GenericDimmer,LEDBar24ChannelMode,Miniscan
+from lightTypes import *
 from databaseManager import DataBaseManager
 from sshUpdateDatabase import SSHUpdateDatabase
 from sshRunFile import SSHRunFile
@@ -25,8 +25,8 @@ class LightDisplay(QWidget):
         self.app = app
         self.lights = lights
         self.interval = interval
-        self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True),Miniscan(0,True)]
-        self.lightTypes = ["GenericDimmer","RGBLight","LEDBar24ChannelMode","RGB6Channel","Miniscan"]
+        self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True),Miniscan(0,True),RGBWLight(0,True)]
+        self.lightTypes = ["GenericDimmer","RGBLight","LEDBar24ChannelMode","RGB6Channel","Miniscan","RGBWLight"]
         self.runLoop = True
         self.chaseOn = False
         self.runningChaser = False
@@ -126,6 +126,10 @@ class LightDisplay(QWidget):
                                         light.channelValues[3*i] = self.redRainbow
                                         light.channelValues[3*i+1] = self.greenRainbow
                                         light.channelValues[3*i+2] = self.blueRainbow
+                                elif light.lightTYpe == "RGBWLight":
+                                    light.channelValues[0] = self.redRainbow
+                                    light.channelValues[1] = self.greenWIndow
+                                    light.channelValues[2] = self.blueWindow
 
                                 else:
                                     update=False  #probably no way of doing rainbow e.g. in generic dimmer

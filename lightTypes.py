@@ -127,6 +127,27 @@ class RGBLight(Light):
         newLight = RGBLight(channel)
         return newLight
 
+class RGBWLight(Light):
+    def __init__(self,startChannel,infoMode = False):
+        Light.__init__(self,startChannel,infoMode)
+        self.lightType="RGBWLight"
+        self.dropdownName = "RGBW Light"
+        self.red = 255
+        self.green = 255
+        self.blue = 255
+        self.white = 0
+        self.channels = ["Red","Green","Blue","White"]
+        self.channelValues = [self.red,self.green,self.blue,self.white]
+        self.previousValues = self.channelValues
+    def updateChannelValues(self):
+        self.red = self.channelValues[0]
+        self.green = self.channelValues[1]
+        self.blue = self.channelValues[2]
+        self.white = self.channelValues[3]
+    def generateNewLight(self,channel):
+        newLight = RGBWLight(channel)
+        return newLight
+
 class GenericDimmer(Light):
     def __init__(self,startChannel,infoMode = False):
         Light.__init__(self,startChannel,infoMode)
@@ -147,58 +168,25 @@ class LEDBar24ChannelMode(Light):
         Light.__init__(self,startChannel,infoMode)
         self.lightType = "LEDBar24ChannelMode"
         self.dropdownName = "LED bar 24 channel mode"
-        self.red1 = 255
-        self.green1 = 255
-        self.blue1 = 255
-        self.red2 = 255
-        self.green2 = 255
-        self.blue2 = 255
-        self.red3 = 255
-        self.green3 = 255
-        self.blue3 = 255
-        self.red4 = 255
-        self.green4 = 255
-        self.blue4 = 255
-        self.red5 = 255
-        self.green5 = 255
-        self.blue5 = 255
-        self.red6 = 255
-        self.green6 = 255
-        self.blue6 = 255
-        self.red7 = 255
-        self.green7 = 255
-        self.blue7 = 255
-        self.red8 = 255
-        self.green8 = 255
-        self.blue8 = 255
-        self.channels = ["Red1","Green1","Blue1","Red2","Green2","Blue2","Red3","Green3","Blue3","Red4","Green4","Blue4","Red5","Green5","Blue5","Red6","Green6","Blue6","Red7","Green7","Blue7","Red8","Green8","Blue8"]
-        self.channelValues = [self.red1,self.green1,self.blue1,self.red2,self.green2,self.blue2,self.red3,self.green3,self.blue3,self.red4,self.green4,self.blue4,self.red5,self.green5,self.blue5,self.red6,self.green6,self.blue6,self.red7,self.green7,self.blue7,self.red8,self.green8,self.blue8]
+        colours = ["red","green","blue"]
+        for i in range(1,9,1):
+            for colour in colours:
+                setattr(self,f"{colour}{i}",255)
+                self.channelValues.append(getattr(self,f"{colour}{i}"))
+
+        coloursCaptialised = ["Red","Green","Blue"]
+        self.channels = []
+        for i in range(1,9,1):
+            for colour in coloursCaptialised:
+                self.channels.append(f"{colour}{i}")
         self.previousValues = self.channelValues
     def updateChannelValues(self):
-        self.red1 = self.channelValues[0]
-        self.green1 = self.channelValues[1]
-        self.blue1 = self.channelValues[2]
-        self.red2 = self.channelValues[3]
-        self.green2 = self.channelValues[4]
-        self.blue2 = self.channelValues[5]
-        self.red3 = self.channelValues[6]
-        self.green3 = self.channelValues[7]
-        self.blue3 = self.channelValues[8]
-        self.red4 = self.channelValues[9]
-        self.green4 = self.channelValues[10]
-        self.blue4 = self.channelValues[11]
-        self.red5 = self.channelValues[12]
-        self.green5 = self.channelValues[13]
-        self.blue5 = self.channelValues[14]
-        self.red6 = self.channelValues[15]
-        self.green6 = self.channelValues[16]
-        self.blue6 = self.channelValues[17]
-        self.red7 = self.channelValues[18]
-        self.green7 = self.channelValues[19]
-        self.blue7 = self.channelValues[20]
-        self.red8 = self.channelValues[21]
-        self.green8 = self.channelValues[22]
-        self.blue8 = self.channelValues[23]
+        counter = 0
+        colours = ["red","green","blue"]
+        for i in range(1,9,1):
+            for colour in colours:
+                setattr(self,f"{colour}{i}",self.channelValues[counter])
+                counter += 1
     def generateNewLight(self,channel):
         newLight = LEDBar24ChannelMode(channel)
         return newLight
