@@ -28,6 +28,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         self.setupUi(self)
         self.setMouseTracking(True)
         self.dataBaseManager = dataBaseManager
+        self.isSequenceWindowOpen = False
         # self.xpos = 0
         # self.width = 1900
         # self.ypos = 0
@@ -179,6 +180,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
             self.errorWindow = ErrorWindow("You need to open or save a rig before opening the sequence window.")
         else:
             self.sequenceWindow = SequenceWindow(self.lightDisplay,self,self.dataBaseManager,self.rigID)
+            self.isSequenceWindowOpen = True
             self.sequenceWindow.show()
 
     def playbackButtonClicked(self):
@@ -312,20 +314,22 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
     #         self.previewLight(self.x,self.y)
 
     def eventFilter(self, source, event):
-        if event.type() == QEvent.MouseMove:
+        if not self.isSequenceWindowOpen:
             if self.creatingLight:
-                self.x = event.x()
-                self.y = event.y()
-                if self.x != 0 and self.y != 0: #gets rid of the random 0's that appear for some reason
-                    self.previewLight(self.x,self.y)
-        if event.type() == QEvent.MouseButtonPress:
-            if event.buttons() == Qt.LeftButton:
-                self.x = event.x()
-                self.y = event.y()
-                self.mousePressed(self.x,self.y)
-                if self.creatingLight:
-                    return 1
+                if event.type() == QEvent.MouseMove:
+                    self.x = event.x()
+                    self.y = event.y()
+                    if self.x != 0 and self.y != 0: #gets rid of the random 0's that appear for some reason
+                        self.previewLight(self.x,self.y)
+            if event.type() == QEvent.MouseButtonPress:
+                if event.buttons() == Qt.LeftButton:
+                    self.x = event.x()
+                    self.y = event.y()
+                    self.mousePressed(self.x,self.y)
+                    if self.creatingLight:
+                        return 1
         return super(LightDisplayWindow, self).eventFilter(source, event)
+
 
     def mousePressed(self,x,y,resetMode = False):
         if not resetMode:

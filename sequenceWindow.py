@@ -402,3 +402,7 @@ class SequenceWindow(QWidget):
         self.lightDisplay.universeChanged()
         for light in self.visualLightDisplay.lightList:
             light.changeColourAccordingToFixture()
+
+    def closeEvent(self,e):
+        self.visualLightDisplay.isSequenceWindowOpen = False
+        print("closed")
