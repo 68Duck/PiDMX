@@ -405,4 +405,3 @@ class SequenceWindow(QWidget):
 
     def closeEvent(self,e):
         self.visualLightDisplay.isSequenceWindowOpen = False
-        print("closed")
