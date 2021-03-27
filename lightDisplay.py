@@ -126,10 +126,10 @@ class LightDisplay(QWidget):
                                         light.channelValues[3*i] = self.redRainbow
                                         light.channelValues[3*i+1] = self.greenRainbow
                                         light.channelValues[3*i+2] = self.blueRainbow
-                                elif light.lightTYpe == "RGBWLight":
+                                elif light.lightType == "RGBWLight":
                                     light.channelValues[0] = self.redRainbow
-                                    light.channelValues[1] = self.greenWIndow
-                                    light.channelValues[2] = self.blueWindow
+                                    light.channelValues[1] = self.greenRainbow
+                                    light.channelValues[2] = self.blueRainbow
 
                                 else:
                                     update=False  #probably no way of doing rainbow e.g. in generic dimmer
