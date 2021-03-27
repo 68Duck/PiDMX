@@ -325,8 +325,13 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                 if event.buttons() == Qt.LeftButton:
                     self.x = event.x()
                     self.y = event.y()
-                    self.mousePressed(self.x,self.y)
+                    returnNormal = self.mousePressed(self.x,self.y)
+                    print(self.x,self.y,"test")
                     if self.creatingLight:
+                        return 1
+                    if returnNormal is None:
+                        pass
+                    else:
                         return 1
         return super(LightDisplayWindow, self).eventFilter(source, event)
 
@@ -378,11 +383,12 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                             for fixture in self.lightDisplay.lights:
                                 if light.channelNumber == fixture.startChannel:
                                     channelValid = True
+                                    print("test")
                                     self.sliderPannelWindow = SliderPannelWindow(light.channelNumber,self.lightDisplay,fixture,light,self)
                                     self.sliderPannelWindow.show()
+                                    return False
                             if not channelValid:
                                 self.errorWindow = ErrorWindow("Channel Error not valid")
-                            return
                 if not lightClicked:
                     if self.creatingLight:
                         if self.creatingMultipleLights:
