@@ -5,6 +5,7 @@ from PyQt5.QtCore import*
 import math as maths
 
 from confirmWindow import ConfirmWindow
+from errorWindow import ErrorWindow
 from panTiltGridWindow import PanTiltGridWindow
 
 class SliderPannelWindow(QWidget):  #creates a class window
