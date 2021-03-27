@@ -50,13 +50,17 @@ class SnakeWindow(QWidget,uic.loadUiType("snakeWindow.ui")[0]):
             self.lightDisplay.universeLock = True
             for i in range(24*self.noBars):
                 self.lightDisplay.universeChannelValues[i+self.firstChannel+(i*self.channelGap)//24] = 0
+            # counter = 0
+            self.initialiseRainbow()
             for bodyPiece in self.snake.bodyPieces:
+                self.runRainbow()
                 redChannelNumber = self.firstChannel + (bodyPiece.xPos)*(24) + bodyPiece.xPos*self.channelGap + bodyPiece.yPos*3
                 greenChannelNumber = redChannelNumber + 1
                 blueChannelNumber = greenChannelNumber + 1
-                self.lightDisplay.universeChannelValues[redChannelNumber] = 255
-                self.lightDisplay.universeChannelValues[greenChannelNumber] = 0
-                self.lightDisplay.universeChannelValues[blueChannelNumber] = 0
+                self.lightDisplay.universeChannelValues[redChannelNumber] = self.redRainbow
+                self.lightDisplay.universeChannelValues[greenChannelNumber] = self.greenRainbow
+                self.lightDisplay.universeChannelValues[blueChannelNumber] = self.blueRainbow
+                # counter += 1
 
             redChannelNumber = self.firstChannel + self.pelletX*(24) + self.pelletX*self.channelGap + self.pelletY*3  #turn on pellet light
             greenChannelNumber = redChannelNumber + 1
@@ -73,6 +77,60 @@ class SnakeWindow(QWidget,uic.loadUiType("snakeWindow.ui")[0]):
             for light in self.visualLightDisplay.lightList:
                 light.changeColourAccordingToFixture()
             self.lightDisplay.universeLock = False
+
+
+    def runRainbow(self):
+        if True:
+            if self.redIncreasing:
+                if self.redRainbow+self.rainbowChangeAmount > 255:
+                    self.redIncreasing = False
+                    self.blueDecreasing = True
+                else:
+                    self.redRainbow += self.rainbowChangeAmount
+            if self.redDecreasing:
+                if self.redRainbow-self.rainbowChangeAmount < 0:
+                    self.redDecreasing = False
+                    self.blueIncreasing = True
+                else:
+                    self.redRainbow -= self.rainbowChangeAmount
+            if self.greenIncreasing:
+                if self.greenRainbow+self.rainbowChangeAmount > 255:
+                    self.greenIncreasing = False
+                    self.redDecreasing = True
+                else:
+                    self.greenRainbow += self.rainbowChangeAmount
+            if self.greenDecreasing:
+                if self.greenRainbow-self.rainbowChangeAmount <= 0:
+                    self.greenDecreasing = False
+                    self.redIncreasing = True
+                else:
+                    self.greenRainbow -= self.rainbowChangeAmount
+            if self.blueIncreasing:
+                if self.blueRainbow+self.rainbowChangeAmount >= 255:
+                    self.blueIncreasing = False
+                    self.greenDecreasing = True
+                else:
+                    self.blueRainbow += self.rainbowChangeAmount
+            if self.blueDecreasing:
+                if self.blueRainbow-self.rainbowChangeAmount <= 0:
+                    self.blueDecreasing = False
+                    self.greenIncreasing = True
+                else:
+                    self.blueRainbow -= self.rainbowChangeAmount
+            # print(self.redRainbow,self.greenRainbow,self.blueRainbow)
+
+
+    def initialiseRainbow(self):
+        self.redIncreasing = False
+        self.greenIncreasing = True
+        self.blueIncreasing = False
+        self.redDecreasing = False
+        self.greenDecreasing = False
+        self.blueDecreasing = False
+        self.redRainbow = 255
+        self.greenRainbow = 0
+        self.blueRainbow = 0
+        self.rainbowChangeAmount = 25
 
 
     def keyPressEvent(self,e):
