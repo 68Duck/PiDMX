@@ -126,6 +126,21 @@ class SequenceWindow(QWidget):
         self.toggleGridButton.setCheckable(True)
         self.toggleGridButton.clicked.connect(self.toggleGridButtonClicked)
 
+        self.addWholeRigButton = QPushButton(self)
+        self.addWholeRigButton.setFixedWidth(120)
+        self.addWholeRigButton.move(1140,10)
+        self.addWholeRigButton.setText("Add whole rig")
+        self.addWholeRigButton.setStyleSheet("background-color:white")
+        self.addWholeRigButton.clicked.connect(self.addWholeRigButtonClicked)
+
+    def addWholeRigButtonClicked(self):
+        for light in self.lights:
+            x,y=[light.xPos,light.yPos]
+            lightName = light.lightType+""+str(light.channelNumber)
+            self.createLight(light.lightType,lightName,x,y)
+            self.lightsToPlace.remove(light)
+        self.addWholeRigButton.setEnabled(False)
+
     def editSequenceButtonClicked(self):
         if self.sequenceID != None:
             self.editSequenceWindow = EditSequenceWindow(self.dataBaseManager,self)
