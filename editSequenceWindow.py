@@ -4,6 +4,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from sortByTerm import sortByTerm
+from errorWindow import ErrorWindow
 
 class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
