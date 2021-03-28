@@ -16,13 +16,41 @@ class SnakeWindow(QWidget,uic.loadUiType("snakeWindow.ui")[0]):
         self.setGeometry(0,0,width,height)
         self.lightDisplay = lightDisplay
         self.visualLightDisplay = visualLightDisplay
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.moveSnake)
         self.initUI()
 
+    def getLEDBarInformation(self):
+        channelNumbers = []
+        for light in self.visualLightDisplay.lightList:
+            if light.lightType == "LEDBar24ChannelMode":
+                channelNumbers.append(light.channelNumber)
+        if len(channelNumbers)>=1:
+            channelNumbers.sort()
+            firstChannel = channelNumbers[0]
+            if len(channelNumbers)>1:
+                secondChannel = channelNumbers[1]
+                channelGap = secondChannel-firstChannel-24
+            else:
+                channelGap = 0
+            numberOfBars = len(channelNumbers)
+            return [firstChannel,channelGap,numberOfBars]
+        else:
+            return [None,None,None]
+
+
     def initUI(self):
+        firstChannel,channelGap,numberOfBars = self.getLEDBarInformation()
+        print(firstChannel,channelGap,numberOfBars)
+        if firstChannel is None:
+            self.startChannelInput.setText(str(100))
+            self.channelGapInput.setText(str(0))
+            self.numberLEDBarsInput.setText(str(8))
+        else:
+            self.startChannelInput.setText(str(firstChannel))
+            self.channelGapInput.setText(str(channelGap))
+            self.numberLEDBarsInput.setText(str(numberOfBars))
         self.startGameButton.clicked.connect(self.startButtonPressed)
-        self.startChannelInput.setText(str(100))
-        self.channelGapInput.setText(str(0))
-        self.numberLEDBarsInput.setText(str(8))
         self.firstChannel = int(self.startChannelInput.text())  #this is the first channel of the first LED Bar
         self.channelGap = int(self.channelGapInput.text())
         self.noBars = int(self.numberLEDBarsInput.text())
@@ -32,8 +60,7 @@ class SnakeWindow(QWidget,uic.loadUiType("snakeWindow.ui")[0]):
         self.channelGap = int(self.channelGapInput.text())
         self.noBars = int(self.numberLEDBarsInput.text())
         self.snake = Snake(self)
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.moveSnake)
+
         self.snakeSpeed = 500
         self.timer.start(self.snakeSpeed)
         self.pelletX = random.randint(0,self.noBars)
