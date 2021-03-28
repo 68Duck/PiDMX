@@ -40,9 +40,9 @@ class SequencePlaybackWindow(QMessageBox):
         for light in self.sequenceWindow.displayLights:
             channelNumber = int(light.lightName[len(light.lightType):len(light.lightName)])
             if light.lightType == "GenericDimmer":
-                pass   #generic dimmers are not saved as are not meant for sequences
-                # channelValue = self.red
-                # self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,channelValue])
+                for fixture in self.sequenceWindow.lightDisplay.lights:
+                    if channelNumber == fixture.startChannel:
+                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,fixture.intensity])
             elif light.lightType == "RGBLight" or light.lightType == "RGB6Channel":
                 self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,255])
                 channelNumber += 1

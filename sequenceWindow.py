@@ -232,6 +232,13 @@ class SequenceWindow(QWidget):
                         if int(displayLightChannel+i) == int(channel):
                             self.lightDisplay.universeChannelValues[channel] = channelValue
                             displayLight.changeColourAccordingToFixture()
+                if displayLight.lightType == "GenericDimmer":
+                    if int(displayLightChannel) == int(channel):
+                        self.lightDisplay.universeChannelValues[channel] = channelValue
+                        for light in self.lightDisplay.lights:
+                            light.updateChannelValuesFromUniverse()
+                            light.updateChannelValues()
+                        displayLight.changeColourAccordingToFixture()
 
         self.updateChannels()
 
@@ -374,7 +381,7 @@ class SequenceWindow(QWidget):
             for light in self.displayLights:
                 if self.x > light.xPos-light.clickableLeft and self.x < light.xPos+light.clickableRight:
                     if self.y > light.yPos-light.clickableTop and self.y < light.yPos+light.clickableBottom:
-                        if light.lightType == "Miniscan":
+                        if light.lightType == "Miniscan" or light.lightType == "GenericDimmer":
                             channelNumber = int(light.lightName[len(light.lightType):len(light.lightName)])
                             channelValid = False
                             for fixture in self.lightDisplay.lights:
@@ -400,7 +407,7 @@ class SequenceWindow(QWidget):
         for light in self.displayLights:
             channelNumber = int(light.lightName[len(light.lightType):len(light.lightName)])
             if light.lightType == "GenericDimmer":
-                pass
+                self.lightDisplay.universeChannelValues[channelNumber] = light.red
             elif light.lightType == "RGBLight" or light.lightType == "RGB6Channel":
                 channelNumber += 1   #as the first is intensity
                 self.lightDisplay.universeChannelValues[channelNumber] = light.red

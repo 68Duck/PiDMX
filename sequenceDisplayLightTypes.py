@@ -239,6 +239,14 @@ class SequenceDisplayLight3(SequenceParentDisplayLight):
         self.red = intensity #just so it works with generic dimmers.
         self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{intensity});')
 
+    def changeColourAccordingToFixture(self):
+        channelNumber = int(self.lightName[len(self.lightType):len(self.lightName)])
+        for fixture in self.lightDisplay.lights:
+            if channelNumber == fixture.startChannel:
+                intensity = fixture.intensity
+                self.red = intensity
+                self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{intensity});')
+
     def changeColourRGB(self,red=None,green=None,blue=None):
         self.indicator.setStyleSheet(f'background-color: rgba(255,255,0,{self.red});')
 
