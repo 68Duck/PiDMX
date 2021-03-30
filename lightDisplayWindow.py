@@ -29,13 +29,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         self.setMouseTracking(True)
         self.dataBaseManager = dataBaseManager
         self.isSequenceWindowOpen = False
-        # self.xpos = 0
-        # self.width = 1900
-        # self.ypos = 0
-        # self.height = 1000
-        # self.setGeometry(int(self.xpos),int(self.ypos),int(self.width),int(self.height)) #sets window parameters top left is (0,0)
         self.setWindowTitle("Lighting Display") #sets window title
-        # self.setStyleSheet("background-color:black")
         self.creatingLight = False
         self.creatingLightInformation = False
         self.creatingChannel = 0
@@ -82,84 +76,86 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         self.createBar("L",25,400,200,570,False)
         self.createBar("L",25,400,1700,570,False)
 
-        # self.patchButton = QtWidgets.QPushButton(self)
-        # self.patchButton.setText("Patch Light")
-        # self.patchButton.setFixedWidth(100)
-        # self.patchButton.move(20,10)
-        # self.patchButton.setText("Patch Light")
-        # self.patchButton.setStyleSheet("color:white;")
+
         self.patchButton.triggered.connect(self.patchButtonClicked)
-
-        # self.selectButton = QtWidgets.QPushButton(self)
-        # self.selectButton.setFixedWidth(100)
-        # self.selectButton.move(130,10)
-        # self.selectButton.setText("Select Lights")
-        # self.selectButton.setStyleSheet("background-color:white")
-        # self.selectButton.setCheckable(True)
         self.selectButton.triggered.connect(self.selectButtonClicked)
-
-        # self.effectsButton = QtWidgets.QPushButton(self)
-        # self.effectsButton.setFixedWidth(100)
-        # self.effectsButton.move(240,10)
-        # self.effectsButton.setText("Effects")
-        # self.effectsButton.setStyleSheet("background-color:white")
         self.effectsButton.triggered.connect(self.effectsButtonClicked)
-
-        # self.openButton = QtWidgets.QPushButton(self)
-        # self.openButton.setFixedWidth(100)
-        # self.openButton.move(350,10)
-        # self.openButton.setText("Open Rig")
-        # self.openButton.setStyleSheet("background-color:white")
         self.openButton.triggered.connect(self.openButtonClicked)
-
-        # self.saveButton = QtWidgets.QPushButton(self)
-        # self.saveButton.setFixedWidth(100)
-        # self.saveButton.move(460,10)
-        # self.saveButton.setText("Save Rig")
-        # self.saveButton.setStyleSheet("background-color:white")
         self.saveButton.triggered.connect(self.saveButtonClicked)
-
-        # self.defaultSaveButton = QPushButton(self)
-        # self.defaultSaveButton.setFixedWidth(100)
-        # self.defaultSaveButton.move(570,10)
-        # self.defaultSaveButton.setText("Auto Save")
-        # self.defaultSaveButton.setStyleSheet("background-color:white")
         self.defaultSaveButton.triggered.connect(self.defaultSaveButtonClicked)
-
-        # self.recordPlayback = QPushButton(self)
-        # self.recordPlayback.setFixedWidth(150)
-        # self.recordPlayback.move(680,10)
-        # self.recordPlayback.setText("Record Playback")
-        # self.recordPlayback.setStyleSheet("background-color:white")
         self.recordPlayback.triggered.connect(self.recordPlaybackClicked)
-
-        # self.playbackButton = QPushButton(self)
-        # self.playbackButton.setFixedWidth(100)
-        # self.playbackButton.move(840,10)
-        # self.playbackButton.setText("Playbacks")
-        # self.playbackButton.setStyleSheet("background-color:white")
         self.playbackButton.triggered.connect(self.playbackButtonClicked)
-
-        # self.sequenceButton = QPushButton(self)
-        # self.sequenceButton.setFixedWidth(150)
-        # self.sequenceButton.move(950,10)
-        # self.sequenceButton.setText("Sequence Window")
-        # self.sequenceButton.setStyleSheet("background-color:white")
         self.sequenceButton.triggered.connect(self.sequenceButtonClicked)
-
-        # self.openSequenceButton = QPushButton(self)
-        # self.openSequenceButton.setFixedWidth(150)
-        # self.openSequenceButton.move(1110,10)
-        # self.openSequenceButton.setText("Open Sequence")
-        # self.openSequenceButton.setStyleSheet("background-color:white")
         self.openSequenceButton.triggered.connect(self.openSequenceButtonClicked)
-
-        # self.snakeButton = QPushButton(self)
-        # self.snakeButton.setFixedWidth(100)
-        # self.snakeButton.move(1270,10)
-        # self.snakeButton.setText("Snake Game")
-        # self.snakeButton.setStyleSheet("background-color:white")
         self.snakeButton.triggered.connect(self.snakeButtonClicked)
+        self.chooseColourButton.triggered.connect(self.chooseColourButtonClicked)
+        self.selectAllLightsButton.triggered.connect(self.selectAllLightsButtonClicked)
+
+    def selectAllLightsButtonClicked(self):
+        if not self.selectAllLightsButton.isChecked():
+            for light in self.lightList:
+                if light.selected:
+                    self.selectedLights.remove(light)
+                    light.toggleSelected()
+                    for l in self.lightList:
+                        if l.channelNumber == light.channelNumber and l!=light:
+                            l.toggleSelected()
+                            self.selectedLights.remove(l)
+        else:
+            if len(self.lightList) == 0:
+                self.errorWindow = ErrorWindow("There are no lights to select.")
+                self.selectButton.setChecked(False)
+                return
+            for light in self.lightList:
+                if light.selected:
+                    pass
+                else:
+                    light.toggleSelected()
+                    self.selectedLights.append(light)
+                    for l in self.lightList:
+                        if l.channelNumber == light.channelNumber and l!=light:
+                            l.toggleSelected()
+                            self.selectedLights.append(l)
+
+
+    def chooseColourButtonClicked(self):
+        if len(self.selectedLights) == 0:
+            self.errorWindow = ErrorWindow("You have not selected any lights to change the colour for.")
+            return
+        colour = QColorDialog.getColor()
+        if colour.isValid():
+            self.setColourToSelectedLights(colour)
+        else:
+            self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")
+
+    def setColourToSelectedLights(self,colour):
+        for l in self.selectedLights:
+            valid = False
+            for light in self.lightDisplay.lights:
+                if light.startChannel == l.channelNumber:
+                    valid = True
+                    break
+
+            if not valid:
+                self.errorWindow("That light does not exist. This is an issue with the code as it should never get here.")
+                return
+            if l.lightType == "RGBChannel" or l.lightType == "RGB6Channel" or l.lightType == "RGB8Channel" or l.lightType == "RGBWLight":
+                for i in range(len(light.channels)):
+                    if light.channels[i] == "Red":
+                        self.lightDisplay.commitToChannel(i,colour.red(),light.startChannel)
+                    elif light.channels[i] == "Green":
+                        self.lightDisplay.commitToChannel(i,colour.green(),light.startChannel)
+                    elif light.channels[i] == "Blue":
+                        self.lightDisplay.commitToChannel(i,colour.blue(),light.startChannel)
+                l.changeColourAccordingToFixture()
+            elif l.lightType == "LEDBar24ChannelMode":
+                for i in range(8):
+                    light.channelValues[3*i] = colour.red()
+                    light.channelValues[3*i+1] = colour.green()
+                    light.channelValues[3*i+2] = colour.blue()
+                light.updateChannelValues()
+                light.changeUniverse()
+                l.changeColourAccordingToFixture()
 
 
     def snakeButtonClicked(self):
@@ -304,15 +300,6 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         else:
             self.tempLight = DisplayLight(xPos,yPos,channel,self.lightDisplay,self)
 
-    #
-    # def mouseMoveEvent(self,e):
-    #     print("test")
-    #     self.x = e.x()
-    #     self.y = e.y()
-    #     if self.creatingLight:
-    #         print("test")
-    #         self.previewLight(self.x,self.y)
-
     def eventFilter(self, source, event):
         if not self.isSequenceWindowOpen:
             if self.creatingLight:
@@ -443,10 +430,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
             selectButton = self.sender()
             if selectButton.isChecked():
                 self.selectingLights = True
-                # selectButton.setStyleSheet("background-color:grey")
             else:
                 self.selectingLights = False
-                # selectButton.setStyleSheet("background-color:white")
 
     def effectsButtonClicked(self):
         self.effectsWindow.checkNumberOfLights()

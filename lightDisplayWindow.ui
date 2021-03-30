@@ -197,7 +197,7 @@ QMainWindow{color:white;background-color:black;}
      <x>0</x>
      <y>0</y>
      <width>1900</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPatch_Light">
@@ -212,6 +212,8 @@ QMainWindow{color:white;background-color:black;}
     </property>
     <addaction name="effectsButton"/>
     <addaction name="selectButton"/>
+    <addaction name="selectAllLightsButton"/>
+    <addaction name="chooseColourButton"/>
    </widget>
    <widget class="QMenu" name="menuRig">
     <property name="title">
@@ -305,6 +307,19 @@ QMainWindow{color:white;background-color:black;}
   <action name="snakeButton">
    <property name="text">
     <string>Snake Game</string>
+   </property>
+  </action>
+  <action name="chooseColourButton">
+   <property name="text">
+    <string>Choose Colour</string>
+   </property>
+  </action>
+  <action name="selectAllLightsButton">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Select All Lights</string>
    </property>
   </action>
  </widget>

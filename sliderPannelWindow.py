@@ -289,12 +289,21 @@ class SliderPannelWindow(QWidget):  #creates a class window
                 self.sliderChangedValue(False)
                 self.updateChannelValues()
 
+
             elif len(self.slidersSelected)% 3 == 0 and len(self.slidersSelected)>0:
                 self.slidersSelected.sort()
                 for i in range(len(self.slidersSelected)//3):
                     self.sliders[self.slidersSelected[i*3]].setValue(colour.red())
                     self.sliders[self.slidersSelected[i*3+1]].setValue(colour.green())
                     self.sliders[self.slidersSelected[i*3+2]].setValue(colour.blue())
+                self.sliderChangedValue(False)
+                self.updateChannelValues()
+
+            elif self.light.lightType == "LEDBar24ChannelMode":
+                for i in range(8):
+                    self.sliders[i*3].setValue(colour.red())
+                    self.sliders[i*3+1].setValue(colour.green())
+                    self.sliders[i*3+2].setValue(colour.blue())
                 self.sliderChangedValue(False)
                 self.updateChannelValues()
 
