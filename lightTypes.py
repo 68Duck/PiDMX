@@ -106,6 +106,36 @@ class RGB6Channel(Light):
         return newLight
 
 
+class RGB8Channel(Light):
+    def __init__(self,startChannel,infoMode = False):
+        Light.__init__(self,startChannel,infoMode)
+        self.lightType = "RGB6Channel"
+        self.dropdownName = "RGB 8 Channel Light"
+        self.intensity = 255
+        self.red = 255
+        self.green = 255
+        self.blue = 255
+        self.white = 0
+        self.colourFader = 0
+        self.colourChooser = 0
+        self.strobe = 0
+        self.channels = ["Intensity","Red","Green","Blue","White","ColourFader","ColourChooser","Strobe"]
+        self.channelValues = [self.intensity,self.red,self.green,self.blue,self.white,self.colourFader,self.colourChooser,self.strobe]
+        self.previousValues = self.channelValues
+    def updateChannelValues(self):
+        self.intensity = self.channelValues[0]
+        self.red = self.channelValues[1]
+        self.green = self.channelValues[2]
+        self.blue = self.channelValues[3]
+        self.white = self.channelValues[4]
+        self.colourFader = self.channelValues[5]
+        self.colourChooser = self.channelValues[6]
+        self.strobe = self.channelValues[7]
+    def generateNewLight(self,channel):
+        newLight = RGB8Channel(channel)  #where NewLight is the class name but newLight is the variable newLight
+        return newLight
+
+
 class RGBLight(Light):
     def __init__(self,startChannel,infoMode = False):
         Light.__init__(self,startChannel,infoMode)
