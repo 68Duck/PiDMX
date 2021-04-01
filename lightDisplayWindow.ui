@@ -236,6 +236,7 @@ QMainWindow{color:white;background-color:black;}
     </property>
     <addaction name="sequenceButton"/>
     <addaction name="openSequenceButton"/>
+    <addaction name="stopSequenceButton"/>
    </widget>
    <widget class="QMenu" name="menuGame">
     <property name="title">
@@ -320,6 +321,11 @@ QMainWindow{color:white;background-color:black;}
    </property>
    <property name="text">
     <string>Select All Lights</string>
+   </property>
+  </action>
+  <action name="stopSequenceButton">
+   <property name="text">
+    <string>Stop Sequence</string>
    </property>
   </action>
  </widget>

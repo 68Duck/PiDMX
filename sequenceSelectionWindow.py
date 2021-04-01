@@ -12,27 +12,25 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
         self.dataBaseManager = dataBaseManager
         self.lightDisplay = lightDisplay
         self.visualLightDisplay = visualLightDisplay
+        self.loopSequence = False
         self.setWindowTitle("Choose Sequence")
         self.initUI()
 
     def initUI(self):
-        # self.openButton = QPushButton(self)
-        # self.openButton.move(300,200)
-        # self.openButton.setFixedWidth(100)
-        # self.openButton.setText("Open")
         self.openButton.clicked.connect(self.openButtonClicked)
-
         self.savedSequences = self.dataBaseManager.getAllData("Sequences")
-
-        # self.dropDown = QComboBox(self)
-        # self.dropDown.move(50,50)
-        # self.dropDown.setMinimumWidth(200)
         for sequence in self.savedSequences:
             if self.visualLightDisplay.rigID == sequence[4]:  #checks is the rigID is the same
                 self.dropDown.addItem(sequence[2])  #sequence[2] is the name of the sequence
 
+
     def openButtonClicked(self):
+        self.loopSequence = self.loopCheckBox.isChecked()
         self.sequence = self.dropDown.currentText()
+        self.visualLightDisplay.runningSequence = True
+        self.setupSequence()
+
+    def setupSequence(self):
         self.sequenceCreatorID = False
         for sequence in self.savedSequences:
             if self.sequence == sequence[2]:
@@ -72,6 +70,7 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
                 light.toggleSelected()
         timeDelayTotal = self.sequenceToOpen[0][2] * -1  #negates the first one so opened immediately
         self.timers = []
+        print(self.sequenceToOpen)
         for sequence in self.sequenceToOpen:
             self.nextSequence = sequence
             timeDelay = sequence[2]
@@ -100,3 +99,13 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
             light.changeColourAccordingToFixture()
         self.timers[0].stop()
         self.timers.pop(0)
+        if len(self.timers) == 0:
+            if self.loopSequence:
+                print("test")
+                self.resetTimer = QTimer()
+                self.resetTimer.timeout.connect(self.replaySequence)
+                self.resetTimer.start(1000)
+
+    def replaySequence(self):
+        self.resetTimer.stop()
+        self.setupSequence()

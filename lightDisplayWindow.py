@@ -45,6 +45,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         self.rigID = None
         self.creatingDuplicate = False
         self.playbackName = None
+        self.runningSequence = False
         self.effectsWindow = EffectsWindow(self.lightDisplay,self.selectedLights,self,True)
         self.initUI()
     def initUI(self):   #create UI
@@ -90,6 +91,15 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         self.snakeButton.triggered.connect(self.snakeButtonClicked)
         self.chooseColourButton.triggered.connect(self.chooseColourButtonClicked)
         self.selectAllLightsButton.triggered.connect(self.selectAllLightsButtonClicked)
+        self.stopSequenceButton.triggered.connect(self.stopSequenceButtonClicked)
+
+
+    def stopSequenceButtonClicked(self):
+        if self.runningSequence:
+            self.sequenceSelectionWindow.loopSequence = False
+            self.runningSequence = False
+        else:
+            self.errorWindow = ErrorWindow("There is no sequence currently running.")
 
     def selectAllLightsButtonClicked(self):
         if not self.selectAllLightsButton.isChecked():
