@@ -37,28 +37,37 @@
     <string>Update Sequence</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="table">
+  <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>20</y>
      <width>451</width>
-     <height>371</height>
+     <height>361</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">QTableWidget{background-color:white}</string>
+   <layout class="QGridLayout" name="layout"/>
+  </widget>
+  <widget class="QPushButton" name="deleteButton">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>400</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
    </property>
-   <column>
-    <property name="text">
-     <string>Number</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Time Delay</string>
-    </property>
-   </column>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{color:white;}</string>
+   </property>
+   <property name="text">
+    <string>Delete Playbacks</string>
+   </property>
   </widget>
  </widget>
  <resources/>
