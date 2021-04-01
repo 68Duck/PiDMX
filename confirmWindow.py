@@ -5,13 +5,14 @@ from PyQt5.QtCore import*
 
 
 class ConfirmWindow(QMessageBox):  #creates a class window
-    def __init__(self,parentWindow,removeRig = False,playbackOveride = False,removePlayback=False,removeSequence = False):
+    def __init__(self,parentWindow,removeRig = False,playbackOveride = False,removePlayback=False,removeSequence = False,removePlaybackFromSequence=False):
         super().__init__()     #use super class of QMainWindow
         self.parentWindow = parentWindow
         self.removePlayback = removePlayback
         self.removeRig = removeRig
         self.playbackOveride = playbackOveride
         self.removeSequence = removeSequence
+        self.removePlaybackFromSequence = removePlaybackFromSequence
         self.initUI()
     def initUI(self):   #create UI
 
@@ -24,6 +25,8 @@ class ConfirmWindow(QMessageBox):  #creates a class window
             self.setText("Are you sure you want to remove this playback?")
         elif self.removeSequence:
             self.setText("Are you sure you want to remove this sequence?")
+        elif self.removePlaybackFromSequence:
+            self.setText("Are you sure you want to remove this playback?")
         else:
             self.setText("Are you sure you want to remove this light?")
         self.setIcon(QMessageBox.Question)

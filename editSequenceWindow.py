@@ -5,6 +5,7 @@ from PyQt5.QtCore import*
 
 from sortByTerm import sortByTerm
 from errorWindow import ErrorWindow
+from confirmWindow import ConfirmWindow
 
 class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
@@ -13,6 +14,7 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
         self.dataBaseManager = dataBaseManager
         self.sequenceWindow = sequenceWindow
         self.setWindowTitle("Edit Sequence")
+        self.removeConfirmed = False
         # self.setGeometry(250,250,300,250)  #x,y,width,height
 
         self.initUI()
@@ -20,7 +22,7 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
         self.sequenceToOpen = self.dataBaseManager.getAllData("sequence"+str(self.sequenceWindow.sequenceID))
         # layout = QHBoxLayout()
         # self.setLayout(layout)
-        self.tableWidget = TableWidget()
+        self.tableWidget = TableWidget(self)
         self.layout.addWidget(self.tableWidget)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(["number","time delay","select"])
@@ -53,42 +55,50 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
         self.updateButton.clicked.connect(self.updateButtonClicked)
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
 
-    def deleteButtonClicked(self):
+    def orderChanged(self):
         for row in range(len(self.sequenceToOpen)):
-                itemArray = []
-                for row in range(len(self.sequenceToOpen)):
-                    array = []
-                    if self.tableWidget.item(row,2).checkState():
-                        pass
-                    else:
-                        for column in range(2):
-                            item = self.tableWidget.item(row,column).text()
-                            try:
-                                item = float(item)
-                            except:
-                                self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
-                                return
-                            array.append(item)
-                        array.insert(0,row+1)
-                        itemArray.append(array)
-                for i in range(len(itemArray)):
-                    itemArray[i][0] = i+1
-                for arr in itemArray:
-                    for sequence in self.sequenceToOpen:
-                        if float(sequence[0]) == float(arr[0]):
-                            arr.insert(1,sequence[1])
-                itemArray = sortByTerm(itemArray,2)  #so sort by third as 0 indexed
-                for arr in itemArray:
-                    arr.pop(2)
-                for i in range(len(itemArray)):
-                    itemArray[i][0] = i+1
-                self.dataBaseManager.createSequenceTable(self.sequenceWindow.sequenceID)  #creates a blank table
-                for arr in itemArray:
-                    record = [None,arr[1],arr[2]]
-                    self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),record)
-        self.tableWidget.hide()
-        self.initUI()
-            # print(self.tableWidget.item(row,2).checkState())
+            rowNumber = QTableWidgetItem(str(row+1))
+            self.tableWidget.setItem(row,0,rowNumber)
+
+    def deleteButtonClicked(self):
+        self.confirmWindow = ConfirmWindow(self,removePlaybackFromSequence = True)
+        if self.removeConfirmed:
+            self.removeConfirmed = False
+            for row in range(len(self.sequenceToOpen)):
+                    itemArray = []
+                    for row in range(len(self.sequenceToOpen)):
+                        array = []
+                        if self.tableWidget.item(row,2).checkState():
+                            pass
+                        else:
+                            for column in range(2):
+                                item = self.tableWidget.item(row,column).text()
+                                try:
+                                    item = float(item)
+                                except:
+                                    self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
+                                    return
+                                array.append(item)
+                            array.insert(0,row+1)
+                            itemArray.append(array)
+                    for i in range(len(itemArray)):
+                        itemArray[i][0] = i+1
+                    for arr in itemArray:
+                        for sequence in self.sequenceToOpen:
+                            if float(sequence[0]) == float(arr[0]):
+                                arr.insert(1,sequence[1])
+                    itemArray = sortByTerm(itemArray,2)  #so sort by third as 0 indexed
+                    for arr in itemArray:
+                        arr.pop(2)
+                    for i in range(len(itemArray)):
+                        itemArray[i][0] = i+1
+                    self.dataBaseManager.createSequenceTable(self.sequenceWindow.sequenceID)  #creates a blank table
+                    for arr in itemArray:
+                        record = [None,arr[1],arr[2]]
+                        self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),record)
+            self.tableWidget.hide()
+            self.initUI()
+                # print(self.tableWidget.item(row,2).checkState())
 
 
     def updateButtonClicked(self):
@@ -124,9 +134,9 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
 
 
 class TableWidget(QTableWidget):  #taken from https://stackoverflow.com/questions/26227885/drag-and-drop-rows-within-qtablewidget
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    def __init__(self,parentWindow):
+        super().__init__()
+        self.parentWindow = parentWindow
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
         self.viewport().setAcceptDrops(True)
@@ -160,6 +170,7 @@ class TableWidget(QTableWidget):  #taken from https://stackoverflow.com/question
             for row_index in range(len(rows_to_move)):
                 self.item(drop_row + row_index, 0).setSelected(True)
                 self.item(drop_row + row_index, 1).setSelected(True)
+            self.parentWindow.orderChanged()
         super().dropEvent(event)
 
     def drop_on(self, event):
