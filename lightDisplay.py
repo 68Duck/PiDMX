@@ -117,7 +117,7 @@ class LightDisplay(QWidget):
                         for light in self.lights:
                             if light.startChannel == displayLight.channelNumber:
                                 update = True
-                                if light.lightType == "RGB6Channel" or light.lightType == "RGBLight":
+                                if light.lightType == "RGB6Channel" or light.lightType == "RGBLight" or light.lightType == "RGB8Channel":
                                     light.channelValues[1] = self.redRainbow  #red is 1 green is 2 blue is 3 for rgbLight and RGB6Channel
                                     light.channelValues[2] = self.greenRainbow
                                     light.channelValues[3] = self.blueRainbow

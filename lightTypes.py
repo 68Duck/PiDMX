@@ -109,7 +109,7 @@ class RGB6Channel(Light):
 class RGB8Channel(Light):
     def __init__(self,startChannel,infoMode = False):
         Light.__init__(self,startChannel,infoMode)
-        self.lightType = "RGB6Channel"
+        self.lightType = "RGB8Channel"
         self.dropdownName = "RGB 8 Channel Light"
         self.intensity = 255
         self.red = 255

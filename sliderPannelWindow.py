@@ -278,7 +278,7 @@ class SliderPannelWindow(QWidget):  #creates a class window
         colour = QColorDialog.getColor()
         if colour.isValid():
 
-            if self.light.lightType == "RGBLight" or self.light.lightType == "RGB6Channel":
+            if self.light.lightType == "RGBLight" or self.light.lightType == "RGB6Channel" or self.light.lightType == "RGB8Channel" or self.light.lightType == "RGBWLight":
                 for i in range(len(self.light.channels)):
                     if self.light.channels[i] == "Red":
                         self.sliders[i].setValue(colour.red())
@@ -596,7 +596,7 @@ class SliderPannelWindowSequenceWindow(QWidget):  #creates a class window
         colour = QColorDialog.getColor()
         if colour.isValid():
 
-            if self.light.lightType == "RGBLight" or self.light.lightType == "RGB6Channel":
+            if self.light.lightType == "RGBLight" or self.light.lightType == "RGB6Channel" or self.light.lightType == "RGB8Channel" or self.light.lightType == "RGBWLight":
                 for i in range(len(self.light.channels)):
                     if self.light.channels[i] == "Red":
                         self.sliders[i].setValue(colour.red())
