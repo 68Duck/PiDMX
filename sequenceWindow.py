@@ -22,10 +22,6 @@ class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
         self.lights = self.visualLightDisplay.lightList
         self.lightsToPlace = self.lights[:]  #[:] creates a copy of the array
         self.lightDisplay = lightDisplay
-        self.xpos = 0
-        self.width = 1900
-        self.ypos = 0
-        self.height = 1000
         self.displayLights = []
         self.addingLight = False
         self.colourSelected = False
@@ -33,7 +29,6 @@ class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
         self.sequenceID = None
         self.displayingPlaybackID = 1
         self.playbacks = []  #for each subarray, [0] is the Playback ID and [1] is the timeDelay
-        self.setGeometry(int(self.xpos),int(self.ypos),int(self.width),int(self.height)) #sets window parameters top left is (0,0)
         self.setWindowTitle("Lighting Sequence") #sets window title
         self.setStyleSheet("background-color:black;")
         self.initUI()
@@ -98,6 +93,8 @@ class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
         sequenceData = self.dataBaseManager.getAllData("sequence"+str(self.sequenceID))
         if len(sequenceData) > 0:
             playbackID = sequenceData[self.displayingPlaybackID-1][1]  #-1 as the first will be 0
+            playbackName = sequenceData[self.displayingPlaybackID-1][3]
+            self.currentPlaybackLabel.setText(f"Current playback name: {playbackName}")
         playbackData = self.dataBaseManager.getAllData("sequencePlayback"+str(playbackID))
         for record in playbackData:
             channel = int(record[1])
@@ -165,6 +162,7 @@ class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
         self.sequenceCreatorID = self.openSequenceWindow.sequenceCreatorID
         self.displayingPlaybackID = 1
         self.setWindowTitle(self.sequenceName)
+        self.openPlayback()
 
     def saveSequenceButtonClicked(self):
         saveSequenceWindow = SaveSequenceWindow(self.dataBaseManager,self)
