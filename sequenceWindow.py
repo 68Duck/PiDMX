@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
@@ -12,9 +12,10 @@ from sequencePlaybackWindow import SequencePlaybackWindow
 from editSequenceWindow import EditSequenceWindow
 from sliderPannelWindow import SliderPannelWindowSequenceWindow
 
-class SequenceWindow(QWidget):
+class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
     def __init__(self,lightDisplay,visualLightDisplay,dataBaseManager,rigID):
         super().__init__()
+        self.setupUi(self)
         self.rigID = rigID
         self.dataBaseManager = dataBaseManager
         self.visualLightDisplay = visualLightDisplay
@@ -37,100 +38,17 @@ class SequenceWindow(QWidget):
         self.setStyleSheet("background-color:black;")
         self.initUI()
     def initUI(self):
-        self.createGrid() #this needs to be first to ensure it is at the back
-        self.hideGrid()
-
-        self.addLightButton = QPushButton(self)
-        self.addLightButton.setFixedWidth(100)
-        self.addLightButton.move(20,10)
-        self.addLightButton.setText("Add Light")
-        self.addLightButton.setStyleSheet("background-color:white")
         self.addLightButton.clicked.connect(self.addLightButtonClicked)
-
-        self.selectColourButton = QPushButton(self)
-        self.selectColourButton.setFixedWidth(100)
-        self.selectColourButton.move(130,10)
-        self.selectColourButton.setText("Colour Mode")
-        self.selectColourButton.setStyleSheet("background-color:white")
         self.selectColourButton.clicked.connect(self.selectColourButtonClicked)
-        self.selectColourButton.setCheckable(True)
-
-        self.colourPickerButton = QPushButton(self)
-        self.colourPickerButton.setFixedWidth(120)
-        self.colourPickerButton.move(240,10)
-        self.colourPickerButton.setText("Choose Colour")
-        self.colourPickerButton.setStyleSheet("background-color:white")
         self.colourPickerButton.clicked.connect(self.colourPickerButtonClicked)
-
-        self.saveSequenceButton = QPushButton(self)
-        self.saveSequenceButton.setFixedWidth(120)
-        self.saveSequenceButton.move(370,10)
-        self.saveSequenceButton.setText("Save sequence")
-        self.saveSequenceButton.setStyleSheet("background-color:white")
         self.saveSequenceButton.clicked.connect(self.saveSequenceButtonClicked)
-
-        self.openButton = QPushButton(self)
-        self.openButton.setFixedWidth(120)
-        self.openButton.move(500,10)
-        self.openButton.setText("Open Sequence")
-        self.openButton.setStyleSheet("background-color:white")
         self.openButton.clicked.connect(self.openButtonClicked)
-
-        self.autoSaveSequenceButton = QPushButton(self)
-        self.autoSaveSequenceButton.setFixedWidth(150)
-        self.autoSaveSequenceButton.move(630,10)
-        self.autoSaveSequenceButton.setText("Auto-save sequence")
-        self.autoSaveSequenceButton.setStyleSheet("background-color:white")
         self.autoSaveSequenceButton.clicked.connect(self.autoSaveSequenceButtonClicked)
-
-        self.savePlaybackButton = QPushButton(self)
-        self.savePlaybackButton.setFixedWidth(100)
-        self.savePlaybackButton.move(790,10)
-        self.savePlaybackButton.setText("Save playback")
-        self.savePlaybackButton.setStyleSheet("background-color:white")
         self.savePlaybackButton.clicked.connect(self.savePlaybackButtonClicked)
-
-        self.nextPlaybackButton = QPushButton(self)
-        self.nextPlaybackButton.setFixedWidth(100)
-        self.nextPlaybackButton.move(1650,10)
-        self.nextPlaybackButton.setText("Next playback")
-        self.nextPlaybackButton.setStyleSheet("background-color:white")
         self.nextPlaybackButton.clicked.connect(self.nextPlaybackButtonClicked)
-
-        self.previousPlaybackButton = QPushButton(self)
-        self.previousPlaybackButton.setFixedWidth(130)
-        self.previousPlaybackButton.move(1760,10)
-        self.previousPlaybackButton.setText("Previous playback")
-        self.previousPlaybackButton.setStyleSheet("background-color:white")
         self.previousPlaybackButton.clicked.connect(self.previousPlaybackButtonClicked)
-
-        self.colourReplaceButton = QPushButton(self)
-        self.colourReplaceButton.setFixedWidth(120)
-        self.colourReplaceButton.move(900,10)
-        self.colourReplaceButton.setText("Replace Colour")
-        self.colourReplaceButton.setStyleSheet("background-color:white")
         self.colourReplaceButton.clicked.connect(self.colourReplaceButtonClicked)
-
-        self.editSequenceButton = QPushButton(self)
-        self.editSequenceButton.setFixedWidth(100)
-        self.editSequenceButton.move(1030,10)
-        self.editSequenceButton.setText("Edit Sequence")
-        self.editSequenceButton.setStyleSheet("background-color:white")
         self.editSequenceButton.clicked.connect(self.editSequenceButtonClicked)
-
-        self.toggleGridButton = QPushButton(self)
-        self.toggleGridButton.setFixedWidth(120)
-        self.toggleGridButton.move(10,970)
-        self.toggleGridButton.setText("Show Grid")
-        self.toggleGridButton.setStyleSheet("background-color:white")
-        self.toggleGridButton.setCheckable(True)
-        self.toggleGridButton.clicked.connect(self.toggleGridButtonClicked)
-
-        self.addWholeRigButton = QPushButton(self)
-        self.addWholeRigButton.setFixedWidth(120)
-        self.addWholeRigButton.move(1140,10)
-        self.addWholeRigButton.setText("Add whole rig")
-        self.addWholeRigButton.setStyleSheet("background-color:white")
         self.addWholeRigButton.clicked.connect(self.addWholeRigButtonClicked)
 
     def addWholeRigButtonClicked(self):
@@ -147,38 +65,6 @@ class SequenceWindow(QWidget):
             self.editSequenceWindow.show()
         else:
             self.errorWindow = ErrorWindow("You need to open or save a sequence before trying to edit one.")
-
-    def toggleGridButtonClicked(self):
-        button = self.sender()
-        if button.isChecked():
-            self.showGrid()
-        else:
-            self.hideGrid()
-
-    def showGrid(self):
-        for label in self.grid:
-            label.show()
-
-    def hideGrid(self):
-        for label in self.grid:
-            label.hide()
-
-    def createGrid(self):
-        columns = 20
-        rows = 20
-        verticalCentre = self.height/2
-        horizontalCentre = self.width/2
-        height = self.height/rows
-        width = self.width/columns
-        self.grid = []
-        for c in range(columns):
-            for r in range(rows):
-                newLabel = QLabel(self)
-                newLabel.move(int(c*width),int(r*height))
-                newLabel.setFixedSize(int(width),int(height))
-                newLabel.setStyleSheet("background-color:black; border: 1px solid white;")
-                self.grid.append(newLabel)
-
 
     def colourReplaceButtonClicked(self):
         colourToReplace = QColorDialog.getColor()
