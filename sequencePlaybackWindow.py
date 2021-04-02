@@ -1,29 +1,30 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from errorWindow import ErrorWindow
 
-class SequencePlaybackWindow(QMessageBox):
+class SequencePlaybackWindow(QWidget,uic.loadUiType("SequencePlaybackWindow.ui")[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
         super().__init__()
+        self.setupUi(self)
         self.dataBaseManager = dataBaseManager
         self.sequenceWindow = sequenceWindow
         self.initUI()
     def initUI(self):
         self.setWindowTitle("Save Playback")
-        self.setText("Enter the amount of time delay between playbacks")
-        self.setIcon(QMessageBox.Question)
 
-        self.timeDelayInput = QLineEdit(self)
-        self.timeDelayInput.move(100,40)
-        self.timeDelayInput.setPlaceholderText("Enter time delay")
+        self.confirmButton.clicked.connect(self.confirmButtonPressed)
 
-        self.button = self.buttonClicked.connect(self.buttonPressed)
-
-    def buttonPressed(self):
+    def confirmButtonPressed(self):
         self.timeDelay = self.timeDelayInput.text()
+        self.playbackName = self.nameInput.text()
+        sequenceInformation = self.dataBaseManager.getAllData("sequence"+str(self.sequenceWindow.sequenceID))
+        for record in sequenceInformation:
+            if record[3] == self.playbackName:
+                self.errorWindow = ErrorWindow("There is already a playback with that name. Please input a different name.")
+                return
         try:
             self.timeDelay = float(self.timeDelay)
             timeDelayValid = True
@@ -32,11 +33,12 @@ class SequencePlaybackWindow(QMessageBox):
             timeDelayValid = False
         if timeDelayValid:
             self.savePlayback()
+        self.close()
 
     def savePlayback(self):
         nextPlaybackID = self.getNextSequencePlaybackID()
         self.dataBaseManager.createSequencePlaybackTable(nextPlaybackID)
-        self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),[None,nextPlaybackID,self.timeDelay])
+        self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),[None,nextPlaybackID,self.timeDelay,self.playbackName])
         for light in self.sequenceWindow.displayLights:
             channelNumber = int(light.lightName[len(light.lightType):len(light.lightName)])
             if light.lightType == "GenericDimmer":

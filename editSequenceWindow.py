@@ -24,8 +24,8 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
         # self.setLayout(layout)
         self.tableWidget = TableWidget(self)
         self.layout.addWidget(self.tableWidget)
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setHorizontalHeaderLabels(["number","time delay","select"])
+        self.tableWidget.setColumnCount(4)
+        self.tableWidget.setHorizontalHeaderLabels(["number","name","time delay","select"])
         # self.table.hide()
         self.tableWidget.setRowCount(len(self.sequenceToOpen))
         header = self.tableWidget.horizontalHeader()
@@ -39,14 +39,16 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
             id = QTableWidgetItem(str(self.sequenceToOpen[i][0]))
             self.tableWidget.setItem(i,0,id)  #in the from x,y,item
             timeDelay = QTableWidgetItem(str(self.sequenceToOpen[i][2]))
-            self.tableWidget.setItem(i,1,timeDelay)  #in the from x,y,item
+            self.tableWidget.setItem(i,2,timeDelay)  #in the from x,y,item
+            playbackName = QTableWidgetItem(str(self.sequenceToOpen[i][3]))
+            self.tableWidget.setItem(i,1,playbackName)
             # self.checkBox = QCheckBox(self)
             chkBoxItem = QTableWidgetItem()
             chkBoxItem.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
             chkBoxItem.setTextAlignment(Qt.AlignCenter)
             chkBoxItem.setCheckState(Qt.Unchecked)
 
-            self.tableWidget.setItem(i,2,chkBoxItem)
+            self.tableWidget.setItem(i,3,chkBoxItem)
             self.checkBoxes.append(chkBoxItem)
 
         self.tableWidget.resizeRowsToContents()
@@ -68,13 +70,14 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
                     itemArray = []
                     for row in range(len(self.sequenceToOpen)):
                         array = []
-                        if self.tableWidget.item(row,2).checkState():
+                        if self.tableWidget.item(row,3).checkState():
                             pass
                         else:
-                            for column in range(2):
+                            for column in range(3):
                                 item = self.tableWidget.item(row,column).text()
                                 try:
-                                    item = float(item)
+                                    if column != 1: #so not the playbackName
+                                        item = float(item)
                                 except:
                                     self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
                                     return
@@ -94,7 +97,7 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
                         itemArray[i][0] = i+1
                     self.dataBaseManager.createSequenceTable(self.sequenceWindow.sequenceID)  #creates a blank table
                     for arr in itemArray:
-                        record = [None,arr[1],arr[2]]
+                        record = [None,arr[1],arr[3],arr[2]]
                         self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),record)
             self.tableWidget.hide()
             self.initUI()
@@ -105,10 +108,11 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
         itemArray = []
         for row in range(len(self.sequenceToOpen)):
             array = []
-            for column in range(2):
+            for column in range(3):
                 item = self.tableWidget.item(row,column).text()
                 try:
-                    item = float(item)
+                    if column != 1:# so not the playbackName
+                        item = float(item)
                 except:
                     self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
                     return
@@ -127,8 +131,9 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
         for i in range(len(itemArray)):
             itemArray[i][0] = i+1
         self.dataBaseManager.createSequenceTable(self.sequenceWindow.sequenceID)  #creates a blank table
+        print(itemArray)
         for arr in itemArray:
-            record = [None,arr[1],arr[2]]
+            record = [None,arr[1],arr[3],arr[2]]
             self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),record)
         self.close()
 

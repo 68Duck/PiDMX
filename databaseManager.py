@@ -54,7 +54,7 @@ class DataBaseManager():
         con = lite.connect(self.db)
         cur = con.cursor()
         cur.execute(f"DROP TABLE IF EXISTS sequence{sequenceID}")
-        cur.execute(f'CREATE TABLE sequence{sequenceID}("ID" INTEGER NOT NULL UNIQUE, "playbackID" TEXT NOT NULL,"timeDelay" REAL NOT NULL, PRIMARY KEY("ID" AUTOINCREMENT));')
+        cur.execute(f'CREATE TABLE sequence{sequenceID}("ID" INTEGER NOT NULL UNIQUE, "playbackID" TEXT NOT NULL,"timeDelay" REAL NOT NULL,"playbackName" TEXT NOT NULL, PRIMARY KEY("ID" AUTOINCREMENT));')
         con.commit()
 
     def createSequenceCreatorTable(self,sequenceCreatorID):
