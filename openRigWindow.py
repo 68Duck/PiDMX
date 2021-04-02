@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
+from confirmWindow import ConfirmWindow
+
 class OpenRigWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay):
         super().__init__()
@@ -23,7 +25,7 @@ class OpenRigWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
             self.dropDown.addItem(rig[1])  #rig[1] is the name of the rig
 
     def deleteButtonClicked(self):
-        confirmWindow = ConfirmWindow(self,True)
+        confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this rig?")
         if self.removeConfirmed:
             rigToDelete = self.dropDown.currentText()
             if rigToDelete == "":

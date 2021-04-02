@@ -18,23 +18,11 @@ class PlaybackWindow(QWidget,uic.loadUiType("playbackWindow.ui")[0]):
         self.initUI()
 
     def initUI(self):
-        # self.runButton  = QPushButton(self)
-        # self.runButton.move(300,200)
-        # self.runButton.setFixedWidth(100)
-        # self.runButton.setText("Open")
         self.runButton.clicked.connect(self.runButtonClicked)
-
-        # self.deleteButton = QPushButton(self)
-        # self.deleteButton.move(300,100)
-        # self.deleteButton.setFixedWidth(100)
-        # self.deleteButton.setText("Delete Playback")
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
 
         self.savedPlaybacks = self.dataBaseManager.getCurrentRigsPlaybacks(self.visualLightDisplay.rigID)
 
-        # self.dropDown = QComboBox(self)
-        # self.dropDown.move(50,50)
-        # self.dropDown.setMinimumWidth(200)
         for playback in self.savedPlaybacks:
             self.dropDown.addItem(playback[3])  #playback[3] is the playback name
 
@@ -109,7 +97,7 @@ class PlaybackWindow(QWidget,uic.loadUiType("playbackWindow.ui")[0]):
 
     def deleteButtonClicked(self):
         self.removedConfirmed = False
-        confirmWindow = ConfirmWindow(self,removePlayback=True)
+        confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this playback?")
         if self.removeConfirmed:
             playbackToDelete = self.dropDown.currentText()
             if playbackToDelete == "":

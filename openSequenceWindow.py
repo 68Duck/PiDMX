@@ -40,7 +40,7 @@ class OpenSequenceWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
                 self.dropDown.addItem(sequence[2])  #sequence[2] is the name of the sequence
 
     def deleteButtonClicked(self):
-        confirmWindow = ConfirmWindow(self,removeSequence = True)
+        confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this sequence?")
         if self.removeConfirmed:
             sequenceToDelete = self.dropDown.currentText()
             if sequenceToDelete == "":

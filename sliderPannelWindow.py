@@ -140,7 +140,7 @@ class SliderPannelWindow(QWidget):  #creates a class window
             print("THIS FEATURE DOSENT EXIST")
 
     def removeFixtureButtonClicked(self):
-        confirmWindow = ConfirmWindow(self)
+        confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this light?")
         if self.removeConfirmed == True:
 
             numberOfSameLight = 0
@@ -458,7 +458,7 @@ class SliderPannelWindowSequenceWindow(QWidget):  #creates a class window
             print("THIS FEATURE DOSENT EXIST")
 
     def removeFixtureButtonClicked(self):
-        confirmWindow = ConfirmWindow(self)
+        confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this light?")
         if self.removeConfirmed == True:
 
             numberOfSameLight = 0

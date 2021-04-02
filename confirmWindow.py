@@ -5,30 +5,15 @@ from PyQt5.QtCore import*
 
 
 class ConfirmWindow(QMessageBox):  #creates a class window
-    def __init__(self,parentWindow,removeRig = False,playbackOveride = False,removePlayback=False,removeSequence = False,removePlaybackFromSequence=False):
+    def __init__(self,parentWindow,message):
         super().__init__()     #use super class of QMainWindow
+        self.message = message
         self.parentWindow = parentWindow
-        self.removePlayback = removePlayback
-        self.removeRig = removeRig
-        self.playbackOveride = playbackOveride
-        self.removeSequence = removeSequence
-        self.removePlaybackFromSequence = removePlaybackFromSequence
         self.initUI()
     def initUI(self):   #create UI
 
         self.setWindowTitle("Alert!")
-        if self.removeRig:
-            self.setText("Are you sure you want to remove this rig?")
-        elif self.playbackOveride:
-            self.setText("This name already exisists. Do you want to overide it.")
-        elif self.removePlayback:
-            self.setText("Are you sure you want to remove this playback?")
-        elif self.removeSequence:
-            self.setText("Are you sure you want to remove this sequence?")
-        elif self.removePlaybackFromSequence:
-            self.setText("Are you sure you want to remove this playback?")
-        else:
-            self.setText("Are you sure you want to remove this light?")
+        self.setText(self.message)
         self.setIcon(QMessageBox.Question)
 
         self.confirm = self.buttonClicked.connect(self.confirmClicked)

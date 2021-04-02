@@ -205,7 +205,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                 nameAlreadyUsed = self.dataBaseManager.checkIfPlaybackNameExistsInRig(self.rigID,self.playbackName)
                 if nameAlreadyUsed:
                     self.removeConfirmed = False
-                    confirmWindow = ConfirmWindow(self,playbackOveride = True)
+                    confirmWindow = ConfirmWindow(self,"This name already exisists. Do you want to overide it.")
                     if not self.removeConfirmed:
                         return
                     else:

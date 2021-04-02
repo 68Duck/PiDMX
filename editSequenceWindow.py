@@ -61,7 +61,7 @@ class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
             self.tableWidget.setItem(row,0,rowNumber)
 
     def deleteButtonClicked(self):
-        self.confirmWindow = ConfirmWindow(self,removePlaybackFromSequence = True)
+        self.confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this playback?")
         if self.removeConfirmed:
             self.removeConfirmed = False
             for row in range(len(self.sequenceToOpen)):
