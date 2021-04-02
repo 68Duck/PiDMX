@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>130</height>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,6 +85,24 @@ color: white;
    </property>
    <property name="text">
     <string>Loop?</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="spacebarCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>120</y>
+     <width>211</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Change playback on Spacebar</string>
    </property>
   </widget>
  </widget>

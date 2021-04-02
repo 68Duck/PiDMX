@@ -25,6 +25,7 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
 
 
     def openButtonClicked(self):
+        self.moveOnSpace = self.spacebarCheckBox.isChecked()
         self.loopSequence = self.loopCheckBox.isChecked()
         self.sequence = self.dropDown.currentText()
         self.visualLightDisplay.runningSequence = True
@@ -65,21 +66,21 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
         for light in self.visualLightDisplay.lightList: #set all to unselected First
             if light.selected == True:
                 light.toggleSelected()
-        for light in self.visualLightDisplay.lightList: #set all to unselected First
-            if light.selected == True:
-                light.toggleSelected()
         self.firstTimeDelay = self.sequenceToOpen[0][2]
         timeDelayTotal = self.sequenceToOpen[0][2] * -1  #negates the first one so opened immediately
         self.timers = []
-        print(self.sequenceToOpen)
         for sequence in self.sequenceToOpen:
             self.nextSequence = sequence
             timeDelay = sequence[2]
             timeDelayTotal += timeDelay
-            self.newTimer = QTimer()
-            self.newTimer.timeout.connect(self.openIndividualSequence)
-            self.timers.append(self.newTimer)
-            self.newTimer.start(int(timeDelayTotal*1000))
+            if self.moveOnSpace:
+                self.visualLightDisplay.checkForSpace = True
+                self.timers.append(1) #used to count the number of sequences so if needs to reset.
+            else:
+                self.newTimer = QTimer()
+                self.newTimer.timeout.connect(self.openIndividualSequence)
+                self.timers.append(self.newTimer)
+                self.newTimer.start(int(timeDelayTotal*1000))
 
     def openIndividualSequence(self):
         sequence = self.sequenceToOpen[0]
@@ -98,14 +99,22 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
         self.lightDisplay.universeChanged()
         for light in self.visualLightDisplay.lightList:
             light.changeColourAccordingToFixture()
-        self.timers[0].stop()
+        if self.moveOnSpace:
+            self.visualLightDisplay.checkForSpace = True
+        else:
+            self.timers[0].stop()
         self.timers.pop(0)
         if len(self.timers) == 0:
             if self.loopSequence:
-                self.resetTimer = QTimer()
-                self.resetTimer.timeout.connect(self.replaySequence)
-                print(self.firstTimeDelay)
-                self.resetTimer.start(self.firstTimeDelay*1000) #*1000 as miliseconds
+                if self.moveOnSpace:
+                    self.setupSequence()
+                else:
+                    self.resetTimer = QTimer()
+                    self.resetTimer.timeout.connect(self.replaySequence)
+                    self.resetTimer.start(self.firstTimeDelay*1000) #*1000 as miliseconds
+            else:
+                if self.moveOnSpace:
+                    self.visualLightDisplay.checkForSpace = False
 
     def replaySequence(self):
         self.resetTimer.stop()

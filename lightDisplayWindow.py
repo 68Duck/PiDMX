@@ -46,6 +46,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
         self.creatingDuplicate = False
         self.playbackName = None
         self.runningSequence = False
+        self.checkForSpace = False
+        self.finishedSequence = False
         self.effectsWindow = EffectsWindow(self.lightDisplay,self.selectedLights,self,True)
         self.initUI()
     def initUI(self):   #create UI
@@ -329,6 +331,14 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0])
                         pass
                     else:
                         return 1
+            if (event.type() == QEvent.KeyPress):
+                key = event.key()
+                if key == Qt.Key_Space:
+                    if self.checkForSpace == True:
+                        self.checkForSpace = False
+                        self.sequenceSelectionWindow.openIndividualSequence()
+                        return 1 #needed to stop double trigger
+
         return super(LightDisplayWindow, self).eventFilter(source, event)
 
 
