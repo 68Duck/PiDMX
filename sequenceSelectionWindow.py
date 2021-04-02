@@ -68,6 +68,7 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
         for light in self.visualLightDisplay.lightList: #set all to unselected First
             if light.selected == True:
                 light.toggleSelected()
+        self.firstTimeDelay = self.sequenceToOpen[0][2]
         timeDelayTotal = self.sequenceToOpen[0][2] * -1  #negates the first one so opened immediately
         self.timers = []
         print(self.sequenceToOpen)
@@ -101,10 +102,10 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui
         self.timers.pop(0)
         if len(self.timers) == 0:
             if self.loopSequence:
-                print("test")
                 self.resetTimer = QTimer()
                 self.resetTimer.timeout.connect(self.replaySequence)
-                self.resetTimer.start(1000)
+                print(self.firstTimeDelay)
+                self.resetTimer.start(self.firstTimeDelay*1000) #*1000 as miliseconds
 
     def replaySequence(self):
         self.resetTimer.stop()
