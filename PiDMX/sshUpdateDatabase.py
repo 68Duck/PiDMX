@@ -49,9 +49,9 @@ class SSHUpdateDatabase(object):
 
     def updateDatabase(self):
         scp = SCPClient(self.client.get_transport())
-        databaseLocation = path.join(os.path.dirname(os.getcwd()),"databases")
+        # databaseLocation = path.join(os.path.dirname(os.getcwd()),"databases")
         db = "universeValues.db"
-        db = path.join(databaseLocation,db)
+        db = path.join("databases",db)
         scp.put(db,recursive=True,remote_path="/var/www/dmx")
         self.counter += 1
         print("updated"+str(self.counter))
