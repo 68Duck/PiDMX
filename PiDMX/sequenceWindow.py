@@ -11,7 +11,7 @@ from openSequenceWindow import OpenSequenceWindow
 from errorWindow import ErrorWindow
 from sequencePlaybackWindow import SequencePlaybackWindow
 from editSequenceWindow import EditSequenceWindow
-from sliderPannelWindow import SliderPannelWindowSequenceWindow
+from sliderPannelWindow import SliderPannelWindow
 
 class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindow.ui"))[0]):
     def __init__(self,lightDisplay,visualLightDisplay,dataBaseManager,rigID):
@@ -262,7 +262,7 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
                             for fixture in self.lightDisplay.lights:
                                 if channelNumber == fixture.startChannel:
                                     channelValid = True
-                                    self.sliderPannelWindow = SliderPannelWindowSequenceWindow(channelNumber,self.lightDisplay,fixture,light,self)
+                                    self.sliderPannelWindow = SliderPannelWindow(channelNumber,self.lightDisplay,fixture,light,self,sequenceWindowMode = True)
                                     self.sliderPannelWindow.show()
                             if not channelValid:
                                 self.errorWindow = ErrorWindow("Channel Error not valid")
