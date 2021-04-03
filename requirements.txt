@@ -3,4 +3,4 @@ paramiko
 scp
 keyboard
 numpy
-sqlite3
+
