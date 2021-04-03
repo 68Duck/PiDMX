@@ -1,0 +1,6 @@
+PyQt5
+paramiko
+scp
+keyboard
+numpy
+sqlite3
