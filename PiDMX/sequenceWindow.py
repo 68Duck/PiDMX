@@ -226,25 +226,15 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
                 for l in self.lights:
                     if int(channelNumber) == int(l.channelNumber):
                         newDisplayLight = SequenceDisplayLight2(self.lightDisplay,self,light,xPos,yPos,lightType)
-                        self.displayLights.append(newDisplayLight.box1)
-                        self.displayLights.append(newDisplayLight.box2)
-                        self.displayLights.append(newDisplayLight.box3)
-                        self.displayLights.append(newDisplayLight.box4)
-                        self.displayLights.append(newDisplayLight.box5)
-                        self.displayLights.append(newDisplayLight.box6)
-                        self.displayLights.append(newDisplayLight.box7)
-                        self.displayLights.append(newDisplayLight.box8)
+                        for i in range(1,9,1):
+                            box = getattr(newDisplayLight,f"box{i}")
+                            self.displayLights.append(box)
 
             else:
                 newDisplayLight = SequenceDisplayLight2(self.lightDisplay,self,light,xPos,yPos,lightType)
-                self.displayLights.append(newDisplayLight.box1)
-                self.displayLights.append(newDisplayLight.box2)
-                self.displayLights.append(newDisplayLight.box3)
-                self.displayLights.append(newDisplayLight.box4)
-                self.displayLights.append(newDisplayLight.box5)
-                self.displayLights.append(newDisplayLight.box6)
-                self.displayLights.append(newDisplayLight.box7)
-                self.displayLights.append(newDisplayLight.box8)
+                for i in range(1,9,1):
+                    box = getattr(newDisplayLight,f"box{i}")
+                    self.displayLights.append(box)
         elif lightType == "GenericDimmer":
             newDisplayLight = SequenceDisplayLight3(self.lightDisplay,self,light,xPos,yPos,lightType)
             self.displayLights.append(newDisplayLight)

@@ -5,10 +5,6 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
-import sys
-import threading
-import math as maths
-import sqlite3 as lite
 import random
 
 class PyDMX:  ##Coppied from the internet. This does the sending to dmx stuff

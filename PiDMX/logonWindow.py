@@ -1,14 +1,7 @@
-import serial
-import time
-import numpy as np
 from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
-import sys
-import threading
-import math as maths
-import sqlite3 as lite
 import random
 import os
 

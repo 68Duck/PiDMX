@@ -232,8 +232,6 @@ class SliderPannelWindow(QWidget):  #creates a class window
                     self.sliders[slider].setValue(int(changedSlider.value()))
         for i in range(len(self.textBoxes)):   ##sliders and textboxes should be the same length
             self.textBoxes[i].setText(str(self.sliders[i].value()))
-        # for i in range(len(self.sliders)):
-        #     self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel)
 
         if self.displayWindowLight:
             for light in self.displayWindow.lightList:
@@ -266,9 +264,6 @@ class SliderPannelWindow(QWidget):  #creates a class window
                 elif int(self.textBoxes[i].text())<0:
                     self.textBoxes[i].setText(str(0))
 
-        # if overallValid:
-        #     for i in range(len(self.sliders)):
-        #         self.lightDisplay.commitToChannel(i,self.sliders[i].value(),self.channel)
         if self.displayWindowLight:
             for light in self.displayWindow.lightList:
                 finished = light.changeColourAccordingToFixture()

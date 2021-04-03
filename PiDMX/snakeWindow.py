@@ -145,7 +145,6 @@ class SnakeWindow(QWidget,uic.loadUiType(os.path.join("ui","snakeWindow.ui"))[0]
                     self.greenIncreasing = True
                 else:
                     self.blueRainbow -= self.rainbowChangeAmount
-            # print(self.redRainbow,self.greenRainbow,self.blueRainbow)
 
 
     def initialiseRainbow(self):

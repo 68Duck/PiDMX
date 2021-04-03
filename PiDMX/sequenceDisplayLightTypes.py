@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import math as maths
 
 class SequenceParentDisplayLight(QWidget):
     def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
@@ -12,9 +13,7 @@ class SequenceParentDisplayLight(QWidget):
         self.sequenceWindow = sequenceWindow
         self.xPos = xPos
         self.yPos = yPos
-        self.red = 255
-        self.green = 255
-        self.blue = 255
+        self.red,self.green,self.blue = [255,255,255]
         self.shapes = self.createShapes()
         self.move()
         self.setClickableRegion()
@@ -76,11 +75,8 @@ class SequenceDisplayLight(SequenceParentDisplayLight):
 
     def createShapes(self):
         self.border = self.createShape(self.xPos-35,self.yPos-35,80,80,20)
-        self.circle1 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle2 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle3 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle4 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle5 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
+        for i in range(1,6,1):
+            setattr(self,f"circle{i}",self.createShape(self.xPos,self.yPos,10,10,int(10/2),True))
         return [self.border,self.circle1,self.circle2,self.circle3,self.circle4,self.circle5]
 
     def setClickableRegion(self):
@@ -104,10 +100,9 @@ class SequenceDisplayLight(SequenceParentDisplayLight):
 
     def move(self):
         self.circle1.move(self.xPos,self.yPos)
-        self.circle2.move(self.xPos-20,self.yPos-20)
-        self.circle3.move(self.xPos-20,self.yPos+20)
-        self.circle4.move(self.xPos+20,self.yPos-20)
-        self.circle5.move(self.xPos+20,self.yPos+20)
+        for i in range(2,6,1): #adds top left top right bottom right and bottom left circles
+            circle = getattr(self,f"circle{i}")
+            circle.move(self.xPos+(20*((-1)**(maths.cos((i-1)*maths.pi/2)>0))),self.yPos+20*((-1)**(i)))
         self.border.move(self.xPos-35,self.yPos-35)
 
     def changeColourRGB(self,red=None,green=None,blue=None):

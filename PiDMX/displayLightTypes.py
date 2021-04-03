@@ -51,14 +51,8 @@ class DisplayLight2(DisplayLightParent):
         DisplayLightParent.__init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow)
 
     def createShapes(self):
-        self.box1 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box2 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box3 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box4 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box5 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box6 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box7 = self.createShape(self.xPos,self.yPos,20,20)
-        self.box8 = self.createShape(self.xPos,self.yPos,20,20)
+        for i in range(1,9,1):
+            setattr(self,f"box{i}",self.createShape(self.xPos,self.yPos,20,20))
         return [self.box1,self.box2,self.box3,self.box4,self.box5,self.box6,self.box7,self.box8]
 
     def setClickableRegion(self):
@@ -74,34 +68,23 @@ class DisplayLight2(DisplayLightParent):
             channel = "0" + channel
         return str(channel)
 
-    def changeColour(self):
-        colour1 = self.hexValueForChannel(self.light.red1)+self.hexValueForChannel(self.light.green1)+self.hexValueForChannel(self.light.blue1)
-        colour2 = self.hexValueForChannel(self.light.red2)+self.hexValueForChannel(self.light.green2)+self.hexValueForChannel(self.light.blue2)
-        colour3 = self.hexValueForChannel(self.light.red3)+self.hexValueForChannel(self.light.green3)+self.hexValueForChannel(self.light.blue3)
-        colour5 = self.hexValueForChannel(self.light.red5)+self.hexValueForChannel(self.light.green5)+self.hexValueForChannel(self.light.blue5)
-        colour4 = self.hexValueForChannel(self.light.red4)+self.hexValueForChannel(self.light.green4)+self.hexValueForChannel(self.light.blue4)
-        colour6 = self.hexValueForChannel(self.light.red6)+self.hexValueForChannel(self.light.green6)+self.hexValueForChannel(self.light.blue6)
-        colour7 = self.hexValueForChannel(self.light.red7)+self.hexValueForChannel(self.light.green7)+self.hexValueForChannel(self.light.blue7)
-        colour8 = self.hexValueForChannel(self.light.red8)+self.hexValueForChannel(self.light.green8)+self.hexValueForChannel(self.light.blue8)
+    def hexValueForRGB(self,red,green,blue):
+        red = self.hexValueForChannel(red)
+        green = self.hexValueForChannel(green)
+        blue = self.hexValueForChannel(blue)
+        return red+green+blue
 
-        self.box1.setStyleSheet(f'background-color: #{colour1};')
-        self.box2.setStyleSheet(f'background-color: #{colour2};')
-        self.box3.setStyleSheet(f'background-color: #{colour3};')
-        self.box4.setStyleSheet(f'background-color: #{colour4};')
-        self.box5.setStyleSheet(f'background-color: #{colour5};')
-        self.box6.setStyleSheet(f'background-color: #{colour6};')
-        self.box7.setStyleSheet(f'background-color: #{colour7};')
-        self.box8.setStyleSheet(f'background-color: #{colour8};')
+    def changeColour(self):
+        for i in range(1,9,1):
+            box = getattr(self,f"box{i}")
+            light = getattr(self,"light")
+            colour = self.hexValueForRGB(getattr(light,f"red{i}"),getattr(light,f"green{i}"),getattr(light,f"blue{i}"))
+            box.setStyleSheet(f'background-color: #{colour};')
 
     def move(self):
-        self.box1.move(self.xPos,self.yPos)
-        self.box2.move(self.xPos,self.yPos+20)
-        self.box3.move(self.xPos,self.yPos+40)
-        self.box4.move(self.xPos,self.yPos+60)
-        self.box5.move(self.xPos,self.yPos+80)
-        self.box6.move(self.xPos,self.yPos+100)
-        self.box7.move(self.xPos,self.yPos+120)
-        self.box8.move(self.xPos,self.yPos+140)
+        for i in range(8):
+            box = getattr(self,f"box{i+1}")
+            box.move(self.xPos,self.yPos+20*i)
 
     def createShape(self,xPos,yPos,width,height):
         self.shape = QLabel(self.parentWindow)
@@ -132,11 +115,8 @@ class DisplayLight(DisplayLightParent):
 
     def createShapes(self):
         self.border = self.createShape(self.xPos-35,self.yPos-35,80,80,20)
-        self.circle1 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle2 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle3 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle4 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
-        self.circle5 = self.createShape(self.xPos,self.yPos,10,10,int(10/2),True)
+        for i in range(1,6,1):
+            setattr(self,f"circle{i}",self.createShape(self.xPos,self.yPos,10,10,int(10/2),True))
         return [self.border,self.circle1,self.circle2,self.circle3,self.circle4,self.circle5]
 
     def setClickableRegion(self):

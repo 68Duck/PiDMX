@@ -38,6 +38,7 @@ class SequencePlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","SequenceP
 
     def savePlayback(self):
         nextPlaybackID = self.getNextSequencePlaybackID()
+        sequencePlabackTable = "sequencePlayback" + str(nextPlaybackID)
         self.dataBaseManager.createSequencePlaybackTable(nextPlaybackID)
         self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),[None,nextPlaybackID,self.timeDelay,self.playbackName])
         for light in self.sequenceWindow.displayLights:
@@ -47,26 +48,21 @@ class SequencePlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","SequenceP
                     if channelNumber == fixture.startChannel:
                         self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,fixture.intensity])
             elif light.lightType == "RGBLight" or light.lightType == "RGB6Channel":
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,255])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber,255])
                 channelNumber += 1
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,light.red])
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+1,light.green])
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+2,light.blue])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber,light.red])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber+1,light.green])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber+2,light.blue])
             elif light.lightType == "Miniscan":
                 for fixture in self.sequenceWindow.lightDisplay.lights:
                     if channelNumber == fixture.startChannel:
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,fixture.colour])
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+1,fixture.goboRoation])
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+2,fixture.gobo])
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+3,fixture.intensity])
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+4,fixture.pan])
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+5,fixture.tilt])
-                        self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber+6,fixture.effects])
+                        for i in range(7):
+                            self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber+i,fixture.channelValues[i]])
 
             else:
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,channelNumber,light.red])
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+1,light.green])
-                self.dataBaseManager.insertRecord("sequencePlayback"+str(nextPlaybackID),[None,int(channelNumber)+2,light.blue])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber,light.red])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber+1,light.green])
+                self.dataBaseManager.insertRecord(sequencePlabackTable,[None,channelNumber+2,light.blue])
         savedPlaybacks = self.dataBaseManager.getAllData("sequence"+str(self.sequenceWindow.sequenceID))
         self.sequenceWindow.displayingPlaybackID = len(savedPlaybacks)
 

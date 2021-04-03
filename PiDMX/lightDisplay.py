@@ -211,7 +211,6 @@ class LightDisplay(QWidget):
                     self.greenIncreasing = True
                 else:
                     self.blueRainbow -= self.rainbowChangeAmount
-            # print(self.redRainbow,self.greenRainbow,self.blueRainbow)
 
 
     def initialiseRainbow(self):

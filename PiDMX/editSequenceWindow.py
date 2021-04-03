@@ -30,9 +30,8 @@ class EditSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","editSequenceW
         # self.table.hide()
         self.tableWidget.setRowCount(len(self.sequenceToOpen))
         header = self.tableWidget.horizontalHeader()
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-        header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        for i in range(3):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
         xPos = 0
         yPos = 0
         self.checkBoxes = []
@@ -67,59 +66,33 @@ class EditSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","editSequenceW
         self.confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this playback?")
         if self.removeConfirmed:
             self.removeConfirmed = False
-            for row in range(len(self.sequenceToOpen)):
-                    itemArray = []
-                    for row in range(len(self.sequenceToOpen)):
-                        array = []
-                        if self.tableWidget.item(row,3).checkState():
-                            pass
-                        else:
-                            for column in range(3):
-                                item = self.tableWidget.item(row,column).text()
-                                try:
-                                    if column != 1: #so not the playbackName
-                                        item = float(item)
-                                except:
-                                    self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
-                                    return
-                                array.append(item)
-                            array.insert(0,row+1)
-                            itemArray.append(array)
-                    for i in range(len(itemArray)):
-                        itemArray[i][0] = i+1
-                    for arr in itemArray:
-                        for sequence in self.sequenceToOpen:
-                            if float(sequence[0]) == float(arr[0]):
-                                arr.insert(1,sequence[1])
-                    itemArray = sortByTerm(itemArray,2)  #so sort by third as 0 indexed
-                    for arr in itemArray:
-                        arr.pop(2)
-                    for i in range(len(itemArray)):
-                        itemArray[i][0] = i+1
-                    self.dataBaseManager.createSequenceTable(self.sequenceWindow.sequenceID)  #creates a blank table
-                    for arr in itemArray:
-                        record = [None,arr[1],arr[3],arr[2]]
-                        self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),record)
+            self.writeTableToDatabase(delete=True)
             self.tableWidget.hide()
             self.initUI()
-                # print(self.tableWidget.item(row,2).checkState())
 
 
     def updateButtonClicked(self):
+        self.writeTableToDatabase(delete=False)
+        self.close()
+
+    def writeTableToDatabase(self,delete=False):
         itemArray = []
         for row in range(len(self.sequenceToOpen)):
             array = []
-            for column in range(3):
-                item = self.tableWidget.item(row,column).text()
-                try:
-                    if column != 1:# so not the playbackName
-                        item = float(item)
-                except:
-                    self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
-                    return
-                array.append(item)
-            array.insert(0,row+1)
-            itemArray.append(array)
+            if self.tableWidget.item(row,3).checkState() and delete:
+                pass
+            else:
+                for column in range(3):
+                    item = self.tableWidget.item(row,column).text()
+                    try:
+                        if column != 1:# so not the playbackName
+                            item = float(item)
+                    except:
+                        self.errorWindow = ErrorWindow("The values need to be numbers. Please try again")
+                        return
+                    array.append(item)
+                array.insert(0,row+1)
+                itemArray.append(array)
         for i in range(len(itemArray)):
             itemArray[i][0] = i+1
         for arr in itemArray:
@@ -132,11 +105,9 @@ class EditSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","editSequenceW
         for i in range(len(itemArray)):
             itemArray[i][0] = i+1
         self.dataBaseManager.createSequenceTable(self.sequenceWindow.sequenceID)  #creates a blank table
-        print(itemArray)
         for arr in itemArray:
             record = [None,arr[1],arr[3],arr[2]]
             self.dataBaseManager.insertRecord("sequence"+str(self.sequenceWindow.sequenceID),record)
-        self.close()
 
 
 class TableWidget(QTableWidget):  #taken from https://stackoverflow.com/questions/26227885/drag-and-drop-rows-within-qtablewidget

@@ -17,6 +17,11 @@ class Light(object):
         self.channels = []
         self.channelValues = []
         self.previousValues = self.channels
+    def createChannelValues(self):
+        self.channelValues = []
+        for channel in self.channelNames:
+            self.channelValues.append(getattr(self,channel))
+        self.previousValues = self.channelValues
     def changeUniverse(self,updateUniverse=True):
         if self.lightDisplay == False:
             self.errorWindow = ErrorWindow("ERROR LightDisplay has not been defined")
@@ -33,8 +38,8 @@ class Light(object):
     def returnChannelValues(self):
         return self.channelValues
     def updateChannelValues(self):
-        #put each variable name equal to the correct part of self.channelValues
-        pass
+        for i in range(len(self.channelNames)):
+            setattr(self,self.channelNames[i],self.channelValues[i])
     def generateNewLight(self,channel):
         newLight = Light(channel)  #change light for each class type
         return newLight
@@ -64,19 +69,11 @@ class Miniscan(Light):
         self.pan = 255//2
         self.tilt = 255//2
         self.effects = 0 #so open
+        self.channelNames = ["colour","goboRoation","gobo","intensity","pan","tilt","effects"]
         self.channels = ["Colour","Gobo Rotation","Gobo","Intensity","Pan","Tilt","Effects"]
-        self.channelValues = [self.colour,self.goboRoation,self.gobo,self.intensity,self.pan,self.tilt,self.effects]
-        self.previousValues = self.channelValues
-    def updateChannelValues(self):
-        self.colour = self.channelValues[0]
-        self.goboRoation = self.channelValues[1]
-        self.gobo = self.channelValues[2]
-        self.intensity = self.channelValues[3]
-        self.pan = self.channelValues[4]
-        self.tilt = self.channelValues[5]
-        self.effects = self.channelValues[6]
+        self.createChannelValues()
     def generateNewLight(self,channel):
-        newLight = Miniscan(channel)  #where NewLight is the class name but newLight is the variable newLight
+        newLight = Miniscan(channel)
         return newLight
 
 
@@ -85,22 +82,14 @@ class RGB6Channel(Light):
         Light.__init__(self,startChannel,infoMode)
         self.lightType = "RGB6Channel"
         self.dropdownName = "RGB 6 Channel Light"
-        self.intensity = 255
-        self.red = 255
-        self.green = 255
-        self.blue = 255
-        self.strobe = 0
-        self.colourFade = 0
+        self.channelNames = ["intensity","red","green","blue","strobe","colourFade"]
         self.channels = ["Intensity","Red","Green","Blue","Strobe","ColourFade"]
-        self.channelValues = [self.intensity,self.red,self.green,self.blue,self.strobe,self.colourFade]
-        self.previousValues = self.channelValues
-    def updateChannelValues(self):
-        self.intensity = self.channelValues[0]
-        self.red = self.channelValues[1]
-        self.green = self.channelValues[2]
-        self.blue = self.channelValues[3]
-        self.strobe = self.channelValues[4]
-        self.colourFade = self.channelValues[5]
+        for i in range(len(self.channelNames)):
+            if i > 3:
+                setattr(self,self.channelNames[i],0)
+            else:
+                setattr(self,self.channelNames[i],255)
+        self.createChannelValues()
     def generateNewLight(self,channel):
         newLight = RGB6Channel(channel)  #where NewLight is the class name but newLight is the variable newLight
         return newLight
@@ -111,26 +100,14 @@ class RGB8Channel(Light):
         Light.__init__(self,startChannel,infoMode)
         self.lightType = "RGB8Channel"
         self.dropdownName = "RGB 8 Channel Light"
-        self.intensity = 255
-        self.red = 255
-        self.green = 255
-        self.blue = 255
-        self.white = 0
-        self.colourFader = 0
-        self.colourChooser = 0
-        self.strobe = 0
         self.channels = ["Intensity","Red","Green","Blue","White","ColourFader","ColourChooser","Strobe"]
-        self.channelValues = [self.intensity,self.red,self.green,self.blue,self.white,self.colourFader,self.colourChooser,self.strobe]
-        self.previousValues = self.channelValues
-    def updateChannelValues(self):
-        self.intensity = self.channelValues[0]
-        self.red = self.channelValues[1]
-        self.green = self.channelValues[2]
-        self.blue = self.channelValues[3]
-        self.white = self.channelValues[4]
-        self.colourFader = self.channelValues[5]
-        self.colourChooser = self.channelValues[6]
-        self.strobe = self.channelValues[7]
+        self.channelNames = ["intensity","red","green","blue","white","colourFader","colourChooser","strobe"]
+        for i in range(len(self.channelNames)):
+            if i > 3:
+                setattr(self,self.channelNames[i],0)
+            else:
+                setattr(self,self.channelNames[i],255)
+        self.createChannelValues()
     def generateNewLight(self,channel):
         newLight = RGB8Channel(channel)  #where NewLight is the class name but newLight is the variable newLight
         return newLight
@@ -141,18 +118,11 @@ class RGBLight(Light):
         Light.__init__(self,startChannel,infoMode)
         self.lightType="RGBLight"
         self.dropdownName = "RGB Light with intensity"
-        self.intensity = 255
-        self.red = 255
-        self.green = 255
-        self.blue = 255
+        self.channelNames = ["intensity","red","green","blue"]
+        for channel in self.channelNames:
+            setattr(self,channel,255)
         self.channels = ["Intensity","Red","Green","Blue"]
-        self.channelValues = [self.intensity,self.red,self.green,self.blue]
-        self.previousValues = self.channelValues
-    def updateChannelValues(self):
-        self.intensity = self.channelValues[0]
-        self.red = self.channelValues[1]
-        self.green = self.channelValues[2]
-        self.blue = self.channelValues[3]
+        self.createChannelValues()
     def generateNewLight(self,channel):
         newLight = RGBLight(channel)
         return newLight
@@ -167,13 +137,8 @@ class RGBWLight(Light):
         self.blue = 255
         self.white = 0
         self.channels = ["Red","Green","Blue","White"]
-        self.channelValues = [self.red,self.green,self.blue,self.white]
-        self.previousValues = self.channelValues
-    def updateChannelValues(self):
-        self.red = self.channelValues[0]
-        self.green = self.channelValues[1]
-        self.blue = self.channelValues[2]
-        self.white = self.channelValues[3]
+        self.channelNames = ["red","green","blue","white"]
+        self.createChannelValues()
     def generateNewLight(self,channel):
         newLight = RGBWLight(channel)
         return newLight
@@ -185,10 +150,8 @@ class GenericDimmer(Light):
         self.dropdownName = "Generic Dimmer"
         self.intensity = 255
         self.channels=["Intensity"]
-        self.channelValues = [self.intensity]
-        self.previousValues = self.channelValues
-    def updateChannelValues(self):
-        self.intensity = self.channelValues[0]
+        self.channelNames = ["intensity"]
+        self.createChannelValues()
     def generateNewLight(self,channel):
         newLight = GenericDimmer(channel)
         return newLight
@@ -199,17 +162,18 @@ class LEDBar24ChannelMode(Light):
         self.lightType = "LEDBar24ChannelMode"
         self.dropdownName = "LED bar 24 channel mode"
         colours = ["red","green","blue"]
+        self.channelNames = []
         for i in range(1,9,1):
             for colour in colours:
                 setattr(self,f"{colour}{i}",255)
-                self.channelValues.append(getattr(self,f"{colour}{i}"))
+                self.channelNames.append(f"{colour}{i}")
 
         coloursCaptialised = ["Red","Green","Blue"]
         self.channels = []
         for i in range(1,9,1):
             for colour in coloursCaptialised:
                 self.channels.append(f"{colour}{i}")
-        self.previousValues = self.channelValues
+        self.createChannelValues()
     def updateChannelValues(self):
         counter = 0
         colours = ["red","green","blue"]
