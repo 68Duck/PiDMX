@@ -2,17 +2,9 @@ import sqlite3 as lite
 from os import path
 import os
 
-# fileDir = path.dirname(__file__)
-# databaseLocation = path.join(os.path.dirname(os.getcwd()),"databases")
-# print(databaseLocation)
-#
-# print(os.getcwd())
-# print(os.path.dirname(os.getcwd()))
-
 class DataBaseManager():
     def __init__(self,db):
-        databaseLocation = path.join(os.path.dirname(os.getcwd()),"databases")
-        self.db = path.join(databaseLocation,db)
+        self.db = path.join(os.path.join("databases",db))
         con = lite.connect(self.db)
 
     def createLightingRigsTable(self):  #for creating database

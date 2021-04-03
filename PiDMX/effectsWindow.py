@@ -2,10 +2,11 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from errorWindow import ErrorWindow
 
-class EffectsWindow(QWidget,uic.loadUiType("effectsWindow.ui")[0]):
+class EffectsWindow(QWidget,uic.loadUiType(os.path.join("ui","effectsWindow.ui"))[0]):
     def __init__(self,lightDisplay,selectedLights,visualLightDisplay,initialTime = False):
         super().__init__()
         self.setupUi(self)

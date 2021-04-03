@@ -2,8 +2,9 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
-class PanTiltGridWindow(QWidget,uic.loadUiType("panTiltGrid.ui")[0]):
+class PanTiltGridWindow(QWidget,uic.loadUiType(os.path.join("ui","panTiltGrid.ui"))[0]):
     def __init__(self,sliderPannelWindow = None):
         super().__init__()
         self.setupUi(self)

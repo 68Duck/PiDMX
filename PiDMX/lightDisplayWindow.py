@@ -4,6 +4,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 import math as maths
 import time
+import os
 
 from effectsWindow import EffectsWindow
 from snakeWindow import SnakeWindow
@@ -19,11 +20,11 @@ from displayLightTypes import *
 from sliderPannelWindow import SliderPannelWindow
 from inputPlaybackNameWindow import InputPlaybackNameWindow
 
-class LightDisplayWindow(QMainWindow,uic.loadUiType("lightDisplayWindow.ui")[0]):  #creates a class window
+class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisplayWindow.ui"))[0]):  #creates a class window
     def __init__(self,lightDisplay,dataBaseManager):
         self.lightDisplay = lightDisplay
         super(QMainWindow).__init__()     #use super class of QMainWindow
-        super(uic.loadUiType("lightDisplayWindow.ui")[0]).__init__()     #use super class of QMainWindow
+        super(uic.loadUiType(os.path.join("ui","lightDisplayWindow.ui"))[0]).__init__()     #use super class of QMainWindow
         super().__init__()     #use super class of QMainWindow
         self.setupUi(self)
         self.setMouseTracking(True)

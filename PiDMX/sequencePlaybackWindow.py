@@ -2,10 +2,11 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from errorWindow import ErrorWindow
 
-class SequencePlaybackWindow(QWidget,uic.loadUiType("SequencePlaybackWindow.ui")[0]):
+class SequencePlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","SequencePlaybackWindow.ui"))[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
         super().__init__()
         self.setupUi(self)

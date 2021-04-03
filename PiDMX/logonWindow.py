@@ -10,13 +10,14 @@ import threading
 import math as maths
 import sqlite3 as lite
 import random
+import os
 
 from databaseManager import DataBaseManager
 from createAccountWindow import CreateAccountWindow
 from errorWindow import ErrorWindow
 from lightDisplayWindow import LightDisplayWindow
 
-class LogonWindow(QMainWindow,uic.loadUiType("logon.ui")[0]):
+class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
     def __init__(self,lightDisplay,app,devMode=False):
         super().__init__()
         self.app = app

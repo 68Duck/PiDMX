@@ -2,11 +2,12 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from errorWindow import ErrorWindow
 from confirmWindow import ConfirmWindow
 
-class OpenSequenceWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
+class OpenSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui"))[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
         super().__init__()
         self.setupUi(self)

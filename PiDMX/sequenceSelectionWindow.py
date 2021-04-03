@@ -2,10 +2,11 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from errorWindow import ErrorWindow
 
-class SequenceSelectionWindow(QWidget,uic.loadUiType("sequenceSelectionWindow.ui")[0]):
+class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequenceSelectionWindow.ui"))[0]):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay):
         super().__init__()
         self.setupUi(self)

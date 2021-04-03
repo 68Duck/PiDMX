@@ -3,10 +3,11 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 import random
+import os
 
 from errorWindow import ErrorWindow
 
-class SnakeWindow(QWidget,uic.loadUiType("snakeWindow.ui")[0]):
+class SnakeWindow(QWidget,uic.loadUiType(os.path.join("ui","snakeWindow.ui"))[0]):
     def __init__(self,lightDisplay,visualLightDisplay):
         super().__init__()
         self.setupUi(self)

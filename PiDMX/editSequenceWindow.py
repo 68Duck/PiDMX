@@ -2,12 +2,13 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from sortByTerm import sortByTerm
 from errorWindow import ErrorWindow
 from confirmWindow import ConfirmWindow
 
-class EditSequenceWindow(QWidget,uic.loadUiType("editSequenceWindow.ui")[0]):
+class EditSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","editSequenceWindow.ui"))[0]):
     def __init__(self,dataBaseManager,sequenceWindow):
         super().__init__()
         self.setupUi(self)

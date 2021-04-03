@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from chooseLightForSequenceWindow import ChooseLightForSequenceWindow
 from sequenceDisplayLightTypes import *
@@ -12,7 +13,7 @@ from sequencePlaybackWindow import SequencePlaybackWindow
 from editSequenceWindow import EditSequenceWindow
 from sliderPannelWindow import SliderPannelWindowSequenceWindow
 
-class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
+class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindow.ui"))[0]):
     def __init__(self,lightDisplay,visualLightDisplay,dataBaseManager,rigID):
         super().__init__()
         self.setupUi(self)

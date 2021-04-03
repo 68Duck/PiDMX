@@ -2,10 +2,11 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from confirmWindow import ConfirmWindow
 
-class OpenRigWindow(QWidget,uic.loadUiType("openRigWindow.ui")[0]):
+class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui"))[0]):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay):
         super().__init__()
         self.setupUi(self)

@@ -2,11 +2,12 @@ from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from errorWindow import ErrorWindow
 from confirmWindow import ConfirmWindow
 
-class PlaybackWindow(QWidget,uic.loadUiType("playbackWindow.ui")[0]):
+class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui"))[0]):
     def __init__(self,visualLightDisplay,dataBaseManager,lightDisplay):
         super().__init__()
         self.setupUi(self)
