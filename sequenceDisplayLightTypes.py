@@ -137,10 +137,10 @@ class SequenceDisplayLight(SequenceParentDisplayLight):
             self.shapes[1+i].setStyleSheet(f'background-color: #{colour}; border-radius: {self.circle1.borderWidth}px;border: 3px solid #{colour};')
 
 class SequenceDisplayLight2Small(SequenceParentDisplayLight):
-    def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
+    def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType,parentClass):
         self.setClickableRegion()
         SequenceParentDisplayLight.__init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType)
-
+        self.parentClass = parentClass
     def createShapes(self):
         self.box = self.createShape(self.xPos,self.yPos,20,20)
         return [self.box]
@@ -161,6 +161,11 @@ class SequenceDisplayLight2Small(SequenceParentDisplayLight):
 
     def move(self):
         self.box.move(self.xPos,self.yPos)
+
+    def changeWholeColour(self,colour):
+        for i in range(8):
+            box = getattr(self.parentClass,f"box{i+1}")
+            box.changeColour(colour)
 
     def changeColour(self,colour):
         colour = self.convertColour(colour)
@@ -192,14 +197,8 @@ class SequenceDisplayLight2(object):
         self.yPos = yPos
         lightType = addingLightType
         channel = int(lightName[len(addingLightType):len(lightName)])
-        self.box1 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+0),self.xPos,self.yPos,addingLightType)
-        self.box2 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+3),self.xPos,self.yPos+20,addingLightType)
-        self.box3 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+6),self.xPos,self.yPos+40,addingLightType)
-        self.box4 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+9),self.xPos,self.yPos+60,addingLightType)
-        self.box5 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+12),self.xPos,self.yPos+80,addingLightType)
-        self.box6 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+15),self.xPos,self.yPos+100,addingLightType)
-        self.box7 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+18),self.xPos,self.yPos+120,addingLightType)
-        self.box8 = SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+21),self.xPos,self.yPos+140,addingLightType)
+        for i in range(8):
+            setattr(self,f"box{i+1}",SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+3*i),self.xPos,self.yPos+20*i,addingLightType,self))
 
 
 class SequenceDisplayLight3(SequenceParentDisplayLight):

@@ -277,11 +277,26 @@ class SequenceWindow(QMainWindow,uic.loadUiType("sequenceWindow.ui")[0]):
                                 self.errorWindow = ErrorWindow("Channel Error not valid")
                         else:
                             if self.colourModeSelected:
-                                light.changeColour(self.colour)
+                                if light.lightType == "LEDBar24ChannelMode":
+                                    modifiers = QApplication.keyboardModifiers()
+                                    if modifiers == Qt.ShiftModifier: #so if shift is pressed
+                                        light.changeWholeColour(self.colour)
+                                    else:
+                                        light.changeColour(self.colour)
+                                else:
+                                    light.changeColour(self.colour)
                             else:
+                                modifiers = QApplication.keyboardModifiers()
+                                if modifiers == Qt.ShiftModifier: #so if shift is pressed
+                                    shiftPressed = True
+                                else:
+                                    shiftPressed = False
                                 self.colour = QColorDialog.getColor()
                                 if self.colour.isValid():
-                                    light.changeColour(self.colour)
+                                    if light.lightType == "LEDBar24ChannelMode" and shiftPressed:
+                                            light.changeWholeColour(self.colour)
+                                    else:
+                                        light.changeColour(self.colour)
                                 else:
                                     self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")
                             self.updateChannels()
