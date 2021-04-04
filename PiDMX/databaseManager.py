@@ -2,10 +2,49 @@ import sqlite3 as lite
 from os import path
 import os
 
+from errorWindow import ErrorWindow
+
 class DataBaseManager():
     def __init__(self,db):
-        self.db = path.join(os.path.join("databases",db))
-        self.con = lite.connect(self.db)
+        if not path.exists("databases"):
+            os.makedirs("databases")
+            self.errorWindow = ErrorWindow("Database folder does not exist. A new database folder had been created.")
+            self.db = path.join(os.path.join("databases","dmx.db")) #as this is the first dmx database
+            self.con = lite.connect(self.db)
+            self.createInitialTables()
+        else:
+            if db == "logon.db":
+                self.db = path.join(os.path.join("databases",db))
+                if not path.isfile(path.join("databases","logon.db")):
+                    self.createLogonTable()
+            elif db == "universeValues.db":
+                self.db = path.join(os.path.join("databases",db))
+                if not path.isfile(path.join("databases","universeValues.db")):
+                    self.createUniverseTable()
+            else:
+                self.db = path.join(os.path.join("databases",db))
+            self.con = lite.connect(self.db)
+
+    def createInitialTables(self):
+        self.createLogonTable()
+        self.createUniverseTable()
+        self.createLightingRigsTable()
+        self.createMainSequenceTable()
+        self.createMainPlaybackTable()
+
+    def createUniverseTable(self):
+        db = path.join(os.path.join("databases","universeValues.db"))
+        con = lite.connect(db)
+        cur = con.cursor()
+        cur.execute('CREATE TABLE "universe" ("id"	INTEGER NOT NULL UNIQUE,"channelNumber"	INTEGER NOT NULL,"channelValue"	INTEGER NOT NULL,PRIMARY KEY("id" AUTOINCREMENT));')
+        con.commit()
+
+    def createLogonTable(self):
+        db = path.join(os.path.join("databases","logon.db"))
+        con = lite.connect(db)
+        cur = con.cursor()
+        cur.execute(f'CREATE TABLE "logon" ("id" INTEGER UNIQUE,"username" TEXT NOT NULL,"password" TEXT,"databaseID" INTEGER NOT NULL,PRIMARY KEY("id" AUTOINCREMENT));')
+        con.commit()
 
     def createLightingRigsTable(self):  #for creating database
         cur = self.con.cursor()
