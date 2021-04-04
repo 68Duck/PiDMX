@@ -5,6 +5,7 @@ from PyQt5.QtCore import*
 import os
 
 from confirmWindow import ConfirmWindow
+from errorWindow import ErrorWindow
 
 class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui"))[0]):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay):
