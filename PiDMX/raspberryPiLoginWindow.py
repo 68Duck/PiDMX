@@ -4,6 +4,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 import os
 
+from portSelectionWindow import PortSelectionWindow
 
 class RaspberryPiLoginWindow(QMainWindow,uic.loadUiType(os.path.join("ui","raspberryPiLoginWindow.ui"))[0]):
     def __init__(self,parentWindow):
@@ -13,11 +14,14 @@ class RaspberryPiLoginWindow(QMainWindow,uic.loadUiType(os.path.join("ui","raspb
         self.setWindowTitle("Raspberry Pi Login")
         self.passwordInput.setEchoMode(QLineEdit.Password)
         self.submitButton.clicked.connect(self.submitButtonPressed)
-        self.runOnComputerAction.triggered.connect(self.runComputerDMX)
+        self.runOnComputerAction.triggered.connect(self.runOnComputerActionTriggered)
         self.runWithoutDMXAction.triggered.connect(self.runWithoutDMX)
 
-    def runComputerDMX(self):
-        self.parentWindow.runComputerDMX()
+    def runOnComputerActionTriggered(self):
+        self.portSelectionWindow = PortSelectionWindow(self)
+
+    def runComputerDMX(self,port):
+        self.parentWindow.runComputerDMX(port)
         self.close()
 
     def runWithoutDMX(self):

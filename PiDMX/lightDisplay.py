@@ -53,8 +53,8 @@ class LightDisplay(QWidget):
             self.sshUpdateDatabase.raspberryPiLoginWindow.hide()
             self.sshUpdateDatabase.runWithoutDMX()
 
-    def runComputerDMX(self):
-        self.dmx = PyDMX('COM3')
+    def runComputerDMX(self,port):
+        self.dmx = PyDMX(port)
         if self.dmx.working:
             pass
         else:
