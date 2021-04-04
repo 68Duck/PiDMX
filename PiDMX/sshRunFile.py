@@ -6,12 +6,12 @@ import threading
 import sys
 
 class SecureShell(object):
-    def __init__(self,password):
+    def __init__(self,password,piIpv4):
         self.client = paramiko.SSHClient()
         self.client.load_system_host_keys()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.loggedIn = False
-        piIpv4 = "192.168.0.70"
+        # piIpv4 = "192.168.0.70"
         while True:
             if password is None:
                 password = getpass() #put a paramater for message if want to change
@@ -32,8 +32,8 @@ class SecureShell(object):
 
 
 class SSHRunFile(object):
-    def __init__(self,testMode = False,password = None):
-        self.ssh = SecureShell(password)
+    def __init__(self,testMode = False,password = None,piIpv4=None):
+        self.ssh = SecureShell(password,piIpv4)
         if testMode:
             while True:
                 if keyboard.is_pressed("q") and self.ssh.loggedIn:

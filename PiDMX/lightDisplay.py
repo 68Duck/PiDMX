@@ -85,10 +85,10 @@ class LightDisplay(QWidget):
         if not self.devMode:
             self.logonWindow.show()
 
-    def sshPasswordInputed(self):
+    def sshPasswordInputed(self,piIpv4):
         self.raspberryPiDMXMode = True
         self.universeChanged()
-        self.sshRunFile = SSHRunFile(password = self.password)
+        self.sshRunFile = SSHRunFile(password = self.password,piIpv4 = piIpv4)
         self.logonWindow = LogonWindow(self,self.app)
         self.logonWindow.show()
 

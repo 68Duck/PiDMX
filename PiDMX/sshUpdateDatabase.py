@@ -6,6 +6,7 @@ from os import path
 
 from raspberryPiLoginWindow import RaspberryPiLoginWindow
 from errorWindow import ErrorWindow
+from ipv4Input import IPv4Input
 
 class SSHUpdateDatabase(object):
     def __init__(self,lightDisplay=None):
@@ -24,10 +25,14 @@ class SSHUpdateDatabase(object):
         self.lightDisplay.runWithoutDMX()
 
     def login(self):
-        password = self.raspberryPiLoginWindow.password
         # password = getpass() #put a paramater for message if want to change
+        self.ipv4Input = IPv4Input(self)
+
+
+    def connectToPi(self,piIpv4):
+        password = self.raspberryPiLoginWindow.password
         try:
-            piIpv4 = "192.168.0.70"
+            # piIpv4 = "192.168.0.70"
             self.client.connect(piIpv4,"22","pi",password)
             if self.lightDisplay is None:
                 pass
@@ -44,7 +49,7 @@ class SSHUpdateDatabase(object):
             print("Could not connect. Please try again later")
             return
         self.updateDatabase()
-        self.lightDisplay.sshPasswordInputed()
+        self.lightDisplay.sshPasswordInputed(piIpv4)
         self.raspberryPiLoginWindow.close()
 
     def updateDatabase(self):
