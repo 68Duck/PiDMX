@@ -210,7 +210,7 @@ class DataBaseManager():
             for column in record:
                 splitRecords.append(column)
         cur.execute(sql1,splitRecords)
-        con.commit()
+        self.con.commit()
 
     def insertRecord(self,table,record):
         cur = self.con.cursor()
