@@ -272,10 +272,14 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
                                     modifiers = QApplication.keyboardModifiers()
                                     if modifiers == Qt.ShiftModifier: #so if shift is pressed
                                         light.changeWholeColour(self.colour)
+                                        self.updateDuplicatesColour(light,self.colour,wholeColour=True)
+
                                     else:
                                         light.changeColour(self.colour)
+                                        self.updateDuplicatesColour(light,self.colour)
                                 else:
                                     light.changeColour(self.colour)
+                                    self.updateDuplicatesColour(light,self.colour)
                             else:
                                 modifiers = QApplication.keyboardModifiers()
                                 if modifiers == Qt.ShiftModifier: #so if shift is pressed
@@ -286,11 +290,23 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
                                 if self.colour.isValid():
                                     if light.lightType == "LEDBar24ChannelMode" and shiftPressed:
                                             light.changeWholeColour(self.colour)
+                                            self.updateDuplicatesColour(light,self.colour,wholeColour=True)
                                     else:
                                         light.changeColour(self.colour)
+                                        self.updateDuplicatesColour(light,self.colour)
+
                                 else:
                                     self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")
                             self.updateChannels()
+
+    def updateDuplicatesColour(self,light,colour,wholeColour = False):
+        for l in self.displayLights:
+            if light != l:
+                if l.lightName == light.lightName:
+                    if wholeColour:
+                        l.changeWholeColour(colour)
+                    else:
+                        l.changeColour(colour)
 
     def updateChannels(self):
         self.lightDisplay.universeLock = True
