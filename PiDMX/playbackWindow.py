@@ -39,7 +39,7 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
         else:
             self.playbackToOpen = self.dataBaseManager.getAllData("playback"+str(self.playbackID))
             if self.playbackToOpen == False:
-                self.errorWindow = ErrorWindow("This pleayback does not exist. Please try again")
+                self.errorWindow = ErrorWindow("This playback does not exist. Please try again")
             else:
                 self.executePlayback()
                 self.playbackOpened = True
