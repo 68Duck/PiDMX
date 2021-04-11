@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>787</width>
+    <height>611</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="createBoxButton">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>70</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create Box</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QSlider" name="createBoxSlider">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>110</y>
+     <width>160</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="sliderPosition">
+    <number>10</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createCircleButton">
+   <property name="geometry">
+    <rect>
+     <x>584</x>
+     <y>202</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create Circle</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="circleSizeLabel">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>280</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Circle Size</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="newImageButton">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>10</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>New Image</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="penSizeLabel">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>470</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pen Size</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>50</y>
+     <width>500</width>
+     <height>500</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+  </widget>
+  <widget class="QSlider" name="createCircleSlider">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>250</y>
+     <width>160</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="sliderPosition">
+    <number>10</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="boxSizeLabel">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>140</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Box Size</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QSlider" name="penSizeSlider">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>440</y>
+     <width>160</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="sliderPosition">
+    <number>10</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="backgroundRadio">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>330</y>
+     <width>111</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Background</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="colourChangingRadio">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>360</y>
+     <width>151</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Colour Changing</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="penButton">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>400</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pen</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="eraserButton">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>510</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Eraser</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="eraserSizeLabel">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>580</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Eraser Size</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QSlider" name="eraserSizeSlider">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>550</y>
+     <width>160</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="sliderPosition">
+    <number>10</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

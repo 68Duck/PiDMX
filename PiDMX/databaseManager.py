@@ -21,6 +21,10 @@ class DataBaseManager():
                 self.db = path.join(os.path.join("databases",db))
                 if not path.isfile(path.join("databases","universeValues.db")):
                     self.createUniverseTable()
+            elif db == "lightTypes.db":
+                self.db = path.join(os.path.join("databases",db))
+                if not path.isfile(path.join("databases","lightTypes.db")):
+                    self.createLightPlaybacksTable()
             else:
                 self.db = path.join(os.path.join("databases",db))
             self.con = lite.connect(self.db)
@@ -31,6 +35,24 @@ class DataBaseManager():
         self.createLightingRigsTable()
         self.createMainSequenceTable()
         self.createMainPlaybackTable()
+        self.createLightPlaybacksTable()
+
+    def createLightPlaybacksTable(self):
+        db = path.join(os.path.join("databases","lightTypes.db"))
+        con = lite.connect(db)
+        cur = con.cursor()
+        cur.execute('CREATE TABLE "lightTypes" ("id" INTEGER NOT NULL UNIQUE,"lightName" TEXT NOT NULL,"imageName" TEXT NOT NULL,"isRGB" TEXT NOT NULL,"indicatorsTableID" INTEGER, "channelNamesTableID" INTEGER, PRIMARY KEY("id" AUTOINCREMENT));')
+        con.commit()
+
+    def createChannelsTable(self,tableNumber):
+        cur = self.con.cursor()
+        cur.execute(f'CREATE TABLE "channels{tableNumber}" ("channelNumber" INTEGER NOT NULL UNIQUE,"channelName" INTEGER NOT NULL, "channelStartValue" INTEGER NOT NULL, PRIMARY KEY("channelNumber" AUTOINCREMENT));')
+        self.con.commit()
+
+    def createIndicatorsTable(self,tableNumber):
+        cur = self.con.cursor()
+        cur.execute(f'CREATE TABLE "indicators{tableNumber}"("id" INTEGER NOT NULL UNIQUE, "x"	INTEGER NOT NULL, "y" INTEGER NOT NULL, "width" INTEGER NOT NULL, "height" INTEGER NOT NULL, "type" INTEGER NOT NULL, PRIMARY KEY("id" AUTOINCREMENT));')
+        self.con.commit()
 
     def createUniverseTable(self):
         db = path.join(os.path.join("databases","universeValues.db"))

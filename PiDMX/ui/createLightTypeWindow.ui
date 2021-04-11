@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>880</width>
+    <height>494</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="addChannelButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>111</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add Channel</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="deleteButton">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>20</y>
+     <width>121</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Delete Channel</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>451</width>
+     <height>361</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="layout"/>
+  </widget>
+  <widget class="QRadioButton" name="rgbRadio">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>60</y>
+     <width>111</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>RGB Light</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="intensityRadio">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>90</y>
+     <width>121</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Intensity Light</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createLightButton">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>440</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create Light</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="rgbWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>140</y>
+     <width>261</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <widget class="QComboBox" name="redChannelInput">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>10</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Red Channel Name:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="blueChannelInput">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>90</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="greenChannelInput">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>50</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Green Channel Name:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Blue Channel Name:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="intensityWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>140</y>
+     <width>291</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <widget class="QComboBox" name="intensityChannelInput">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>10</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Intensity Channel Name:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLineEdit" name="lightNameInput">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>440</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>440</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Light Name:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createSpriteButton">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>20</y>
+     <width>121</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create Sprite</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
