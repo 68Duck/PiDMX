@@ -46,8 +46,18 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         self.createSpriteWindow = CreateSpriteWindow(self.lightName,self)
         self.createSpriteWindow.show()
 
+    def hasDuplicates(self,array):
+        return len(array) != len(set(array))
+
 
     def createLightButtonClicked(self):
+        channelNames = []
+        for i in range(self.table.rowCount()):
+            channelNames.append(self.table.item(i,0).text())
+        if self.hasDuplicates(channelNames):
+            self.errorWindow = ErrorWindow("You cannot have channels with the same name. Please try again")
+            return
+
         self.lightName = self.lightNameInput.text()
         if self.lightName == "":
             self.errorWindow = ErrorWindow("Please enter a name for the light type")
@@ -79,7 +89,17 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         for i in range(self.table.rowCount()):
             channelName = self.table.item(i,0).text()
             startChannelValue = self.table.item(i,1).text()
-            record = [None,channelName,startChannelValue]
+            channelInformation = None
+            if isRGB:
+                colours = ["red","green","blue"]
+            else:
+                colours = ["intensity"]
+            for colour in colours:
+                attr = getattr(self,f"{colour}ChannelInput")
+                if attr.currentText() == channelName:
+                    channelInformation = colour
+
+            record = [None,channelName,startChannelValue,channelInformation]
             self.dataBaseManager.insertRecord("channels"+str(channelID),record)
 
         indicatorsID = self.getNextTableID("indicators")

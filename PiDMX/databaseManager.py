@@ -46,7 +46,7 @@ class DataBaseManager():
 
     def createChannelsTable(self,tableNumber):
         cur = self.con.cursor()
-        cur.execute(f'CREATE TABLE "channels{tableNumber}" ("channelNumber" INTEGER NOT NULL UNIQUE,"channelName" INTEGER NOT NULL, "channelStartValue" INTEGER NOT NULL, PRIMARY KEY("channelNumber" AUTOINCREMENT));')
+        cur.execute(f'CREATE TABLE "channels{tableNumber}" ("channelNumber" INTEGER NOT NULL UNIQUE,"channelName" INTEGER NOT NULL, "channelStartValue" INTEGER NOT NULL, "channelInformation" TEXT, PRIMARY KEY("channelNumber" AUTOINCREMENT));')
         self.con.commit()
 
     def createIndicatorsTable(self,tableNumber):
