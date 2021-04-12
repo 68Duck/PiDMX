@@ -4,13 +4,19 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 from PIL import Image
 import math as maths
-from os import path
+from os import path,mkdir
+
+from errorWindow import ErrorWindow
 
 
 class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWindow.ui"))[0]):
     def __init__(self,imageName,parentWindow):
         super().__init__()
         self.setupUi(self)
+        if not path.exists("images"):
+            mkdir("images")
+            self.errorWindow = ErrorWindow("The images folder does not exists. Creating a new images folder.")
+
         self.imageName = imageName
         self.parentWindow = parentWindow
         if self.imageName[len(self.imageName)-3:len(self.imageName)] != ".png":
