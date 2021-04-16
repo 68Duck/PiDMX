@@ -244,12 +244,19 @@ QMainWindow{color:white;background-color:black;}
     </property>
     <addaction name="snakeButton"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Create Light Type</string>
+    </property>
+    <addaction name="createLightTypeButton"/>
+   </widget>
    <addaction name="menuPatch_Light"/>
    <addaction name="menuEffects"/>
    <addaction name="menuRig"/>
    <addaction name="menuPlayback"/>
    <addaction name="menuSequence"/>
    <addaction name="menuGame"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="patchButton">
@@ -326,6 +333,11 @@ QMainWindow{color:white;background-color:black;}
   <action name="stopSequenceButton">
    <property name="text">
     <string>Stop Sequence</string>
+   </property>
+  </action>
+  <action name="createLightTypeButton">
+   <property name="text">
+    <string>Create Light Type</string>
    </property>
   </action>
  </widget>

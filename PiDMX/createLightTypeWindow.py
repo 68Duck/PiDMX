@@ -10,7 +10,7 @@ from createSpriteWindow import CreateSpriteWindow
 from databaseManager import DataBaseManager
 
 class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLightTypeWindow.ui"))[0]):
-    def __init__(self,dataBaseManager):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Create Light Type")
@@ -81,8 +81,19 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
             self.imageName = newImageName
         if self.rgbRadio.isChecked():
             isRGB = True
+            colours = ["red","green","blue"]
+            rgbNames = []
+            for colour in colours:
+                attr = getattr(self,f"{colour}ChannelInput")
+                rgbName = attr.currentText()
+                rgbNames.append(rgbName)
+            if self.hasDuplicates(rgbNames):
+                self.errorWindow = ErrorWindow("You cannot have the red, green or blue channels with the same name. Please try again")
+                return
+
         if self.intensityRadio.isChecked():
             isRGB = False
+
 
         channelID = self.getNextTableID("channels")
         self.dataBaseManager.createChannelsTable(channelID)
@@ -117,6 +128,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
 
         record = [None,self.lightName,self.imageName,isRGB,indicatorsID,channelID]  #needs to have indicators and channel names in new tables
         self.dataBaseManager.insertRecord("lightTypes",record)
+        self.close()
 
 
     def getNextTableID(self,tableName):
@@ -274,6 +286,6 @@ class TableWidget(QTableWidget):  #taken from https://stackoverflow.com/question
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-    win = CreateLightTypeWindow(None)
+    win = CreateLightTypeWindow()
     win.show()
     sys.exit(app.exec_())

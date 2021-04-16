@@ -19,6 +19,7 @@ from openRigWindow import OpenRigWindow
 from displayLightTypes import *
 from sliderPannelWindow import SliderPannelWindow
 from inputPlaybackNameWindow import InputPlaybackNameWindow
+from createLightTypeWindow import CreateLightTypeWindow
 
 class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisplayWindow.ui"))[0]):  #creates a class window
     def __init__(self,lightDisplay,dataBaseManager):
@@ -95,6 +96,12 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.chooseColourButton.triggered.connect(self.chooseColourButtonClicked)
         self.selectAllLightsButton.triggered.connect(self.selectAllLightsButtonClicked)
         self.stopSequenceButton.triggered.connect(self.stopSequenceButtonClicked)
+        self.createLightTypeButton.triggered.connect(self.createLightTypeButtonClicked)
+
+
+    def createLightTypeButtonClicked(self):
+        self.createLightTypeWindow = CreateLightTypeWindow()
+        self.createLightTypeWindow.show()
 
 
     def stopSequenceButtonClicked(self):
