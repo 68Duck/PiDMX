@@ -13,21 +13,24 @@ class DataBaseManager():
             self.con = lite.connect(self.db)
             self.createInitialTables()
         else:
+            self.db = path.join(os.path.join("databases",db))
+            self.con = lite.connect(self.db)
             if db == "logon.db":
-                self.db = path.join(os.path.join("databases",db))
                 if not path.isfile(path.join("databases","logon.db")):
                     self.createLogonTable()
+                if not self.checkIfTableExisits("logon"):
+                    self.createLogonTable()
             elif db == "universeValues.db":
-                self.db = path.join(os.path.join("databases",db))
                 if not path.isfile(path.join("databases","universeValues.db")):
                     self.createUniverseTable()
+                if not self.checkIfTableExisits("universe"):
+                    self.createUniverseTable()
             elif db == "lightTypes.db":
-                self.db = path.join(os.path.join("databases",db))
                 if not path.isfile(path.join("databases","lightTypes.db")):
                     self.createLightPlaybacksTable()
-            else:
-                self.db = path.join(os.path.join("databases",db))
-            self.con = lite.connect(self.db)
+                if not self.checkIfTableExisits("lightTypes"):
+                    self.createLightPlaybacksTable()
+
 
     def createInitialTables(self):
         self.createLogonTable()
