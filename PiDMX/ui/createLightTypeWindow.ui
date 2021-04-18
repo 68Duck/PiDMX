@@ -55,7 +55,7 @@
     <rect>
      <x>520</x>
      <y>60</y>
-     <width>111</width>
+     <width>281</width>
      <height>18</height>
     </rect>
    </property>
@@ -68,7 +68,7 @@
     <rect>
      <x>520</x>
      <y>90</y>
-     <width>121</width>
+     <width>321</width>
      <height>18</height>
     </rect>
    </property>
@@ -93,7 +93,7 @@
    <property name="geometry">
     <rect>
      <x>520</x>
-     <y>140</y>
+     <y>150</y>
      <width>261</width>
      <height>131</height>
     </rect>
@@ -167,38 +167,38 @@
      <string>Blue Channel Name:</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QWidget" name="intensityWidget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>520</x>
-     <y>140</y>
-     <width>291</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <widget class="QComboBox" name="intensityChannelInput">
+   <widget class="QWidget" name="intensityWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>10</y>
-      <width>111</width>
-      <height>21</height>
+      <x>0</x>
+      <y>0</y>
+      <width>291</width>
+      <height>51</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>121</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Intensity Channel Name:</string>
-    </property>
+    <widget class="QComboBox" name="intensityChannelInput">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>10</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Intensity Channel Name:</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QLineEdit" name="lightNameInput">
@@ -235,6 +235,75 @@
    </property>
    <property name="text">
     <string>Create Sprite</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="panTiltWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>290</y>
+     <width>261</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <widget class="QComboBox" name="panChannelInput">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>10</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pan Channel Name:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="tiltChannelInput">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>50</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tilt Channel Name:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QCheckBox" name="panTiltCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>120</y>
+     <width>291</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add pan/tilt</string>
    </property>
   </widget>
  </widget>

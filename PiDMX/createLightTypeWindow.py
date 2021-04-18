@@ -23,6 +23,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         self.rgbRadio.clicked.connect(self.radioChanged)
         self.intensityRadio.clicked.connect(self.radioChanged)
         self.createSpriteButton.clicked.connect(self.createSpriteButtonClicked)
+        self.panTiltCheckBox.clicked.connect(self.panTiltChanged)
         self.table = TableWidget(self)
         self.layout.addWidget(self.table)
         self.table.itemChanged.connect(self.itemChanged)
@@ -34,6 +35,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
     def initUI(self):
         self.rgbRadio.setChecked(True)
         self.radioChanged()
+        self.panTiltChanged()
         self.table.setColumnCount(3)
         self.table.setHorizontalHeaderLabels(["channel name","channel start value","select"])
         self.table.setRowCount(0)
@@ -51,6 +53,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
 
 
     def createLightButtonClicked(self):
+        hasPanTilt = self.panTiltCheckBox.isChecked()
         channelNames = []
         for i in range(self.table.rowCount()):
             channelNames.append(self.table.item(i,0).text())
@@ -81,12 +84,14 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
             self.imageName = newImageName
         if self.rgbRadio.isChecked():
             isRGB = True
-            colours = ["red","green","blue"]
+            colours = ["red","green","blue","pan","tilt"]
             rgbNames = []
             for colour in colours:
                 attr = getattr(self,f"{colour}ChannelInput")
                 rgbName = attr.currentText()
-                rgbNames.append(rgbName)
+                print(rgbName)
+                if rgbName != "": #stops not working with pan/tilt if does not exist
+                    rgbNames.append(rgbName)
             if self.hasDuplicates(rgbNames):
                 self.errorWindow = ErrorWindow("You cannot have the red, green or blue channels with the same name. Please try again")
                 return
@@ -105,6 +110,9 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
                 colours = ["red","green","blue"]
             else:
                 colours = ["intensity"]
+            if hasPanTilt:
+                colours.append("pan")
+                colours.append("tilt")
             for colour in colours:
                 attr = getattr(self,f"{colour}ChannelInput")
                 if attr.currentText() == channelName:
@@ -126,7 +134,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
             self.dataBaseManager.insertRecord("indicators"+str(indicatorsID),record)
 
 
-        record = [None,self.lightName,self.imageName,isRGB,indicatorsID,channelID]  #needs to have indicators and channel names in new tables
+        record = [None,self.lightName,self.imageName,isRGB,hasPanTilt,indicatorsID,channelID]  #needs to have indicators and channel names in new tables
         self.dataBaseManager.insertRecord("lightTypes",record)
         self.close()
 
@@ -148,6 +156,13 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         else: #so intensity radio
             self.intensityWidget.show()
             self.rgbWidget.hide()
+        self.updateChannelDropdowns()
+
+    def panTiltChanged(self):
+        if self.panTiltCheckBox.isChecked():
+            self.panTiltWidget.show()
+        else:
+            self.panTiltWidget.hide()
         self.updateChannelDropdowns()
 
     def itemChanged(self,item):
@@ -190,6 +205,13 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
             for i in range(self.table.rowCount()):
                 channelName = self.table.item(i,0).text()
                 self.intensityChannelInput.addItem(channelName)
+        if self.panTiltCheckBox.isChecked():
+            self.panChannelInput.clear()
+            self.tiltChannelInput.clear()
+            for i in range(self.table.rowCount()):
+                channelName = self.table.item(i,0).text()
+                self.panChannelInput.addItem(channelName)
+                self.tiltChannelInput.addItem(channelName)
 
 
     def addChannelButtonClicked(self):
@@ -221,6 +243,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
                     self.table.removeRow(row)
         else:
             self.errorWindow = ErrorWindow("No channels are selected. Try selecting a channel to delete one.")
+        self.updateChannelDropdowns()
 
 
 

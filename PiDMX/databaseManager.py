@@ -41,7 +41,7 @@ class DataBaseManager():
         db = path.join(os.path.join("databases","lightTypes.db"))
         con = lite.connect(db)
         cur = con.cursor()
-        cur.execute('CREATE TABLE "lightTypes" ("id" INTEGER NOT NULL UNIQUE,"lightName" TEXT NOT NULL,"imageName" TEXT NOT NULL,"isRGB" TEXT NOT NULL,"indicatorsTableID" INTEGER, "channelNamesTableID" INTEGER, PRIMARY KEY("id" AUTOINCREMENT));')
+        cur.execute('CREATE TABLE "lightTypes" ("id" INTEGER NOT NULL UNIQUE,"lightName" TEXT NOT NULL,"imageName" TEXT NOT NULL,"isRGB" TEXT NOT NULL,"hasPanTilt" TEXT NOT NULL,"indicatorsTableID" INTEGER, "channelNamesTableID" INTEGER, PRIMARY KEY("id" AUTOINCREMENT));')
         con.commit()
 
     def createChannelsTable(self,tableNumber):
