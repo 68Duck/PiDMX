@@ -71,7 +71,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         else:
             lightTypes = self.dataBaseManager.getAllData("lightTypes")
             for light in lightTypes:
-                lightName = light[1]
+                lightName = light["lightName"]
                 if self.lightName == lightName:
                     self.errorWindow = ErrorWindow("There is already a light with that name. Please choose a different name")
                     return

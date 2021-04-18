@@ -47,7 +47,7 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
         logons = self.logonDatabaseManager.getAllData("logon")
         invalid = False
         for logon in logons:
-            if username == logon[1]:
+            if username == logon["username"]:
                 invalid = True
 
         if username == "" or password == "":
@@ -61,7 +61,7 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
             while exists:
                 exists = False
                 for logon in logons:
-                    if counter == logon[3]:
+                    if counter == logon["databaseID"]:
                         exists = True
                 if not exists:
                     break
@@ -101,9 +101,9 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
     def passwordValidation(self,username,password):
         logons = self.logonDatabaseManager.getAllData("logon")
         for logon in logons:
-            if logon[1] == username:
-                if logon[2] == password:
-                    return logon[3]
+            if logon["username"] == username:
+                if logon["password"] == password:
+                    return logon["databaseID"]
         return False
 
     def openLightDisplay(self):

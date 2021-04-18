@@ -23,8 +23,8 @@ class OpenSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
         self.savedSequences = self.dataBaseManager.getAllData("Sequences")
         for sequence in self.savedSequences:
-            if self.sequenceWindow.rigID == sequence[4]:  #checks is the rigID is the same
-                self.dropDown.addItem(sequence[2])  #sequence[2] is the name of the sequence
+            if self.sequenceWindow.rigID == sequence["rigID"]:
+                self.dropDown.addItem(sequence["sequenceName"])
 
     def deleteButtonClicked(self):
         confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this sequence?")
@@ -35,9 +35,9 @@ class OpenSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow
             else:
                 self.dataBaseManager.deleteSequenceFromSequences(sequenceToDelete)
                 for sequence in self.savedSequences:
-                    if sequenceToDelete == sequence[2]:
-                        sequenceID = sequence[1]
-                        sequenceCreatorID = sequence[3]
+                    if sequenceToDelete == sequence["sequenceName"]:
+                        sequenceID = sequence["sequenceID"]
+                        sequenceCreatorID = sequence["sequenceCreatorID"]
                 self.dataBaseManager.dropSequenceTable(sequenceID)
                 self.dataBaseManager.dropSequenceCreatorTable(sequenceCreatorID)
             self.close()
@@ -76,10 +76,10 @@ class OpenSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow
             self.errorWindow = ErrorWindow("The sequence you have selected does not exist. Please try again")
         else:
             for light in self.sequenceToOpen:
-                lightName = light[1]
-                lightType = light[2]
-                xPos = light[3]
-                yPos = light[4]
+                lightName = light["lightName"]
+                lightType = light["lightType"]
+                xPos = light["xPos"]
+                yPos = light["yPos"]
                 self.sequenceWindow.createLight(lightType,lightName,xPos,yPos,openFromSavedSequence=True)
                 lightsAlreadyPlaced = []
                 for l in self.sequenceWindow.lightsToPlace:

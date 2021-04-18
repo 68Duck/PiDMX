@@ -23,7 +23,7 @@ class SequencePlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","SequenceP
         self.playbackName = self.nameInput.text()
         sequenceInformation = self.dataBaseManager.getAllData("sequence"+str(self.sequenceWindow.sequenceID))
         for record in sequenceInformation:
-            if record[3] == self.playbackName:
+            if record["playbackName"] == self.playbackName:
                 self.errorWindow = ErrorWindow("There is already a playback with that name. Please input a different name.")
                 return
         try:

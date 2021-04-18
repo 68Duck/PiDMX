@@ -34,7 +34,7 @@ class CreateAccountWindow(QWidget):
         logons = self.logonDatabaseManager.getAllData("logon")
         invalid = False
         for logon in logons:
-            if username == logon[1]:
+            if username == logon["username"]:
                 invalid = True
 
         if username == "" or password == "":
@@ -48,7 +48,7 @@ class CreateAccountWindow(QWidget):
             while exists:
                 exists = False
                 for logon in logons:
-                    if counter == logon[3]:
+                    if counter == logon["databaseID"]:
                         exists = True
                 if not exists:
                     break

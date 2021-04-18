@@ -3,6 +3,7 @@ from os import path
 import os
 
 from errorWindow import ErrorWindow
+from dict_factory import dict_factory
 
 class DataBaseManager():
     def __init__(self,db):
@@ -11,10 +12,12 @@ class DataBaseManager():
             self.errorWindow = ErrorWindow("Database folder does not exist. A new database folder had been created.")
             self.db = path.join(os.path.join("databases","dmx.db")) #as this is the first dmx database
             self.con = lite.connect(self.db)
+            self.con.execute("PRAGMA foreign_keys = 1")
             self.createInitialTables()
         else:
             self.db = path.join(os.path.join("databases",db))
             self.con = lite.connect(self.db)
+            self.con.execute("PRAGMA foreign_keys = 1")
             if db == "logon.db":
                 if not path.isfile(path.join("databases","logon.db")):
                     self.createLogonTable()
@@ -161,6 +164,7 @@ class DataBaseManager():
         if exisits == False:
             return False
         cur = self.con.cursor()
+        cur.row_factory = dict_factory
         sql1 = (f'SELECT * FROM {table} ')
         cur.execute(sql1)
         results = cur.fetchall()
@@ -168,6 +172,7 @@ class DataBaseManager():
 
     def getCurrentRigsPlaybacks(self,rigID):
         cur = self.con.cursor()
+        cur.row_factory = dict_factory
         sql1 = (f'SELECT * FROM Playbacks WHERE RigId="{rigID}" ')
         cur.execute(sql1)
         results = cur.fetchall()

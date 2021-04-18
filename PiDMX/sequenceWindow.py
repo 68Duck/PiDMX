@@ -93,13 +93,13 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
     def openPlayback(self):
         sequenceData = self.dataBaseManager.getAllData("sequence"+str(self.sequenceID))
         if len(sequenceData) > 0:
-            playbackID = sequenceData[self.displayingPlaybackID-1][1]  #-1 as the first will be 0
-            playbackName = sequenceData[self.displayingPlaybackID-1][3]
+            playbackID = sequenceData[self.displayingPlaybackID-1]["playbackID"]  #-1 as the first will be 0
+            playbackName = sequenceData[self.displayingPlaybackID-1]["playbackName"]
             self.currentPlaybackLabel.setText(f"Current playback name: {playbackName}")
         playbackData = self.dataBaseManager.getAllData("sequencePlayback"+str(playbackID))
         for record in playbackData:
-            channel = int(record[1])
-            channelValue = record[2]
+            channel = int(record["channelNumber"])
+            channelValue = record["channelValue"]
             for displayLight in self.displayLights:
                 displayLightChannel = int(displayLight.lightName[len(displayLight.lightType):len(displayLight.lightName)])
                 if displayLight.lightType == "RGBLight" or displayLight.lightType == "RGB6Channel":

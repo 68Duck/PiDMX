@@ -25,14 +25,14 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
         self.savedPlaybacks = self.dataBaseManager.getCurrentRigsPlaybacks(self.visualLightDisplay.rigID)
 
         for playback in self.savedPlaybacks:
-            self.dropDown.addItem(playback[3])  #playback[3] is the playback name
+            self.dropDown.addItem(playback["Name"])  #playback[3] is the playback name
 
     def runButtonClicked(self):
         self.playback = self.dropDown.currentText()
         self.playbackID = None
         for playback in self.savedPlaybacks:
-            if self.playback == playback[3]:
-                self.playbackID = playback[1]
+            if self.playback == playback["Name"]:
+                self.playbackID = playback["PlaybackID"]
         if self.playbackID == None:
             self.playbackOpened = False
             self.errorWindow = ErrorWindow("This playback does not exist. Try creating a playback first")
@@ -56,8 +56,8 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
         if self.lightDisplay.runningRainbow:
             self.visualLightDisplay.effectsWindow.toggleRainbow()
         for playback in self.playbackToOpen:
-            channelNumber = playback[1]
-            channelValue = playback[2]
+            channelNumber = playback["channelNumber"]
+            channelValue = playback["channelValue"]
             try:
                 channelNumber = int(channelNumber)
             except:

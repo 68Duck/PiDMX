@@ -24,7 +24,7 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
         self.savedRigs = self.dataBaseManager.getAllData("LightingRigs")
         for rig in self.savedRigs:
-            self.dropDown.addItem(rig[1])  #rig[1] is the name of the rig
+            self.dropDown.addItem(rig["name"])
 
     def deleteButtonClicked(self):
         confirmWindow = ConfirmWindow(self,"Are you sure you want to remove this rig?")
@@ -35,8 +35,8 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
             else:
                 self.dataBaseManager.deleteRigFromLightingRigs(rigToDelete)
                 for rig in self.savedRigs:
-                    if rigToDelete == rig[1]:
-                        rigID = rig[2]
+                    if rigToDelete == rig["name"]:
+                        rigID = rig["lightsTableID"]
                 self.dataBaseManager.dropRigTable(rigID)
             self.close()
 
@@ -82,10 +82,10 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
             self.errorWindow = ErrorWindow("The rig you have selected does not exist. Please try again")
         else:
             for light in self.rigToOpen:
-                lightType = light[1]
-                xpos = light[2]
-                ypos = light[3]
-                startChannel = light[4]
+                lightType = light["lightType"]
+                xpos = light["xPos"]
+                ypos = light["yPos"]
+                startChannel = light["startChannel"]
                 lightInformation = self.getLightInformation(lightType)
                 self.newLight = lightInformation.generateNewLight(startChannel)
                 self.newLight.lightDisplay = self.lightDisplay

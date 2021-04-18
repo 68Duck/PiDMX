@@ -21,8 +21,8 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
         self.openButton.clicked.connect(self.openButtonClicked)
         self.savedSequences = self.dataBaseManager.getAllData("Sequences")
         for sequence in self.savedSequences:
-            if self.visualLightDisplay.rigID == sequence[4]:  #checks is the rigID is the same
-                self.dropDown.addItem(sequence[2])  #sequence[2] is the name of the sequence
+            if self.visualLightDisplay.rigID == sequence["rigID"]:  #checks is the rigID is the same
+                self.dropDown.addItem(sequence["sequenceName"])  #sequence[2] is the name of the sequence
 
 
     def openButtonClicked(self):
@@ -35,9 +35,9 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
     def setupSequence(self):
         self.sequenceCreatorID = False
         for sequence in self.savedSequences:
-            if self.sequence == sequence[2]:
-                self.sequenceCreatorID = sequence[3]
-                self.sequenceID = sequence[1]
+            if self.sequence == sequence["sequenceName"]:
+                self.sequenceCreatorID = sequence["sequenceCreatorID"]
+                self.sequenceID = sequence["sequenceID"]
         if self.sequenceCreatorID == False and self.sequenceCreatorID != 0:
             self.sequenceOpened = False
             self.errorWindow = ErrorWindow("This rig does not exist. Try saving a rig first")
@@ -72,7 +72,7 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
         self.timers = []
         for sequence in self.sequenceToOpen:
             self.nextSequence = sequence
-            timeDelay = sequence[2]
+            timeDelay = sequence["timeDelay"]
             timeDelayTotal += timeDelay
             if self.moveOnSpace:
                 self.visualLightDisplay.checkForSpace = True
@@ -86,12 +86,12 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
     def openIndividualSequence(self):
         sequence = self.sequenceToOpen[0]
         self.sequenceToOpen.pop(0)
-        playbackID = sequence[1]
-        timeDelay = sequence[2]
+        playbackID = sequence["playbackID"]
+        timeDelay = sequence["timeDelay"]
         self.playbackToOpen = self.dataBaseManager.getAllData("sequencePlayback"+str(playbackID))
         for playback in self.playbackToOpen:
-            channelNumber = int(playback[1])
-            channelValue = int(playback[2])
+            channelNumber = int(playback["channelNumber"])
+            channelValue = int(playback["channelValue"])
             self.lightDisplay.universeChannelValues[channelNumber] = channelValue
         for light in self.lightDisplay.lights:
             light.updateChannelValuesFromUniverse()

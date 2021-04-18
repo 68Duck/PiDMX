@@ -36,11 +36,11 @@ class EditSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","editSequenceW
         yPos = 0
         self.checkBoxes = []
         for i in range(len(self.sequenceToOpen)):
-            id = QTableWidgetItem(str(self.sequenceToOpen[i][0]))
+            id = QTableWidgetItem(str(self.sequenceToOpen[i]["ID"]))
             self.tableWidget.setItem(i,0,id)  #in the from x,y,item
-            timeDelay = QTableWidgetItem(str(self.sequenceToOpen[i][2]))
+            timeDelay = QTableWidgetItem(str(self.sequenceToOpen[i]["timeDelay"]))
             self.tableWidget.setItem(i,2,timeDelay)  #in the from x,y,item
-            playbackName = QTableWidgetItem(str(self.sequenceToOpen[i][3]))
+            playbackName = QTableWidgetItem(str(self.sequenceToOpen[i]["playbackName"]))
             self.tableWidget.setItem(i,1,playbackName)
             # self.checkBox = QCheckBox(self)
             chkBoxItem = QTableWidgetItem()
