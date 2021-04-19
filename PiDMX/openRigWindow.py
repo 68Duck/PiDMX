@@ -44,8 +44,8 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
         self.rig = self.dropDown.currentText()
         self.rigID = False
         for rig in self.savedRigs:
-            if self.rig == rig[1]:
-                self.rigID = rig[2]
+            if self.rig == rig["name"]:
+                self.rigID = rig["lightsTableID"]
         if self.rigID == False and self.rigID != 0:
             self.rigOpened = False
             self.errorWindow = ErrorWindow("This rig does not exist. Try saving a rig first")
