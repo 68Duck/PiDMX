@@ -176,7 +176,11 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                 light.updateChannelValues()
                 light.changeUniverse()
                 l.changeColourAccordingToFixture()
-
+            elif l.lightType == "GenericDimmer":
+                light.channelValues[0] = colour.red()  #as only one channel. This is so we can use this to dim all lights
+                light.updateChannelValues()
+                light.changeUniverse()
+                l.changeColourAccordingToFixture()
 
     def snakeButtonClicked(self):
         self.snakeWindow = SnakeWindow(self.lightDisplay,self)
@@ -466,3 +470,6 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         if len(self.effectsWindow.selectedLights) > 0:
             self.effectsWindow.initialTime = False
             self.effectsWindow.show()
+
+    def closeEvent(self,e):
+        self.lightDisplay.sendzero()

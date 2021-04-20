@@ -261,3 +261,6 @@ class LightDisplay(QWidget):
         for light in self.lights:
             for i in range(len(light.channelValues)):
                 self.channelsOccupied[light.startChannel+i-1] = 1
+
+    def sendzero(self):
+        self.dmx.sendzero()
