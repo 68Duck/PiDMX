@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
+from order_dictionaries import order_dictionaries
 
 class Light(object):
     def __init__(self,startChannel,infoMode = False):
@@ -56,6 +57,37 @@ class Light(object):
             self.channelValues[i] = self.previousValues[i]  #previous values and channel values should be the same
         self.updateChannelValues()
         self.changeUniverse()
+
+class LightFromDatabase(Light): #Finish me
+    def __init__(self,startChannel,infoMode = False,lightInformation = None):
+        Light.__init__(self,startChannel,infoMode)
+        if lightInformation is None:
+            self.errorWindow = ErrorWindow("There is no information passed in to this light.")
+        self.lightInformation = lightInformation
+        # print(self.lightInformation)
+        self.lightType = lightInformation["lightName"]
+        self.dropdownName = self.lightType
+        self.imageName = lightInformation["imageName"]
+        self.isRGB = lightInformation["isRGB"]
+        self.hasPanTilt = lightInformation["hasPanTilt"]
+        self.indicators = lightInformation["indicators"]
+        self.channelInformation = lightInformation["channelInformation"]
+        self.channelNames = []
+        self.channelInformation = order_dictionaries(self.channelInformation,"channelNumber")
+        for channel in self.channelInformation:
+            self.channelNames.append(channel["channelName"])
+            setattr(self,channel["channelName"],channel["channelStartValue"])
+            if channel["channelInformation"] != None:
+                setattr(self,f"{channel['channelInformation']}channelName",channel["channelName"])
+
+        print(self.channelNames)
+        self.channels = self.channelNames
+        self.createChannelValues()
+    def generateNewight(self,channel):
+        newLight = LightFromDatabase(channel,self.lightInformation)
+        return newLight
+
+
 
 class Miniscan(Light):
     def __init__(self,startChannel,infoMode = False):
