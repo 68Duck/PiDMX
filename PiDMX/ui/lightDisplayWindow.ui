@@ -197,7 +197,7 @@ QMainWindow{color:white;background-color:black;}
      <x>0</x>
      <y>0</y>
      <width>1900</width>
-     <height>22</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPatch_Light">
@@ -213,6 +213,7 @@ QMainWindow{color:white;background-color:black;}
     <addaction name="effectsButton"/>
     <addaction name="selectButton"/>
     <addaction name="selectAllLightsButton"/>
+    <addaction name="selectLightTypeButton"/>
     <addaction name="chooseColourButton"/>
    </widget>
    <widget class="QMenu" name="menuRig">
@@ -338,6 +339,11 @@ QMainWindow{color:white;background-color:black;}
   <action name="createLightTypeButton">
    <property name="text">
     <string>Create Light Type</string>
+   </property>
+  </action>
+  <action name="selectLightTypeButton">
+   <property name="text">
+    <string>Select light type</string>
    </property>
   </action>
  </widget>

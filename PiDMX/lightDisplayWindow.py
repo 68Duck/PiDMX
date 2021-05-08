@@ -20,6 +20,7 @@ from displayLightTypes import *
 from sliderPannelWindow import SliderPannelWindow
 from inputPlaybackNameWindow import InputPlaybackNameWindow
 from createLightTypeWindow import CreateLightTypeWindow
+from lightTypeWindow import LightTypeWindow
 
 class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisplayWindow.ui"))[0]):  #creates a class window
     def __init__(self,lightDisplay,dataBaseManager):
@@ -97,6 +98,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.selectAllLightsButton.triggered.connect(self.selectAllLightsButtonClicked)
         self.stopSequenceButton.triggered.connect(self.stopSequenceButtonClicked)
         self.createLightTypeButton.triggered.connect(self.createLightTypeButtonClicked)
+        self.selectLightTypeButton.triggered.connect(self.selectLightTypeButtonClicked)
 
 
     def createLightTypeButtonClicked(self):
@@ -111,16 +113,44 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         else:
             self.errorWindow = ErrorWindow("There is no sequence currently running.")
 
+    def selectLightTypeButtonClicked(self):
+        if self.selectAllLightsButton.isChecked():
+            self.selectAllLightsButtonClicked()
+            self.selectAllLightsButton.setChecked(False)
+        self.lightTypeWindow = LightTypeWindow(self)
+        self.lightTypeWindow.show()
+
+    def selectLightAndDuplicates(self,light):
+        light.toggleSelected()
+        self.selectedLights.append(light)
+        for l in self.lightList: #selects lights of the same channnel
+            if l.channelNumber == light.channelNumber and l!=light:
+                l.toggleSelected()
+                self.selectedLights.append(l)
+
+    def deselectLightAndDuplicates(self,light):
+        self.selectedLights.remove(light)
+        light.toggleSelected()
+        for l in self.lightList:#selects lights of the same channnel
+            if l.channelNumber == light.channelNumber and l!=light:
+                l.toggleSelected()
+                self.selectedLights.remove(l)
+
+    def selectLightsOfType(self,lightType,select=True):
+        for light in self.lightList:
+            # print(light.lightType)
+            if select:
+                if not light.selected and light.lightType == lightType:
+                    self.selectLightAndDuplicates(light)
+            else:
+                if light.selected and light.lightType == lightType:
+                    self.deselectLightAndDuplicates(light)
+
     def selectAllLightsButtonClicked(self):
         if not self.selectAllLightsButton.isChecked():
             for light in self.lightList:
                 if light.selected:
-                    self.selectedLights.remove(light)
-                    light.toggleSelected()
-                    for l in self.lightList:
-                        if l.channelNumber == light.channelNumber and l!=light:
-                            l.toggleSelected()
-                            self.selectedLights.remove(l)
+                    self.deselectLightAndDuplicates(light)
         else:
             if len(self.lightList) == 0:
                 self.errorWindow = ErrorWindow("There are no lights to select.")
@@ -130,12 +160,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                 if light.selected:
                     pass
                 else:
-                    light.toggleSelected()
-                    self.selectedLights.append(light)
-                    for l in self.lightList:
-                        if l.channelNumber == light.channelNumber and l!=light:
-                            l.toggleSelected()
-                            self.selectedLights.append(l)
+                    self.selectLightAndDuplicates(light)
 
 
     def chooseColourButtonClicked(self):
@@ -472,4 +497,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             self.effectsWindow.show()
 
     def closeEvent(self,e):
-        self.lightDisplay.sendzero()
+        try:
+            self.lightDisplay.sendzero()
+        except:
+            pass #as this will be in test mode so dmx is not connected
