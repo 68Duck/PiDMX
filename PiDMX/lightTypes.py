@@ -76,15 +76,21 @@ class LightFromDatabase(Light): #Finish me
         self.channelInformation = order_dictionaries(self.channelInformation,"channelNumber")
         for channel in self.channelInformation:
             self.channelNames.append(channel["channelName"])
-            setattr(self,channel["channelName"],channel["channelStartValue"])
+            if not hasattr(self,channel["channelName"]):
+                setattr(self,channel["channelName"],channel["channelStartValue"])
+            else:
+                self.errorWindow = ErrorWindow("The channel name overlaps another attribute")
             if channel["channelInformation"] != None:
-                setattr(self,f"{channel['channelInformation']}channelName",channel["channelName"])
+                if not hasattr(self,f"{channel['channelInformation']}channelName"):
+                    setattr(self,f"{channel['channelInformation']}channelName",channel["channelName"])
+                else:
+                    self.errorWindow = ErrorWindow("The channel name overlaps another attribute")
 
         print(self.channelNames)
         self.channels = self.channelNames
         self.createChannelValues()
-    def generateNewight(self,channel):
-        newLight = LightFromDatabase(channel,self.lightInformation)
+    def generateNewight(self,channel,infoMode = False):
+        newLight = LightFromDatabase(channel,lightInformation = self.lightInformation,infoMode = infoMode)
         return newLight
 
 
