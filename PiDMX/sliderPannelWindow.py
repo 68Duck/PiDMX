@@ -241,6 +241,8 @@ class SliderPannelWindow(QWidget):  #creates a class window
                 for light in self.displayWindow.lightList:
                     finished = light.changeColourAccordingToFixture()
 
+        self.updateChannelValues()  #remove me to stop sending data after each slider is moved if becomes too slow
+
 
     def textBoxChangedValue(self):
         if not self.colourMode:
