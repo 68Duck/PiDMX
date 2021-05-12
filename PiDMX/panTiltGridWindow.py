@@ -64,6 +64,18 @@ class PanTiltGridWindow(QWidget,uic.loadUiType(os.path.join("ui","panTiltGrid.ui
         if self.sliderPannelWindow is None:
             pass
         else:
+            self.light = self.sliderPannelWindow.light
+            databaseSlider = False
+            if type(self.light).__name__ == "LightFromDatabase":
+                if self.light.lightInformation["hasPanTilt"] == "1":
+                    databaseSlider = True
+                    channelInformation = self.light.lightInformation["channelInformation"]
+                    for channel in channelInformation:
+                        if channel["channelInformation"] is not None:
+                            if channel["channelInformation"] == "pan":
+                                panChannelName = channel["channelName"]
+                            if channel["channelInformation"] == "tilt":
+                                tiltChannelName = channel["channelName"]
             for slider in self.sliderPannelWindow.sliders:
                 if slider.message[6:len(slider.message)] == "Pan":
                     slider.setValue((int(self.panTextInput.text())/100*255)//1)
@@ -71,6 +83,16 @@ class PanTiltGridWindow(QWidget,uic.loadUiType(os.path.join("ui","panTiltGrid.ui
                 elif slider.message[6:len(slider.message)] == "Tilt":
                     slider.setValue((int(self.tiltTextInput.text())/100*255)//1)
                     self.sliderPannelWindow.sliderChangedValue()
+                elif databaseSlider:
+                    if slider.message[6:len(slider.message)] == panChannelName:
+                        slider.setValue((int(self.panTextInput.text())/100*255)//1)
+                        self.sliderPannelWindow.sliderChangedValue()
+                    elif slider.message[6:len(slider.message)] == tiltChannelName:
+                        slider.setValue((int(self.tiltTextInput.text())/100*255)//1)
+                        self.sliderPannelWindow.sliderChangedValue()
+
+
+
             self.sliderPannelWindow.updateChannelValues()
 
     def mouseMoveEvent(self,e):

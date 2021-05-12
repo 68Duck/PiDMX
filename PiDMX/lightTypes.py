@@ -21,7 +21,7 @@ class Light(object):
     def createChannelValues(self):
         self.channelValues = []
         for channel in self.channelNames:
-            self.channelValues.append(getattr(self,channel))
+            self.channelValues.append(getattr(self,str(channel)))
         self.previousValues = self.channelValues
     def changeUniverse(self,updateUniverse=True):
         if self.lightDisplay == False:
@@ -40,7 +40,7 @@ class Light(object):
         return self.channelValues
     def updateChannelValues(self):
         for i in range(len(self.channelNames)):
-            setattr(self,self.channelNames[i],self.channelValues[i])
+            setattr(self,str(self.channelNames[i]),self.channelValues[i])
     def generateNewLight(self,channel):
         newLight = Light(channel)  #change light for each class type
         return newLight
@@ -58,7 +58,7 @@ class Light(object):
         self.updateChannelValues()
         self.changeUniverse()
 
-class LightFromDatabase(Light): #Finish me
+class LightFromDatabase(Light):
     def __init__(self,startChannel,infoMode = False,lightInformation = None):
         Light.__init__(self,startChannel,infoMode)
         if lightInformation is None:
@@ -76,8 +76,8 @@ class LightFromDatabase(Light): #Finish me
         self.channelInformation = order_dictionaries(self.channelInformation,"channelNumber")
         for channel in self.channelInformation:
             self.channelNames.append(channel["channelName"])
-            if not hasattr(self,channel["channelName"]):
-                setattr(self,channel["channelName"],channel["channelStartValue"])
+            if not hasattr(self,str(channel["channelName"])):
+                setattr(self,str(channel["channelName"]),channel["channelStartValue"])
             else:
                 self.errorWindow = ErrorWindow("The channel name overlaps another attribute")
             if channel["channelInformation"] != None:
@@ -86,10 +86,9 @@ class LightFromDatabase(Light): #Finish me
                 else:
                     self.errorWindow = ErrorWindow("The channel name overlaps another attribute")
 
-        print(self.channelNames)
         self.channels = self.channelNames
         self.createChannelValues()
-    def generateNewight(self,channel,infoMode = False):
+    def generateNewLight(self,channel,infoMode = False):
         newLight = LightFromDatabase(channel,lightInformation = self.lightInformation,infoMode = infoMode)
         return newLight
 

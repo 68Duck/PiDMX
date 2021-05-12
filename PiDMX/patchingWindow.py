@@ -16,6 +16,7 @@ class PatchingWindow(QWidget):
         self.lightDisplay = lightDisplay
         self.setGeometry(int(xpos),int(ypos),int(width),int(height)) #sets window parameters top left is (0,0)
         self.setWindowTitle("Light Patching") #sets window title
+        self.lightDisplay.updateLightTypes()
         self.initUI()
     def initUI(self):
         self.startChannelBox = QLineEdit(self)

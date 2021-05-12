@@ -27,6 +27,8 @@ class LightDisplay(QWidget):
         self.interval = interval
         self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True),Miniscan(0,True),RGBWLight(0,True),RGB8Channel(0,True)]
         self.lightTypes = ["GenericDimmer","RGBLight","LEDBar24ChannelMode","RGB6Channel","Miniscan","RGBWLight","RGB8Channel"]
+        self.noHardCodedLightTypes = len(self.lightsInformation)
+        self.getLightTypesFromDatabase()
         self.runLoop = True
         self.chaseOn = False
         self.runningChaser = False
@@ -52,6 +54,26 @@ class LightDisplay(QWidget):
         if self.devMode:
             self.sshUpdateDatabase.raspberryPiLoginWindow.hide()
             self.sshUpdateDatabase.runWithoutDMX()
+
+
+    def updateLightTypes(self):
+        for i in range(len(self.lightsInformation)-self.noHardCodedLightTypes):
+            self.lightsInformation.pop()
+            self.lightTypes.pop()
+        self.getLightTypesFromDatabase()
+
+    def getLightTypesFromDatabase(self):
+        dataBaseManager = DataBaseManager("lightTypes.db")
+        lightTypes = dataBaseManager.getAllData("lightTypes")
+        for lightInformation in lightTypes:
+            # print(lightInformation)
+            lightInformation["indicators"] = dataBaseManager.getAllData(f"indicators{lightInformation['indicatorsTableID']}")
+            lightInformation["channelInformation"] = dataBaseManager.getAllData(f"channels{lightInformation['channelNamesTableID']}")
+            newLight = LightFromDatabase(0,infoMode = True,lightInformation = lightInformation)
+            # print(newLight.generateNewLight(0,infoMode = True))
+            self.lightsInformation.append(newLight.generateNewLight(0,infoMode = True))
+            self.lightTypes.append(lightInformation["lightName"])
+        # print(lightTypes)
 
     def runComputerDMX(self,port):
         self.dmx = PyDMX(port)

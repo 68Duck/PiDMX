@@ -70,8 +70,12 @@ class SliderPannelWindow(QWidget):  #creates a class window
 
 
         self.sliderChangedValue()
+        panTilt = False
+        if type(self.light).__name__ == "LightFromDatabase":
+            if self.light.lightInformation["hasPanTilt"] == "1":
+                panTilt = True
 
-        if self.light.lightType == "Miniscan":
+        if self.light.lightType == "Miniscan" or panTilt:
             self.panTiltGridButton = QPushButton(self)
             self.panTiltGridButton.setFixedWidth(150)
             self.panTiltGridButton.move(520,10)
@@ -311,7 +315,33 @@ class SliderPannelWindow(QWidget):  #creates a class window
                 self.updateChannelValues()
 
             else:
-                self.errorWindow = ErrorWindow("There is nowhere to put the colour. Try selecting 3 channels to select the colour of.")
+                databaseLight = False
+                if type(self.light).__name__ == "LightFromDatabase":
+                    databaseLight = True
+                if databaseLight:
+                    if self.light.lightInformation["isRGB"] == "1":
+                        channelInformation = self.light.lightInformation["channelInformation"]
+                        for channel in channelInformation:
+                            if channel["channelInformation"] is not None:
+                                if channel["channelInformation"] == "red":
+                                    redChannelName = channel["channelName"]
+                                if channel["channelInformation"] == "green":
+                                    greenChannelName = channel["channelName"]
+                                if channel["channelInformation"] == "blue":
+                                    blueChannelName = channel["channelName"]
+                        for i in range(len(self.light.channels)):
+                            if self.light.channels[i] == redChannelName:
+                                self.sliders[i].setValue(colour.red())
+                            if self.light.channels[i] == greenChannelName:
+                                self.sliders[i].setValue(colour.green())
+                            if self.light.channels[i] == blueChannelName:
+                                self.sliders[i].setValue(colour.blue())
+                        self.sliderChangedValue(False)
+                        self.updateChannelValues()
+                    else:
+                        self.errorWindow = ErrorWindow("There is nowhere to put the colour. Try selecting 3 channels to select the colour of.")
+                else:
+                    self.errorWindow = ErrorWindow("There is nowhere to put the colour. Try selecting 3 channels to select the colour of.")
 
         else:
             self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")

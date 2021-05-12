@@ -318,8 +318,10 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             self.newLight = DisplayLight3(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
         elif self.lightInformation.lightType == "Miniscan":
             self.newLight = DisplayLight4(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
-        else:
+        elif self.lightInformation.lightType == "RGB6Channel" or self.lightInformation.lightType == "RGBLight" or self.lightInformation.lightType == "RGBWLight" or self.lightInformation.lightType == "RGB8Channel":
             self.newLight = DisplayLight(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
+        else:
+            self.newLight = DatabaseDisplayLight(self.tempLight.xPos,self.tempLight.yPos,channel,self.lightDisplay,self)
         self.newLight.lightType = self.lightInformation.lightType
         self.lightList.append(self.newLight)
 
@@ -330,8 +332,10 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             self.newLight = DisplayLight3(xpos,ypos,channel,self.lightDisplay,self)
         elif lightType == "Miniscan":
             self.newLight = DisplayLight4(xpos,ypos,channel,self.lightDisplay,self)
-        else:
+        elif lightType == "RGB6Channel" or lightType == "RGBLight" or lightType == "RGBWLight" or lightType == "RGB8Channel":
             self.newLight = DisplayLight(xpos,ypos,channel,self.lightDisplay,self)
+        else:
+            self.newLight = DatabaseDisplayLight(xpos,ypos,channel,self.lightDisplay,self)
         self.newLight.lightType = lightType
         self.lightList.append(self.newLight)
 
@@ -345,9 +349,10 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             self.tempLight = DisplayLight3(xPos,yPos,channel,self.lightDisplay,self)
         elif self.lightInformation.lightType == "Miniscan":
             self.tempLight = DisplayLight4(xPos,yPos,channel,self.lightDisplay,self)
-
-        else:
+        elif self.lightInformation.lightType == "RGB6Channel" or self.lightInformation.lightType == "RGBLight" or self.lightInformation.lightType == "RGBWLight" or self.lightInformation.lightType == "RGB8Channel":
             self.tempLight = DisplayLight(xPos,yPos,channel,self.lightDisplay,self)
+        else:
+            self.tempLight = DatabaseDisplayLight(xPos,yPos,self.creatingLightChannel,self.lightDisplay,self)
 
     def eventFilter(self, source, event):
         if not self.isSequenceWindowOpen:
@@ -402,20 +407,21 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                                     if l.channelNumber == light.channelNumber and l!=light:
                                         l.toggleSelected()
                                         self.selectedLights.remove(l)
-                if not lightClicked:
-                    if self.creatingLight:
-                        if self.creatingMultipleLights:
-                            channelToCreateLightWith = self.creatingLightChannel-((self.numberOfLightsToCreate-1)*len(self.creatingLightInformation.channels)) - (self.channelGap*(self.numberOfLightsToCreate-1))
-                        else:
-                            channelToCreateLightWith = self.creatingLightChannel
-                        self.createLight(self.x,self.y,channelToCreateLightWith)  #if error then change me back?
-                        try:
-                            self.createLight(self.x,self.y,channelToCreateLightWith)
-                        except:
-                            self.errorWindow = ErrorWindow("Error with creating light. Possibly type of light error?")
-                        self.numberOfLightsToCreate -= 1
-                        if self.numberOfLightsToCreate == 0:
-                            self.creatingLight = False
+                # if not lightClicked:
+                #     if self.creatingLight:
+                #         if self.creatingMultipleLights:
+                #             channelToCreateLightWith = self.creatingLightChannel-((self.numberOfLightsToCreate-1)*len(self.creatingLightInformation.channels)) - (self.channelGap*(self.numberOfLightsToCreate-1))
+                #         else:
+                #             channelToCreateLightWith = self.creatingLightChannel
+                #         print("REMOVE ME")
+                #         self.createLight(self.x,self.y,channelToCreateLightWith)  #if error then change me back?
+                #         try:
+                #             self.createLight(self.x,self.y,channelToCreateLightWith)
+                #         except:
+                #             self.errorWindow = ErrorWindow("Error with creating light. Possibly type of light error?")
+                #         self.numberOfLightsToCreate -= 1
+                #         if self.numberOfLightsToCreate == 0:
+                #             self.creatingLight = False
             else:
                 lightClicked = False
                 for light in self.lightList:
@@ -439,7 +445,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                             channelToCreateLightWith = self.creatingLightChannel
                         try:
                             self.createLight(self.x,self.y,channelToCreateLightWith)
-                        except:
+                        except Exception as e:
+                            print(e)
                             self.errorWindow = ErrorWindow("Error with creating light. Possibly type of light error?")
                         self.numberOfLightsToCreate -= 1
                         if self.numberOfLightsToCreate == 0:

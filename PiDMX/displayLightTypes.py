@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
+from os import path
+from update_stylesheet import update_stylesheet
+
 class DisplayLightParent(object):
     def __init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow):
         self.selected = False
@@ -108,8 +111,107 @@ class DisplayLight2(DisplayLightParent):
             self.selectedShape.show()
 
 
+class DatabaseDisplayLight(DisplayLightParent): #finish me
+    def __init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow):
+        # QLabel.__init__(self)
+        self.indicators = []
+        for light in parentWindow.lightDisplay.lights:
+            if channelNumber == light.startChannel:
+                self.lightInformation = light.lightInformation
+                try:
+                    a = self.lightInformation
+                except:
+                    raise Exception("There is no lightInformation")
+        DisplayLightParent.__init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow)
 
-class DisplayLight(DisplayLightParent):
+    def changeColour(self):
+        channelInformation = self.lightInformation["channelInformation"]
+        isRGB = False
+        if self.lightInformation["isRGB"]:
+            isRGB = True
+        for channel in channelInformation:
+            if channel["channelInformation"] is not None:
+                if isRGB:
+                    if channel["channelInformation"] == "red":
+                        redChannelName = channel["channelName"]
+                    if channel["channelInformation"] == "green":
+                        greenChannelName = channel["channelName"]
+                    if channel["channelInformation"] == "blue":
+                        blueChannelName = channel["channelName"]
+                else:
+                    if channel["channelInformation"] == "intensity":
+                        intensityChannelName = channel["channelName"]
+
+        light = getattr(self,"light")
+        if isRGB:
+            colour = self.hexValueForRGB(getattr(light,redChannelName),getattr(light,greenChannelName),getattr(light,blueChannelName))
+            for indicator in self.indicators:
+                indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"background-color",f'#{colour}'))
+                indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"border",f'3px solid#{colour}'))
+        else:
+            #finish me
+            for indicator in self.indicators:
+                styleSheet = indicator.styleSheet() + f'background-color: rgba(255,255,0,{getattr(light,intensityChannelName)});'
+                indicator.setStyleSheet(styleSheet)
+                # indicator.setStyleSheet(indicator.styleSheet().append(QString(f'background-color: rgba(255,255,0,{getattr(light,intensityChannelName)});')))
+
+
+
+    def hexValueForChannel(self,channel):
+        channel = hex(channel)
+        channel = channel[2:len(channel)]
+        if len(channel) < 2:
+            channel = "0" + channel
+        return str(channel)
+
+    def hexValueForRGB(self,red,green,blue):
+        red = self.hexValueForChannel(red)
+        green = self.hexValueForChannel(green)
+        blue = self.hexValueForChannel(blue)
+        return red+green+blue
+
+    def move(self):
+        self.imageLabel.move(self.xPos,self.yPos)
+        for shape in self.shapes:
+            if shape != self.imageLabel:
+                shape.move(self.xPos+shape.relativeX,self.yPos+shape.relativeY)
+
+        for shape in self.shapes:
+            shape.show()
+
+    def setClickableRegion(self):
+        self.clickableLeft = 0
+        self.clickableRight = 100
+        self.clickableTop = 50
+        self.clickableBottom = 50
+
+    def createShapes(self):
+        self.imageLabel = QLabel(self.parentWindow)
+        pixmap = QPixmap(path.join("images",self.lightInformation["imageName"]))
+        self.imageLabel.setPixmap(pixmap.scaled(100,100,Qt.KeepAspectRatio))
+        self.imageLabel.setFixedSize(100,100)
+        shapes = [self.imageLabel]
+
+        for indicator in self.lightInformation["indicators"]:
+            self.indicatorLabel = QLabel(self.parentWindow)
+            x = indicator["x"]//5
+            y = indicator["y"]//5
+            width = indicator["width"]//5
+            height = indicator["height"]//5
+            type = indicator["type"]
+            self.indicatorLabel.relativeX = x
+            self.indicatorLabel.relativeY = y
+            self.indicatorLabel.setFixedSize(width,height)
+            if type == "circle":
+                self.indicatorLabel.setStyleSheet(f"background-color:#ffff00;border-radius:{int(width/2)};border: 3px solid #ffff00;")
+            elif type == "square":
+                self.indicatorLabel.setStyleSheet(f"background-color:#ffff00;border: 3px solid #ffff00;")
+            shapes.append(self.indicatorLabel)
+            self.indicators.append(self.indicatorLabel)
+
+        return shapes
+
+class DisplayLight(DisplayLightParent): #rgbLight
     def __init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow):
         DisplayLightParent.__init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow)
 
@@ -174,7 +276,7 @@ class DisplayLight(DisplayLightParent):
             self.selectedShape.show()
 
 
-class DisplayLight3(DisplayLightParent):
+class DisplayLight3(DisplayLightParent): #generic dimmer
     def __init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow):
         DisplayLightParent.__init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow)
 
