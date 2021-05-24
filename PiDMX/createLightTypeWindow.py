@@ -153,9 +153,9 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         if self.rgbRadio.isChecked():
             self.rgbWidget.show()
             self.intensityWidget.hide()
-        else: #so intensity radio
-            self.intensityWidget.show()
+        else: #so intensity radio#
             self.rgbWidget.hide()
+            self.intensityWidget.show()
         self.updateChannelDropdowns()
 
     def panTiltChanged(self):

@@ -127,7 +127,7 @@ class DatabaseDisplayLight(DisplayLightParent): #finish me
     def changeColour(self):
         channelInformation = self.lightInformation["channelInformation"]
         isRGB = False
-        if self.lightInformation["isRGB"]:
+        if self.lightInformation["isRGB"] == "1":
             isRGB = True
         for channel in channelInformation:
             if channel["channelInformation"] is not None:

@@ -5,6 +5,7 @@ from PyQt5.QtCore import*
 from PIL import Image
 import math as maths
 from os import path,mkdir
+import easygui
 
 from errorWindow import ErrorWindow
 
@@ -51,11 +52,23 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
         self.eraserButton.clicked.connect(self.eraserButtonClicked)
         self.colourChangingRadio.clicked.connect(self.radioChanged)
         self.backgroundRadio.clicked.connect(self.radioChanged)
+        self.openImageButton.clicked.connect(self.openImageButtonClicked)
         self.penSizeSliderChangedValue()
         self.eraserSizeSliderChangedValue()
         self.boxSliderChangedValue()
         self.circleSliderChangedValue()
 
+    def openImageButtonClicked(self):
+        # print(easygui.fileopenbox())
+        openedImage = easygui.fileopenbox()
+        try:
+            self.image = Image.open(openedImage)
+            self.image = self.image.resize((500,500))
+        except:
+            self.errorWindow = ErrorWindow("That file cannot be read as an image. Please try again.")
+            self.openImageButtonClicked()
+        # self.image = Image.open(easygui.fileopenbox())
+        self.saveImage()
 
     def newImageButtonPressed(self):
         for i in range(self.image.width):
@@ -103,7 +116,7 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
 
 
     def penButtonClicked(self):
-        if self.sender().isChecked():
+        if self.penButton.isChecked():
             self.creatingBox = False
             self.creatingCircle = False
             self.creatingChangingBox = False
@@ -145,6 +158,7 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
                 self.pixels[x,y] = colour
 
     def mousePressEvent(self,e):
+        print(e.x(),e.y())
         if self.creatingBox:
             xpos = e.x()-self.imageLabel.x()
             ypos = e.y()-self.imageLabel.y()
