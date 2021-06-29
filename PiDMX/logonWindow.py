@@ -4,6 +4,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 import random
 import os
+import hashlib
 
 from databaseManager import DataBaseManager
 from createAccountWindow import CreateAccountWindow
@@ -70,7 +71,11 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
 
             self.newDatabaseId = counter
 
-            self.logonDatabaseManager.insertRecord("logon",[None,username,password,self.newDatabaseId])
+            m = hashlib.sha256()
+            m.update(password.encode("utf8"))
+            hashedPassword = m.digest()
+
+            self.logonDatabaseManager.insertRecord("logon",[None,username,hashedPassword,self.newDatabaseId])
             self.createDatabase(self.newDatabaseId)
             self.tabs.setCurrentIndex(0)
 
@@ -85,7 +90,10 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
     def submitButtonPressed(self):
         username = self.usernameInput.text()
         password = self.passwordInput.text()
-        self.logonValid = self.passwordValidation(username,password)
+        m = hashlib.sha256()
+        m.update(password.encode("utf8"))
+        hashedPassword = m.digest()
+        self.logonValid = self.passwordValidation(username,hashedPassword)
         if self.logonValid is not False:
             self.databaseID = self.logonValid
             if self.databaseID == 0:
