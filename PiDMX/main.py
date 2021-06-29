@@ -26,7 +26,7 @@ sys.excepthook = my_exception_hook
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    devMode = True
+    devMode = False
     lightDisplay = LightDisplay([],app=app,devMode=devMode)
     # win = LogonWindow(lightDisplay)
     # win.show()
