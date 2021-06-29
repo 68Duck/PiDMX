@@ -50,10 +50,11 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
 
     def addWholeRigButtonClicked(self):
         for light in self.lights:
-            x,y=[light.xPos,light.yPos]
-            lightName = light.lightType+""+str(light.channelNumber)
-            self.createLight(light.lightType,lightName,x,y)
-            self.lightsToPlace.remove(light)
+            if light in self.lightsToPlace:
+                x,y=[light.xPos,light.yPos]
+                lightName = light.lightType+""+str(light.channelNumber)
+                self.createLight(light.lightType,lightName,x,y)
+                self.lightsToPlace.remove(light)
         self.addWholeRigButton.setEnabled(False)
 
     def editSequenceButtonClicked(self):
@@ -228,8 +229,11 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
             self.errorWindow = ErrorWindow("The colour you have selected is not valid. Please try again")
 
     def addLightButtonClicked(self):
-        self.chooseLightWindow = ChooseLightForSequenceWindow(self)
-        self.chooseLightWindow.show()
+        if len(self.lightsToPlace)>0:
+            self.chooseLightWindow = ChooseLightForSequenceWindow(self)
+            self.chooseLightWindow.show()
+        else:
+            self.errorWindow = ErrorWindow("All lights have been placed.")
 
     def createLight(self,lightType,light,xPos,yPos,openFromSavedSequence=False):
         if lightType == "LEDBar24ChannelMode":
