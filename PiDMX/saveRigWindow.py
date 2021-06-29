@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
+from errorWindow import ErrorWindow
+from messageWindow import MessageWindow
+
 class SaveRigWindow(QMessageBox):
     def __init__(self,dataBaseManager,lightDisplay,visualLightDisplay,autoSave = False):
         self.autoSave = autoSave
@@ -56,6 +59,7 @@ class SaveRigWindow(QMessageBox):
             self.dataBaseManager.createRigTable(self.newRigID)
             for record in newRig:
                 self.dataBaseManager.insertRecord("rig"+str(self.newRigID),record)
+            self.messageWindow = MessageWindow(f"The rig was saved as {self.rigName}")
         except:
             self.errorState = True
             self.errorWindow = ErrorWindow("Data base is not working. Possibly data base is locked?")
