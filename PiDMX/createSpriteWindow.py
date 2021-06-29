@@ -64,6 +64,7 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
         try:
             self.image = Image.open(openedImage)
             self.image = self.image.resize((500,500))
+            self.pixels = self.image.load()
         except:
             self.errorWindow = ErrorWindow("That file cannot be read as an image. Please try again.")
             self.openImageButtonClicked()
