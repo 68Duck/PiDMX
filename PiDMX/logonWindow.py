@@ -10,6 +10,7 @@ from databaseManager import DataBaseManager
 from createAccountWindow import CreateAccountWindow
 from errorWindow import ErrorWindow
 from lightDisplayWindow import LightDisplayWindow
+from messageWindow import MessageWindow
 
 class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
     def __init__(self,lightDisplay,app,devMode=False):
@@ -80,6 +81,7 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
             self.tabs.setCurrentIndex(0)
 
             #Alert account created
+            self.messageWindow = MessageWindow(f"The account with name '{username}' has been created")
 
     def createDatabase(self,databaseID):
         self.dataBaseManager = DataBaseManager("dmx"+str(databaseID)+".db")
@@ -118,3 +120,4 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
         self.lightDisplay = LightDisplayWindow(self.lightDisplay,self.dataBaseManager)
         self.app.installEventFilter(self.lightDisplay)
         self.lightDisplay.show()
+        self.close()
