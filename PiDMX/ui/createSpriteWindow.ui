@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>823</width>
+    <width>927</width>
     <height>611</height>
    </rect>
   </property>
@@ -172,8 +172,17 @@
    <property name="minimum">
     <number>1</number>
    </property>
+   <property name="maximum">
+    <number>20</number>
+   </property>
+   <property name="pageStep">
+    <number>2</number>
+   </property>
+   <property name="value">
+    <number>3</number>
+   </property>
    <property name="sliderPosition">
-    <number>10</number>
+    <number>3</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>

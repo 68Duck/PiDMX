@@ -14,6 +14,7 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
     def __init__(self,imageName,parentWindow):
         super().__init__()
         self.setupUi(self)
+        self.setMouseTracking(True)
         if not path.exists("images"):
             mkdir("images")
             self.errorWindow = ErrorWindow("The images folder does not exists. Creating a new images folder.")
@@ -57,6 +58,8 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
         self.eraserSizeSliderChangedValue()
         self.boxSliderChangedValue()
         self.circleSliderChangedValue()
+
+        self.previousPosition = None
 
     def openImageButtonClicked(self):
         # print(easygui.fileopenbox())
@@ -158,8 +161,77 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
             if y > 0 and y < self.image.height:
                 self.pixels[x,y] = colour
 
+    # def createLine(self,firstPoint,secondPoint,width): #does something weird but creates an interresting font
+    #     x0,y0 = firstPoint
+    #     x1,y1 = secondPoint
+    #     ax = 1 if (x0<x1) else -1
+    #     ay = 1 if (y0<y1) else -1
+    #
+    #     for i in range(width):
+    #         fp = (firstPoint[0]+ax*i,firstPoint[1]+ay*i)
+    #         sp = (secondPoint[0]+ax*i,secondPoint[1]+ay*i)
+    #
+    #         x0,y0 = fp
+    #         x1,y1 = sp
+    #         dy = abs(y1-y0)
+    #         dx = abs(x1-x0)
+    #         sx = 1 if (x0<x1) else -1
+    #         sy = 1 if (y0<y1) else -1
+    #         err = dx-dy
+    #
+    #         while True:
+    #             self.setPixel(x0,y0,(255,255,255))
+    #             if x0 == x1 and y0 == y1:
+    #                 break
+    #             else:
+    #                 e2 = 2*err
+    #                 if e2 > -dy:
+    #                     err -= dy
+    #                     x0 += sx
+    #                 if e2 < dx:
+    #                     err += dx
+    #                     y0 += sy
+    def createLine(self,firstPoint,secondPoint,width):
+        x0,y0 = firstPoint
+        x1,y1 = secondPoint
+        dy = abs(y1-y0)
+        dx = abs(x1-x0)
+        sx = 1 if (x0<x1) else -1
+        sy = 1 if (y0<y1) else -1
+        err = dx-dy
+
+        while True:
+            xpos = x0
+            ypos = y0
+            for i in range(width):
+                for j in range(width):
+                    if maths.sqrt(i**2+j**2)>width:
+                        pass
+                    else:
+                        self.setPixel(xpos+i,ypos+j,(255,255,255))
+                        self.setPixel(xpos+i,ypos-j,(255,255,255))
+                        self.setPixel(xpos-i,ypos+j,(255,255,255))
+                        self.setPixel(xpos-i,ypos-j,(255,255,255))
+            # self.setPixel(x0,y0,(255,255,255))
+            if x0 == x1 and y0 == y1:
+                break
+            else:
+                e2 = 2*err
+                if e2 > -dy:
+                    err -= dy
+                    x0 += sx
+                if e2 < dx:
+                    err += dx
+                    y0 += sy
+
+
+
+
+    def mouseReleaseEvent(self,e):
+        print("test")
+        self.previousPosition = None
+
     def mousePressEvent(self,e):
-        print(e.x(),e.y())
         if self.creatingBox:
             xpos = e.x()-self.imageLabel.x()
             ypos = e.y()-self.imageLabel.y()
@@ -213,28 +285,33 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
         else:
             xpos = e.x()-self.imageLabel.x()
             ypos = e.y()-self.imageLabel.y()
-            if self.penButton.isChecked():
-                colour = (255,255,255)
-                self.circleSize = self.penSizeSlider.value()
-            else: # elif self.eraserButton.isChecked():
-                colour = (0,0,0)
-                self.circleSize = self.eraserSizeSlider.value()
-                for label in self.labels:
-                    x = label.x()
-                    y = label.y()
-                    if e.x() > x and e.x() < x+label.width():
-                        if e.y() > y and e.y() < y+label.height():
-                            label.hide()
-                            self.labels.remove(label)
-            for i in range(self.circleSize):
-                for j in range(self.circleSize):
-                    if maths.sqrt(i**2+j**2)>self.circleSize:
-                        pass
-                    else:
-                        self.setPixel(xpos+i,ypos+j,colour)
-                        self.setPixel(xpos+i,ypos-j,colour)
-                        self.setPixel(xpos-i,ypos+j,colour)
-                        self.setPixel(xpos-i,ypos-j,colour)
+            if self.previousPosition is not None:
+                self.createLine((xpos,ypos),self.previousPosition,self.penSizeSlider.value())
+            if xpos > 0 and xpos < self.image.width:
+                if ypos > 0 and ypos < self.image.width:
+                    self.previousPosition = (xpos,ypos)
+            # if self.penButton.isChecked():
+            #     colour = (255,255,255)
+            #     self.circleSize = self.penSizeSlider.value()
+            # else: # elif self.eraserButton.isChecked():
+            #     colour = (0,0,0)
+            #     self.circleSize = self.eraserSizeSlider.value()
+            #     for label in self.labels:
+            #         x = label.x()
+            #         y = label.y()
+            #         if e.x() > x and e.x() < x+label.width():
+            #             if e.y() > y and e.y() < y+label.height():
+            #                 label.hide()
+            #                 self.labels.remove(label)
+            # for i in range(self.circleSize):
+            #     for j in range(self.circleSize):
+            #         if maths.sqrt(i**2+j**2)>self.circleSize:
+            #             pass
+            #         else:
+            #             self.setPixel(xpos+i,ypos+j,colour)
+            #             self.setPixel(xpos+i,ypos-j,colour)
+            #             self.setPixel(xpos-i,ypos+j,colour)
+            #             self.setPixel(xpos-i,ypos-j,colour)
         self.saveImage()
 
     def mouseMoveEvent(self,e):
@@ -257,11 +334,13 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
         self.saveImage()
         self.parentWindow.indicators = self.labels
 
-
+class Test:
+    def __init__(self):
+        self.image = None
 
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-    win = CreateSpriteWindow("test")
+    win = CreateSpriteWindow("sadfhsadfhkljsadfhkljasdhsdfjk",Test())
     win.show()
     sys.exit(app.exec_())
