@@ -30,6 +30,7 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         self.checkBoxes = []
         self.indicators = []
         self.removeConfirmed = False
+        self.invalidChannelNames = ["errorWindow","lightInformation","lightType","imageName","isRGB","hasPanTilt","indicators","channelInformation","channelNames","channelInformation","channels"]
         self.initUI()
 
     def initUI(self):
@@ -99,6 +100,11 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
         if self.intensityRadio.isChecked():
             isRGB = False
 
+        for i in range(self.table.rowCount()):  #this needs to be out of the next loop to ensure no data is written to the database
+            channelName = self.table.item(i,0).text()
+            if channelName in self.invalidChannelNames:
+                self.errorWindow = ErrorWindow(f"The channel name '{channelName}' is invalid. Please try again with a different name.")
+                return
 
         channelID = self.getNextTableID("channels")
         self.dataBaseManager.createChannelsTable(channelID)
