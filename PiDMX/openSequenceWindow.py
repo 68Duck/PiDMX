@@ -46,9 +46,9 @@ class OpenSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow
         self.sequence = self.dropDown.currentText()
         self.sequenceCreatorID = False
         for sequence in self.savedSequences:
-            if self.sequence == sequence[2]:
-                self.sequenceCreatorID = sequence[3]
-                self.sequenceID = sequence[1]
+            if self.sequence == sequence["sequenceName"]:
+                self.sequenceCreatorID = sequence["sequenceCreatorID"]
+                self.sequenceID = sequence["sequenceID"]
         if self.sequenceCreatorID == False and self.sequenceCreatorID != 0:
             self.sequenceOpened = False
             self.errorWindow = ErrorWindow("This rig does not exist. Try saving a rig first")
