@@ -14,134 +14,18 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow{background-color:black;}</string>
+   <string notr="true">QAction{color:white;}
+QMainWindow{color:white;background-color:black;}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="addLightButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Add Light</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="selectColourButton">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Colour Mode</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="colourPickerButton">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>10</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Choose Colour</string>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="saveSequenceButton">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>10</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Save Sequence</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="openButton">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>10</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Open Sequence</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="autoSaveSequenceButton">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>10</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Auto-save sequence</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="savePlaybackButton">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>10</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Save Playback</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="nextPlaybackButton">
     <property name="geometry">
      <rect>
-      <x>1670</x>
+      <x>1600</x>
       <y>20</y>
-      <width>91</width>
-      <height>23</height>
+      <width>111</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -154,10 +38,10 @@
    <widget class="QPushButton" name="previousPlaybackButton">
     <property name="geometry">
      <rect>
-      <x>1780</x>
+      <x>1740</x>
       <y>20</y>
-      <width>101</width>
-      <height>23</height>
+      <width>141</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -165,54 +49,6 @@
     </property>
     <property name="text">
      <string>Previous Playback</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="colourReplaceButton">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>10</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Replace Colour</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="editSequenceButton">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>10</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Edit Sequence</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="addWholeRigButton">
-    <property name="geometry">
-     <rect>
-      <x>980</x>
-      <y>10</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{background-color:white;}</string>
-    </property>
-    <property name="text">
-     <string>Add whole rig</string>
     </property>
    </widget>
    <widget class="QLabel" name="currentPlaybackLabel">
@@ -249,8 +85,92 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAdd_Light">
+    <property name="title">
+     <string>Add Light</string>
+    </property>
+    <addaction name="addLightButton"/>
+    <addaction name="addWholeRigButton"/>
+   </widget>
+   <widget class="QMenu" name="menuColour">
+    <property name="title">
+     <string>Colour</string>
+    </property>
+    <addaction name="selectColourButton"/>
+    <addaction name="colourPickerButton"/>
+    <addaction name="colourReplaceButton"/>
+   </widget>
+   <widget class="QMenu" name="menuSequence">
+    <property name="title">
+     <string>Sequence</string>
+    </property>
+    <addaction name="saveSequenceButton"/>
+    <addaction name="openButton"/>
+    <addaction name="autoSaveSequenceButton"/>
+    <addaction name="editSequenceButton"/>
+   </widget>
+   <widget class="QMenu" name="menuPlayback">
+    <property name="title">
+     <string>Playback</string>
+    </property>
+    <addaction name="savePlaybackButton"/>
+   </widget>
+   <addaction name="menuAdd_Light"/>
+   <addaction name="menuColour"/>
+   <addaction name="menuSequence"/>
+   <addaction name="menuPlayback"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="addLightButton">
+   <property name="text">
+    <string>Add Light</string>
+   </property>
+  </action>
+  <action name="selectColourButton">
+   <property name="text">
+    <string>Colour Mode</string>
+   </property>
+  </action>
+  <action name="colourPickerButton">
+   <property name="text">
+    <string>Choose Colour</string>
+   </property>
+  </action>
+  <action name="saveSequenceButton">
+   <property name="text">
+    <string>Save Sequence</string>
+   </property>
+  </action>
+  <action name="openButton">
+   <property name="text">
+    <string>Open Sequence</string>
+   </property>
+  </action>
+  <action name="autoSaveSequenceButton">
+   <property name="text">
+    <string>Auto-save sequence</string>
+   </property>
+  </action>
+  <action name="savePlaybackButton">
+   <property name="text">
+    <string>Save Playback</string>
+   </property>
+  </action>
+  <action name="colourReplaceButton">
+   <property name="text">
+    <string>Replace Colour</string>
+   </property>
+  </action>
+  <action name="editSequenceButton">
+   <property name="text">
+    <string>Edit Sequence</string>
+   </property>
+  </action>
+  <action name="addWholeRigButton">
+   <property name="text">
+    <string>Add whole rig</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

@@ -16,6 +16,7 @@ from sliderPannelWindow import SliderPannelWindow
 class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindow.ui"))[0]):
     def __init__(self,lightDisplay,visualLightDisplay,dataBaseManager,rigID):
         super().__init__()
+        super(QMainWindow).__init__()
         self.setupUi(self)
         self.rigID = rigID
         self.dataBaseManager = dataBaseManager
@@ -31,21 +32,21 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
         self.displayingPlaybackID = 1
         self.playbacks = []  #for each subarray, [0] is the Playback ID and [1] is the timeDelay
         self.setWindowTitle("Lighting Sequence") #sets window title
-        self.setStyleSheet("background-color:black;")
+        # self.setStyleSheet("background-color:black;")
         self.initUI()
     def initUI(self):
-        self.addLightButton.clicked.connect(self.addLightButtonClicked)
-        self.selectColourButton.clicked.connect(self.selectColourButtonClicked)
-        self.colourPickerButton.clicked.connect(self.colourPickerButtonClicked)
-        self.saveSequenceButton.clicked.connect(self.saveSequenceButtonClicked)
-        self.openButton.clicked.connect(self.openButtonClicked)
-        self.autoSaveSequenceButton.clicked.connect(self.autoSaveSequenceButtonClicked)
-        self.savePlaybackButton.clicked.connect(self.savePlaybackButtonClicked)
+        self.addLightButton.triggered.connect(self.addLightButtonClicked)
+        self.selectColourButton.triggered.connect(self.selectColourButtonClicked)
+        self.colourPickerButton.triggered.connect(self.colourPickerButtonClicked)
+        self.saveSequenceButton.triggered.connect(self.saveSequenceButtonClicked)
+        self.openButton.triggered.connect(self.openButtonClicked)
+        self.autoSaveSequenceButton.triggered.connect(self.autoSaveSequenceButtonClicked)
+        self.savePlaybackButton.triggered.connect(self.savePlaybackButtonClicked)
         self.nextPlaybackButton.clicked.connect(self.nextPlaybackButtonClicked)
         self.previousPlaybackButton.clicked.connect(self.previousPlaybackButtonClicked)
-        self.colourReplaceButton.clicked.connect(self.colourReplaceButtonClicked)
-        self.editSequenceButton.clicked.connect(self.editSequenceButtonClicked)
-        self.addWholeRigButton.clicked.connect(self.addWholeRigButtonClicked)
+        self.colourReplaceButton.triggered.connect(self.colourReplaceButtonClicked)
+        self.editSequenceButton.triggered.connect(self.editSequenceButtonClicked)
+        self.addWholeRigButton.triggered.connect(self.addWholeRigButtonClicked)
 
     def addWholeRigButtonClicked(self):
         for light in self.lights:
