@@ -97,8 +97,8 @@ class EditSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","editSequenceW
             itemArray[i][0] = i+1
         for arr in itemArray:
             for sequence in self.sequenceToOpen:
-                if float(sequence[0]) == float(arr[0]):
-                    arr.insert(1,sequence[1])
+                if float(sequence["ID"]) == float(arr[0]):
+                    arr.insert(1,sequence["playbackID"])
         itemArray = sortByTerm(itemArray,2)  #so sort by third as 0 indexed
         for arr in itemArray:
             arr.pop(2)
