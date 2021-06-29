@@ -96,6 +96,9 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
             playbackID = sequenceData[self.displayingPlaybackID-1]["playbackID"]  #-1 as the first will be 0
             playbackName = sequenceData[self.displayingPlaybackID-1]["playbackName"]
             self.currentPlaybackLabel.setText(f"Current playback name: {playbackName}")
+        else:
+            self.errorWindow = ErrorWindow("There are no saved sequences. Try saving a sequence before opening one.")
+            return
         playbackData = self.dataBaseManager.getAllData("sequencePlayback"+str(playbackID))
         for record in playbackData:
             channel = int(record["channelNumber"])
@@ -154,6 +157,14 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
 
 
     def openButtonClicked(self):
+        self.savedSequences = self.dataBaseManager.getAllData("Sequences")
+        atLeastOneSequence = False
+        for sequence in self.savedSequences:
+            if self.rigID == sequence["rigID"]:
+                atLeastOneSequence = True
+        if atLeastOneSequence == False:
+            self.errorWindow = ErrorWindow("There are no saved sequences. Try saving a sequence before opening one.")
+            return
         self.openSequenceWindow = OpenSequenceWindow(self.dataBaseManager,self)
         self.openSequenceWindow.show()
 
