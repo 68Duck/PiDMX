@@ -228,7 +228,6 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
 
 
     def mouseReleaseEvent(self,e):
-        print("test")
         self.previousPosition = None
 
     def mousePressEvent(self,e):
