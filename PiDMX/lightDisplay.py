@@ -37,7 +37,7 @@ class LightDisplay(QWidget):
         self.computerDMXMode = False
         self.dmxOffMode = False
         self.initialiseRainbow()
-        self.rainbowChangeAmount = 10
+        self.rainbowChangeAmount = 30
         self.selectedLights = []
         self.displayLock = False
         self.universeLock = False
@@ -136,29 +136,56 @@ class LightDisplay(QWidget):
                     self.effectLastRun = time.time()
                     self.runRainbow()
                     for displayLight in self.selectedLights:
-                        for light in self.lights:
-                            if light.startChannel == displayLight.channelNumber:
-                                update = True
-                                if light.lightType == "RGB6Channel" or light.lightType == "RGBLight" or light.lightType == "RGB8Channel":
-                                    light.channelValues[1] = self.redRainbow  #red is 1 green is 2 blue is 3 for rgbLight and RGB6Channel
-                                    light.channelValues[2] = self.greenRainbow
-                                    light.channelValues[3] = self.blueRainbow
-                                elif light.lightType == "LEDBar24ChannelMode":
-                                    for i in range(8):
-                                        light.channelValues[3*i] = self.redRainbow
-                                        light.channelValues[3*i+1] = self.greenRainbow
-                                        light.channelValues[3*i+2] = self.blueRainbow
-                                elif light.lightType == "RGBWLight":
-                                    light.channelValues[0] = self.redRainbow
-                                    light.channelValues[1] = self.greenRainbow
-                                    light.channelValues[2] = self.blueRainbow
+                        light = displayLight.light
+                        update = True
+                        if light.lightType == "RGB6Channel" or light.lightType == "RGBLight" or light.lightType == "RGB8Channel":
+                            light.channelValues[1] = self.redRainbow  #red is 1 green is 2 blue is 3 for rgbLight and RGB6Channel
+                            light.channelValues[2] = self.greenRainbow
+                            light.channelValues[3] = self.blueRainbow
+                        elif light.lightType == "LEDBar24ChannelMode":
+                            for i in range(8):
+                                light.channelValues[3*i] = self.redRainbow
+                                light.channelValues[3*i+1] = self.greenRainbow
+                                light.channelValues[3*i+2] = self.blueRainbow
+                        elif light.lightType == "RGBWLight":
+                            light.channelValues[0] = self.redRainbow
+                            light.channelValues[1] = self.greenRainbow
+                            light.channelValues[2] = self.blueRainbow
 
-                                else:
-                                    update=False  #probably no way of doing rainbow e.g. in generic dimmer
-                                if update:
-                                    light.updateChannelValues()
-                                    light.changeUniverse()
-                                    finished = displayLight.changeColourAccordingToFixture()
+                        else:
+                            update=False  #probably no way of doing rainbow e.g. in generic dimmer
+                        if update:
+                            light.updateChannelValues()
+                            light.changeUniverse()
+                            finished = displayLight.changeColourAccordingToFixture()
+            # if self.runningRainbow:
+            #     if self.effectLastRun + (self.selectedLights[0].parentWindow.effectsWindow.rainbowDelay) < time.time(): #this could be a source of an error if selectedLights becomes 0 somehow
+            #         self.effectLastRun = time.time()
+            #         self.runRainbow()
+            #         for displayLight in self.selectedLights:
+            #             for light in self.lights:
+            #                 if light.startChannel == displayLight.channelNumber:
+            #                     update = True
+            #                     if light.lightType == "RGB6Channel" or light.lightType == "RGBLight" or light.lightType == "RGB8Channel":
+            #                         light.channelValues[1] = self.redRainbow  #red is 1 green is 2 blue is 3 for rgbLight and RGB6Channel
+            #                         light.channelValues[2] = self.greenRainbow
+            #                         light.channelValues[3] = self.blueRainbow
+            #                     elif light.lightType == "LEDBar24ChannelMode":
+            #                         for i in range(8):
+            #                             light.channelValues[3*i] = self.redRainbow
+            #                             light.channelValues[3*i+1] = self.greenRainbow
+            #                             light.channelValues[3*i+2] = self.blueRainbow
+            #                     elif light.lightType == "RGBWLight":
+            #                         light.channelValues[0] = self.redRainbow
+            #                         light.channelValues[1] = self.greenRainbow
+            #                         light.channelValues[2] = self.blueRainbow
+            #
+            #                     else:
+            #                         update=False  #probably no way of doing rainbow e.g. in generic dimmer
+            #                     if update:
+            #                         light.updateChannelValues()
+            #                         light.changeUniverse()
+            #                         finished = displayLight.changeColourAccordingToFixture()
 
 
 
@@ -176,7 +203,11 @@ class LightDisplay(QWidget):
                 pass
             if not self.universeLock:
                 for i in range(len(self.universeChannelValues)):
-                    self.dmx.set_data(int(i),int(self.universeChannelValues[i]))  #should be int(i+1) Dont know why I have done it like this
+                    # print(int(i),int(self.universeChannelValues[i]))
+                    if i==0:
+                        pass
+                    else:
+                        self.dmx.set_data(int(i),int(self.universeChannelValues[i]))  #should be int(i+1) Dont know why I have done it like this
         elif self.dmxOffMode:
             pass
         else:

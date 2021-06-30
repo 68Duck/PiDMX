@@ -14,8 +14,8 @@ class EffectsWindow(QWidget,uic.loadUiType(os.path.join("ui","effectsWindow.ui")
         self.maxTimeDelayChaser = 2
         self.minTimeDelayChaser = 0.1
         self.chaserDelay = ((self.maxTimeDelayChaser-self.minTimeDelayChaser)/2+self.minTimeDelayChaser)//1
-        self.maxTimeDelayRainbow = 1
-        self.minTimeDelayRainbow = 0.1
+        self.maxTimeDelayRainbow = 0.15
+        self.minTimeDelayRainbow = 0.01
         self.rainbowDelay = ((self.maxTimeDelayRainbow-self.minTimeDelayRainbow)/2+self.minTimeDelayRainbow)//1
 
         self.visualLightDisplay = visualLightDisplay
@@ -79,13 +79,12 @@ class EffectsWindow(QWidget,uic.loadUiType(os.path.join("ui","effectsWindow.ui")
     def chaserSliderChangedValue(self):
         speedPercentage = (100-(self.chaserSlider.value()))/100
         self.chaserText.setText(str(int(round((1-speedPercentage)*100,0))))
-        self.chaserDelay = (speedPercentage * (self.maxTimeDelayChaser-self.minTimeDelayChaser) + self.minTimeDelayChaser)//1
+        self.chaserDelay = (speedPercentage * (self.maxTimeDelayChaser-self.minTimeDelayChaser) + self.minTimeDelayChaser)
 
     def rainbowSliderChangedValue(self):
         speedPercentage = (100-(self.rainbowSlider.value()))/100
         self.rainbowText.setText(str(int(round((1-speedPercentage)*100,0))))
-        self.rainbowDelay = (speedPercentage * (self.maxTimeDelayRainbow-self.minTimeDelayRainbow) + self.minTimeDelayRainbow)//1
-
+        self.rainbowDelay = (speedPercentage * (self.maxTimeDelayRainbow-self.minTimeDelayRainbow) + self.minTimeDelayRainbow)
 
     def toggleChaser(self):
         if self.lightDisplay.runningChaser == False:
