@@ -33,6 +33,11 @@ class DataBaseManager():
                     self.createLightPlaybacksTable()
                 if not self.checkIfTableExisits("lightTypes"):
                     self.createLightPlaybacksTable()
+            elif db == "bars.db":
+                if not path.isfile(path.join("databases","bars.db")):
+                    self.createLocationsTable()
+                if not self.checkIfTableExisits("locations"):
+                    self.createLocationsTable()
 
 
     def createInitialTables(self):
@@ -42,6 +47,24 @@ class DataBaseManager():
         self.createMainSequenceTable()
         self.createMainPlaybackTable()
         self.createLightPlaybacksTable()
+
+    def createLocationsTable(self):
+        db = path.join(os.path.join("databases","bars.db"))
+        con = lite.connect(db)
+        cur = con.cursor()
+        cur.execute('CREATE TABLE "locations" ("id" INTEGER NOT NULL UNIQUE,"locationName" TEXT NOT NULL,"barsTableName" TEXT NOT NULL, PRIMARY KEY("id" AUTOINCREMENT));')
+        con.commit()
+
+    def createBarsTable(self,tableName):
+        cur = self.con.cursor()
+        cur.execute(f'CREATE TABLE "{tableName}" ("id" INTEGER NOT NULL UNIQUE,"isHorizontal" INTEGER NOT NULL,"width" INTEGER NOT NULL,"height" INTEGER NOT NULL,"barName" TEXT NOT NULL,"xPos" INTEGER NOT NULL,"yPos" INTEGER NOT NULL, PRIMARY KEY("id" AUTOINCREMENT))')
+        self.con.commit()
+
+    def createSquaresTable(self,tableName):
+        cur = self.con.cursor()
+        cur.execute(f'CREATE TABLE "{tableName}" ("id" INTEGER NOT NULL UNIQUE,"x0" INTEGER NOT NULL,"y0" INTEGER NOT NULL,"x1" INTEGER NOT NULL,"y1" INTEGER NOT NULL, PRIMARY KEY("id" AUTOINCREMENT))')
+        self.con.commit()
+
 
     def createLightPlaybacksTable(self):
         db = path.join(os.path.join("databases","lightTypes.db"))
@@ -132,6 +155,12 @@ class DataBaseManager():
         cur.execute(f'SELECT PlaybackID FROM Playbacks WHERE RigID="{rigID}" AND Name="{playbackName}"')
         results = cur.fetchall()
         cur.execute(f"DROP TABLE IF EXISTS playback{results[0][0]}")
+        self.con.commit()
+
+    def delteBarsTable(self,barTableName):
+        cur = self.con.cursor()
+        cur.execute(f'DELETE FROM Locations WHERE barsTableName="{barTableName}"')
+        cur.execute(f'DROP TABLE {barTableName}')
         self.con.commit()
 
     def deleteSequenceFromSequences(self,tableName):
