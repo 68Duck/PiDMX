@@ -56,6 +56,7 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
                 self.createLight(light.lightType,lightName,x,y)
                 self.lightsToPlace.remove(light)
         self.addWholeRigButton.setEnabled(False)
+        self.addLightButton.setEnabled(False)
 
     def editSequenceButtonClicked(self):
         if self.sequenceID != None:

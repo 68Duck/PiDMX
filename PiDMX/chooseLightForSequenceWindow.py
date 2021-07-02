@@ -25,4 +25,7 @@ class ChooseLightForSequenceWindow(QWidget,uic.loadUiType(os.path.join("ui","cho
                 self.sequenceWindow.addingLight = lightSelectedName
                 self.sequenceWindow.addingLightType = light.lightType
                 self.sequenceWindow.lightsToPlace.remove(light)
+                if len(self.sequenceWindow.lightsToPlace) == 0:
+                    self.sequenceWindow.addLightButton.setEnabled(False)
+                    self.sequenceWindow.addWholeRigButton.setEnabled(False)
         self.close()
