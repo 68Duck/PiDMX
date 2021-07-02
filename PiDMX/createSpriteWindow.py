@@ -37,7 +37,7 @@ class CreateSpriteWindow(QWidget,uic.loadUiType(path.join("ui","createSpriteWind
             self.image.save(path.join("images",self.imageName))
 
         self.pixels = self.image.load()
-        self.setGeometry(250,250,750,750)
+        # self.setGeometry(250,250,750,750)
         self.imageLabel = QLabel(self)
         self.saveImage()
         self.imageLabel.move(25,25)

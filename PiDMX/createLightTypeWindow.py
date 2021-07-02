@@ -81,7 +81,11 @@ class CreateLightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","CreateLigh
             return
         else:
             newImageName = f"{self.lightName}.png"
-            os.rename(os.path.join("images",self.imageName),os.path.join("images",newImageName)) #changes the image name to the name of the light
+            try:
+                os.rename(os.path.join("images",self.imageName),os.path.join("images",newImageName)) #changes the image name to the name of the light
+            except:
+                self.errorWindow = ErrorWindow(f"The images folder already has an image called {newImageName}. Please try a different name.")
+                return
             self.imageName = newImageName
         if self.rgbRadio.isChecked():
             isRGB = True
