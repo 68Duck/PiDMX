@@ -197,7 +197,7 @@ QMainWindow{color:white;background-color:black;}
      <x>0</x>
      <y>0</y>
      <width>1900</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPatch_Light">
@@ -251,6 +251,13 @@ QMainWindow{color:white;background-color:black;}
     </property>
     <addaction name="createLightTypeButton"/>
    </widget>
+   <widget class="QMenu" name="menuStage">
+    <property name="title">
+     <string>Stage</string>
+    </property>
+    <addaction name="stageCreatorButton"/>
+    <addaction name="openStageButton"/>
+   </widget>
    <addaction name="menuPatch_Light"/>
    <addaction name="menuEffects"/>
    <addaction name="menuRig"/>
@@ -258,6 +265,7 @@ QMainWindow{color:white;background-color:black;}
    <addaction name="menuSequence"/>
    <addaction name="menuGame"/>
    <addaction name="menu"/>
+   <addaction name="menuStage"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="patchButton">
@@ -344,6 +352,16 @@ QMainWindow{color:white;background-color:black;}
   <action name="selectLightTypeButton">
    <property name="text">
     <string>Select light type</string>
+   </property>
+  </action>
+  <action name="stageCreatorButton">
+   <property name="text">
+    <string>Stage Creator Window</string>
+   </property>
+  </action>
+  <action name="openStageButton">
+   <property name="text">
+    <string>Open Stage</string>
    </property>
   </action>
  </widget>

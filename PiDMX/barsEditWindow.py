@@ -260,11 +260,11 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         if self.hasSpaces(self.tableName) or self.tableName == "":
             self.errorWindow = ErrorWindow("The table has numbers or spaces in it. Please try again")
             return
-        self.barsTableName = f"{self.tableName}Bars"
+        self.barTableName = f"{self.tableName}Bars"
         self.squaresTableName = f"{self.tableName}Squares"
-        self.dataBaseManager.createBarsTable(self.barsTableName)
+        self.dataBaseManager.createBarsTable(self.barTableName)
         self.dataBaseManager.createSquaresTable(self.squaresTableName)
-        record = [None,self.tableName,self.barsTableName,self.squaresTableName]#none is for the id
+        record = [None,self.tableName,self.barTableName,self.squaresTableName]#none is for the id
         self.dataBaseManager.insertRecord("locations",record)
         self.messageWindow = MessageWindow(f"A rig with the name {self.tableName} was created")
         self.setWindowTitle(self.tableName)
@@ -297,7 +297,8 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
             for l in self.locations:
                 if l["locationName"] == location:
                     barTable = l["barsTableName"]
-            self.dataBaseManager.delteBarsTable(barTable) #this deletes the table and removes the row from locations
+                    squareTable = l["squaresTableName"]
+            self.dataBaseManager.deleteBarsAndSquaresTable(barTable,squareTable) #this deletes the table and removes the row from locations
             self.openDropDown.removeItem(0) #removes the first item so the item that is being deleted
         else:
             return

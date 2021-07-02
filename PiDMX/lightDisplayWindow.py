@@ -21,6 +21,9 @@ from sliderPannelWindow import SliderPannelWindow
 from inputPlaybackNameWindow import InputPlaybackNameWindow
 from createLightTypeWindow import CreateLightTypeWindow
 from lightTypeWindow import LightTypeWindow
+from barsEditWindow import BarsEditWindow
+from openStageWindow import OpenStageWindow
+from databaseManager import DataBaseManager
 
 class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisplayWindow.ui"))[0]):  #creates a class window
     def __init__(self,lightDisplay,dataBaseManager):
@@ -54,33 +57,9 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.effectsWindow = EffectsWindow(self.lightDisplay,self.selectedLights,self,True)
         self.initUI()
     def initUI(self):   #create UI
-        self.stageLeft = QLabel(self)
-        self.stageLeft.move(350,50)
-        self.stageLeft.setFixedSize(5,550)
-        self.stageLeft.setStyleSheet("background-color:white;")
-
-        self.stageRight = QLabel(self)
-        self.stageRight.move(1550,50)
-        self.stageRight.setFixedSize(5,550)
-        self.stageRight.setStyleSheet("background-color:white;")
-
-        self.stageTop = QLabel(self)
-        self.stageTop.move(350,50)
-        self.stageTop.setFixedSize(1200,5)
-        self.stageTop.setStyleSheet("background-color:white;")
-
-        self.stageBottom = QLabel(self)
-        self.stageBottom.move(350,600)
-        self.stageBottom.setFixedSize(1200,5)
-        self.stageBottom.setStyleSheet("background-color:white;")
-
-        self.createBar("A",900,25,500,700)
-        self.createBar("B",900,25,500,900)
-        self.createBar("F",900,25,500,500)
-        self.createBar("M",900,25,500,300)
-        self.createBar("C",900,25,500,100)
-        self.createBar("L",25,400,200,570,False)
-        self.createBar("L",25,400,1700,570,False)
+        self.barsInformation = []
+        self.squareParts = []
+        self.openStage("default")
 
 
         self.patchButton.triggered.connect(self.patchButtonClicked)
@@ -99,7 +78,33 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.stopSequenceButton.triggered.connect(self.stopSequenceButtonClicked)
         self.createLightTypeButton.triggered.connect(self.createLightTypeButtonClicked)
         self.selectLightTypeButton.triggered.connect(self.selectLightTypeButtonClicked)
+        self.stageCreatorButton.triggered.connect(self.openBarsEditWindow)
+        self.openStageButton.triggered.connect(self.openStageButtonClicked)
 
+    def openStageButtonClicked(self):
+        self.openStageWindow = OpenStageWindow(self)
+
+    def openStage(self,location):
+        for bar in self.barsInformation:
+            for part in bar:
+                part.hide()
+        self.barsInformation = []
+        for part in self.squareParts:
+            part.hide()
+        self.squareParts = []
+        dbManager = DataBaseManager("bars.db")
+        data = dbManager.getAllData("locations")
+        for row in data:
+            if row["locationName"] == location:
+                self.barsData = dbManager.getAllData(row["barsTableName"])
+                self.squaresInformation = dbManager.getAllData(row["squaresTableName"])
+        for bar in self.barsData:
+            self.createBar(bar["barName"],bar["width"],bar["height"],bar["xPos"],bar["yPos"],bar["isHorizontal"])
+        for square in self.squaresInformation:
+            self.createSquare(square)
+
+    def openBarsEditWindow(self):
+        self.barsEditWindow = BarsEditWindow(self.lightDisplay.app)
 
     def createLightTypeButtonClicked(self):
         self.createLightTypeWindow = CreateLightTypeWindow()
@@ -467,15 +472,48 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         if removed == False:
             self.errorWindow = ErrorWindow("Error. light not removed")
 
+    def createSquare(self,square):
+        firstPoint = (square["x0"],square["y0"])
+        secondPoint = (square["x1"],square["y1"])
+        x,y = firstPoint
+        x1,y1 = secondPoint
+        width = abs(x1-x)
+        height = abs(y1-y)
+        sx = True if x<x1 else False
+        sy = True if y<y1 else False
+        sideWidth = 5
+        self.sL = self.createSquareSide(x if sx else x1,y if sy else y1,sideWidth,height)
+        self.sT = self.createSquareSide(x if sx else x1,y if sy else y1,width,sideWidth)
+        self.sR = self.createSquareSide(x1 if sx else x,y if sy else y1,sideWidth,height+5)
+        self.sB = self.createSquareSide(x if sx else x1,y1 if sy else y,width,sideWidth)
+        self.sides = [self.sL,self.sT,self.sR,self.sB]
+        for side in self.sides:
+            self.squareParts.append(side)
+
+
+    def createSquareSide(self,x,y,width,height):
+        self.side = QLabel(self)
+        self.side.move(x,y)
+        self.side.setFixedSize(width,height)
+        self.side.setStyleSheet("background-color:white")
+        self.side.show()
+        return self.side
+
+
     def createBar(self,barName,width,height,xPos,yPos,horizontal = True):
         self.a = QLabel(self)
         self.a.move(xPos,yPos)
         self.a.setFixedSize(width,height)
         self.a.setStyleSheet("background-color:white; border: 1px solid white;")
+        self.a.show()
+        newBarInformation = []
+        newBarInformation.append(self.a)
         if horizontal:
-            self.createBarLabel(barName,xPos+width+50,yPos-15)
+            barLabel = self.createBarLabel(barName,xPos+width+50,yPos-15)
         else: #so vertical
-            self.createBarLabel(barName,xPos-15,yPos-75)
+            barLabel = self.createBarLabel(barName,xPos-15,yPos-75)
+        newBarInformation.append(barLabel)
+        self.barsInformation.append(newBarInformation)
 
     def createBarLabel(self,barName,xPos,yPos):
         self.barLabel = QLabel(self)
@@ -484,6 +522,8 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.barLabel.setStyleSheet("background-color:white; border: 1px solid white;font-size: 30px;")
         self.barLabel.setText(barName)
         self.barLabel.setAlignment(Qt.AlignCenter)
+        self.barLabel.show()
+        return self.barLabel
 
     def patchButtonClicked(self):
         self.patchPannel = PatchingWindow(self.lightDisplay,self)

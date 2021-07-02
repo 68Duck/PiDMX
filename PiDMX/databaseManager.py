@@ -157,10 +157,11 @@ class DataBaseManager():
         cur.execute(f"DROP TABLE IF EXISTS playback{results[0][0]}")
         self.con.commit()
 
-    def delteBarsTable(self,barTableName):
+    def deleteBarsAndSquaresTable(self,barTableName,squaresTable):
         cur = self.con.cursor()
         cur.execute(f'DELETE FROM Locations WHERE barsTableName="{barTableName}"')
         cur.execute(f'DROP TABLE {barTableName}')
+        cur.execute(f'DROP TABLE {squaresTable}')
         self.con.commit()
 
     def deleteSequenceFromSequences(self,tableName):
