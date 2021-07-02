@@ -48,20 +48,6 @@ class SliderPannelWindow(QWidget):  #creates a class window
         self.selectAllButton.setStyleSheet("background-color:lightgrey")
         self.selectAllButton.clicked.connect(self.selectAllSelectButtons)
 
-        if self.displayWindowLight:
-            self.removeFixtureButton = QPushButton(self)
-            self.removeFixtureButton.setFixedWidth(150)
-            self.removeFixtureButton.move(220,10)
-            self.removeFixtureButton.setText("Remove fixture")
-            self.removeFixtureButton.setStyleSheet("background-color:lightgrey")
-            self.removeFixtureButton.clicked.connect(self.removeFixtureButtonClicked)
-
-            self.duplicateFixtureButton = QPushButton(self)
-            self.duplicateFixtureButton.setFixedWidth(150)
-            self.duplicateFixtureButton.move(370,10)
-            self.duplicateFixtureButton.setText("Duplicate fixture")
-            self.duplicateFixtureButton.setStyleSheet("background-color:lightgrey")
-            self.duplicateFixtureButton.clicked.connect(self.duplicateFixtureButtonClicked)
 
         for i in range(len(self.light.channels)):
 
@@ -82,6 +68,45 @@ class SliderPannelWindow(QWidget):  #creates a class window
             self.panTiltGridButton.setText("Pan/tilt grid")
             self.panTiltGridButton.setStyleSheet("background-color:lightgrey")
             self.panTiltGridButton.clicked.connect(self.panTiltGridButtonClicked)
+
+        if self.displayWindowLight:
+            self.removeFixtureButton = QPushButton(self)
+            self.removeFixtureButton.setFixedWidth(150)
+            self.removeFixtureButton.move(220,10)
+            self.removeFixtureButton.setText("Remove fixture")
+            self.removeFixtureButton.setStyleSheet("background-color:lightgrey")
+            self.removeFixtureButton.clicked.connect(self.removeFixtureButtonClicked)
+
+            self.duplicateFixtureButton = QPushButton(self)
+            self.duplicateFixtureButton.setFixedWidth(150)
+            self.duplicateFixtureButton.move(370,10)
+            self.duplicateFixtureButton.setText("Duplicate fixture")
+            self.duplicateFixtureButton.setStyleSheet("background-color:lightgrey")
+            self.duplicateFixtureButton.clicked.connect(self.duplicateFixtureButtonClicked)
+
+            self.moveFixtureButton = QPushButton(self)
+            self.moveFixtureButton.setFixedWidth(150)
+            self.moveFixtureButton.move(670 if self.light.lightType == "Miniscan" or panTilt else 520 ,10)
+            self.moveFixtureButton.setText("Move fixture")
+            self.moveFixtureButton.setStyleSheet("background-color:lightgrey")
+            self.moveFixtureButton.clicked.connect(self.moveFixtureButtonClicked)
+
+
+
+
+    def moveFixtureButtonClicked(self): #create duplicate and then remove the current light
+        self.displayWindow.numberOfLightsToCreate += 1
+        self.displayWindow.creatingLight = True
+        self.displayWindow.creatingMultipleLights = False  #as creating one duplicate
+        self.displayWindow.creatingLightChannel = self.light.startChannel
+        for light in self.lightDisplay.lightsInformation:
+            if self.light.lightType == light.lightType:
+                self.displayWindow.lightInformation = light
+        self.displayWindow.creatingLightChannel = self.light.startChannel
+
+
+        self.displayWindow.removeLight(self.displayWindowLight)
+        self.hide()
 
     def panTiltGridButtonClicked(self):
         self.panTiltGrid = PanTiltGridWindow(self)
