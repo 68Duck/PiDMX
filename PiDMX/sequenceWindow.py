@@ -259,8 +259,12 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
             newDisplayLight = SequenceDisplayLight4(self.lightDisplay,self,light,xPos,yPos,lightType)
             self.displayLights.append(newDisplayLight)
 
-        else:
+        elif lightType == "RGBLight" or lightType == "RGBWLight" or lightType == "RGB6Channel" or lightType == "RGB8Channel":
             newDisplayLight = SequenceDisplayLight(self.lightDisplay,self,light,xPos,yPos,lightType)
+            self.displayLights.append(newDisplayLight)
+
+        else:
+            newDisplayLight = DatabaseSequenceDisplayLight(self.lightDisplay,self,light,xPos,yPos,lightType)
             self.displayLights.append(newDisplayLight)
 
     def mousePressEvent(self,e):

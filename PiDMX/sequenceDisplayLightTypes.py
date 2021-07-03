@@ -4,6 +4,9 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 import math as maths
 
+from os import path
+from update_stylesheet import update_stylesheet
+
 class SequenceParentDisplayLight(QWidget):
     def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
         super().__init__()
@@ -68,6 +71,90 @@ class SequenceParentDisplayLight(QWidget):
         self.red = colour[0]
         self.greeen = colour[1]
         self.blue = colour[2]
+
+class DatabaseSequenceDisplayLight(SequenceParentDisplayLight):
+    def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
+        self.channelNumber = lightName[len(addingLightType):len(lightName)]
+        self.indicators = []
+        for light in lightDisplay.lights:
+            if int(self.channelNumber) == int(light.startChannel):
+                self.lightInformation = light.lightInformation
+                try:
+                    a = self.lightInformation
+                except:
+                    raise Exception("There is no lightInformation")
+        SequenceParentDisplayLight.__init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType)
+
+
+    def createShapes(self):
+        self.imageLabel = QLabel(self.sequenceWindow)
+        pixmap = QPixmap(path.join("images",self.lightInformation["imageName"]))
+        self.imageLabel.setPixmap(pixmap.scaled(100,100,Qt.KeepAspectRatio))
+        self.imageLabel.setFixedSize(100,100)
+        shapes = [self.imageLabel]
+
+        for indicator in self.lightInformation["indicators"]:
+            self.indicatorLabel = QLabel(self.sequenceWindow)
+            x = indicator["x"]//5
+            y = indicator["y"]//5
+            width = indicator["width"]//5
+            height = indicator["height"]//5
+            type = indicator["type"]
+            self.indicatorLabel.relativeX = x
+            self.indicatorLabel.relativeY = y
+            self.indicatorLabel.setFixedSize(width,height)
+            if type == "circle":
+                self.indicatorLabel.setStyleSheet(f"background-color:#ffff00;border-radius:{int(width/2)};border: 3px solid #ffff00;")
+            elif type == "square":
+                self.indicatorLabel.setStyleSheet(f"background-color:#ffff00;border: 3px solid #ffff00;")
+            shapes.append(self.indicatorLabel)
+            self.indicators.append(self.indicatorLabel)
+
+        return shapes
+
+    def setClickableRegion(self):
+        self.clickableLeft = 0
+        self.clickableRight = 100
+        self.clickableTop = 0
+        self.clickableBottom = 100
+
+
+
+    def move(self):
+        self.imageLabel.move(self.xPos,self.yPos)
+        for shape in self.shapes:
+            if shape != self.imageLabel:
+                shape.move(self.xPos+shape.relativeX,self.yPos+shape.relativeY)
+
+        for shape in self.shapes:
+            shape.show()
+
+    def changeColourRGB(self,red=None,green=None,blue=None):
+        if red == None:
+            red = self.red
+        else:
+            self.red = red
+        if green == None:
+            green = self.green
+        else:
+            self.green = green
+        if blue == None:
+            blue = self.blue
+        else:
+            self.blue = blue
+        red = self.convertColourRGB(red)
+        green = self.convertColourRGB(green)
+        blue = self.convertColourRGB(blue)
+        colour = str(red)+str(green)+str(blue)
+        for indicator in self.indicators:
+            indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"background-color",f'#{colour}'))
+            indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"border",f'3px solid#{colour}'))
+
+    def changeColour(self,colour):
+        colour = self.convertColour(colour)
+        for indicator in self.indicators:
+            indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"background-color",f'#{colour}'))
+            indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"border",f'3px solid#{colour}'))
 
 class SequenceDisplayLight(SequenceParentDisplayLight):
     def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
