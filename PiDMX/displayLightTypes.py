@@ -182,8 +182,8 @@ class DatabaseDisplayLight(DisplayLightParent): #finish me
     def setClickableRegion(self):
         self.clickableLeft = 0
         self.clickableRight = 100
-        self.clickableTop = 50
-        self.clickableBottom = 50
+        self.clickableTop = 0
+        self.clickableBottom = 100
 
     def createShapes(self):
         self.imageLabel = QLabel(self.parentWindow)
@@ -210,6 +210,19 @@ class DatabaseDisplayLight(DisplayLightParent): #finish me
             self.indicators.append(self.indicatorLabel)
 
         return shapes
+
+    def toggleSelected(self):
+        if self.selected:
+            self.selected = False
+            self.changeColourAccordingToFixture()
+            self.selectedShape.hide()
+        else:
+            self.selected = True
+            self.selectedShape = QLabel(self.parentWindow)
+            self.selectedShape.move(self.xPos-5,self.yPos-5)
+            self.selectedShape.setStyleSheet("border: 1px solid orange; background-color:transparent")
+            self.selectedShape.setFixedSize(110,110)
+            self.selectedShape.show()
 
 class DisplayLight(DisplayLightParent): #rgbLight
     def __init__(self,xPos,yPos,channelNumber,lightDisplay,parentWindow):
