@@ -189,7 +189,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             if not valid:
                 self.errorWindow("That light does not exist. This is an issue with the code as it should never get here.")
                 return
-            if l.lightType == "RGBChannel" or l.lightType == "RGB6Channel" or l.lightType == "RGB8Channel" or l.lightType == "RGBWLight":
+            if l.lightType == "RGBLight" or l.lightType == "RGB6Channel" or l.lightType == "RGB8Channel" or l.lightType == "RGBWLight":
                 for i in range(len(light.channels)):
                     if light.channels[i] == "Red":
                         self.lightDisplay.commitToChannel(i,colour.red(),light.startChannel)
@@ -211,6 +211,27 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                 light.updateChannelValues()
                 light.changeUniverse()
                 l.changeColourAccordingToFixture()
+            elif l.lightType == "Miniscan":
+                pass #don't change as the colour channel is a colour scroller.
+            else: #so light from database
+                if isinstance(l,DatabaseDisplayLight):
+                    for channel in light.channelInformation:
+                        if channel["channelInformation"] == "red":
+                            channelNumber = channel["channelNumber"]
+                            self.lightDisplay.commitToChannel(channelNumber-1,colour.red(),light.startChannel) #-1 as fixed 0 indexing
+                        if channel["channelInformation"] == "green":
+                            channelNumber = channel["channelNumber"]
+                            self.lightDisplay.commitToChannel(channelNumber-1,colour.green(),light.startChannel)
+                        if channel["channelInformation"] == "blue":
+                            channelNumber = channel["channelNumber"]
+                            self.lightDisplay.commitToChannel(channelNumber-1,colour.blue(),light.startChannel)
+                    light.updateChannelValues()
+                    light.changeUniverse()
+                    l.changeColourAccordingToFixture()
+                else:
+                    self.errorWindow = ErrorWindow(f"The light type {type(l)} cannot change colour as has not been implemented")
+
+
 
     def snakeButtonClicked(self):
         self.snakeWindow = SnakeWindow(self.lightDisplay,self)
@@ -403,30 +424,16 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                             if light.selected:
                                 self.selectedLights.append(light)
                                 for l in self.lightList:
-                                    if l.channelNumber == light.channelNumber and l!=light:
+                                    if l.channelNumber == light.channelNumber and l!=light: #for selecting duplicates
                                         l.toggleSelected()
                                         self.selectedLights.append(l)
                             else:
                                 self.selectedLights.remove(light)
                                 for l in self.lightList:
-                                    if l.channelNumber == light.channelNumber and l!=light:
+                                    if l.channelNumber == light.channelNumber and l!=light: #for deselecting duplicates
                                         l.toggleSelected()
                                         self.selectedLights.remove(l)
-                # if not lightClicked:
-                #     if self.creatingLight:
-                #         if self.creatingMultipleLights:
-                #             channelToCreateLightWith = self.creatingLightChannel-((self.numberOfLightsToCreate-1)*len(self.creatingLightInformation.channels)) - (self.channelGap*(self.numberOfLightsToCreate-1))
-                #         else:
-                #             channelToCreateLightWith = self.creatingLightChannel
-                #         print("REMOVE ME")
-                #         self.createLight(self.x,self.y,channelToCreateLightWith)  #if error then change me back?
-                #         try:
-                #             self.createLight(self.x,self.y,channelToCreateLightWith)
-                #         except:
-                #             self.errorWindow = ErrorWindow("Error with creating light. Possibly type of light error?")
-                #         self.numberOfLightsToCreate -= 1
-                #         if self.numberOfLightsToCreate == 0:
-                #             self.creatingLight = False
+
             else:
                 lightClicked = False
                 for light in self.lightList:
