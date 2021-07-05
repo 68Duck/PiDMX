@@ -143,11 +143,12 @@ class PatchingWindow(QWidget):
                             for i in range(numberOfFixtures):
                                 self.newLight = lightInformation.generateNewLight(channel+i*(amountOfChannels+channelGap))
                                 self.newLight.lightDisplay = self.lightDisplay
-                                self.newLight.changeUniverse()
+                                self.newLight.changeUniverse(updateUniverse = False)
                                 self.lightDisplay.lights.append(self.newLight)
                                 self.lightDisplay.updateOccupiedChannels()
                                 if self.displayWindow:
                                     self.displayOnWindow(self.newLight,lightInformation,True)
+                            self.lightDisplay.updateUniverse()
                             self.close()
 
 

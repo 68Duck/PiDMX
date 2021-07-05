@@ -89,10 +89,11 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
                 lightInformation = self.getLightInformation(lightType)
                 self.newLight = lightInformation.generateNewLight(startChannel)
                 self.newLight.lightDisplay = self.lightDisplay
-                self.newLight.changeUniverse()
+                self.newLight.changeUniverse(updateUniverse = False)
                 self.lightDisplay.lights.append(self.newLight)
                 self.lightDisplay.updateOccupiedChannels()
                 self.displayOnWindow(self.newLight,xpos,ypos,lightType,startChannel)
+            self.lightDisplay.universeChanged()
 
     def displayOnWindow(self,light,xpos,ypos,lightType,channel):
         self.visualLightDisplay.createLightFromSavedRig(light,xpos,ypos,lightType,channel)

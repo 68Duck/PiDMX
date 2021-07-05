@@ -192,11 +192,11 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             if l.lightType == "RGBLight" or l.lightType == "RGB6Channel" or l.lightType == "RGB8Channel" or l.lightType == "RGBWLight":
                 for i in range(len(light.channels)):
                     if light.channels[i] == "Red":
-                        self.lightDisplay.commitToChannel(i,colour.red(),light.startChannel)
+                        self.lightDisplay.commitToChannel(i,colour.red(),light.startChannel,multipleChannelsChanged=True)
                     elif light.channels[i] == "Green":
-                        self.lightDisplay.commitToChannel(i,colour.green(),light.startChannel)
+                        self.lightDisplay.commitToChannel(i,colour.green(),light.startChannel,multipleChannelsChanged=True)
                     elif light.channels[i] == "Blue":
-                        self.lightDisplay.commitToChannel(i,colour.blue(),light.startChannel)
+                        self.lightDisplay.commitToChannel(i,colour.blue(),light.startChannel,multipleChannelsChanged=True)
                 l.changeColourAccordingToFixture()
             elif l.lightType == "LEDBar24ChannelMode":
                 for i in range(8):
@@ -204,12 +204,12 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                     light.channelValues[3*i+1] = colour.green()
                     light.channelValues[3*i+2] = colour.blue()
                 light.updateChannelValues()
-                light.changeUniverse()
+                light.changeUniverse(updateUniverse=False)
                 l.changeColourAccordingToFixture()
             elif l.lightType == "GenericDimmer":
                 light.channelValues[0] = colour.red()  #as only one channel. This is so we can use this to dim all lights
                 light.updateChannelValues()
-                light.changeUniverse()
+                light.changeUniverse(updateUniverse=False)
                 l.changeColourAccordingToFixture()
             elif l.lightType == "Miniscan":
                 pass #don't change as the colour channel is a colour scroller.
@@ -218,19 +218,20 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                     for channel in light.channelInformation:
                         if channel["channelInformation"] == "red":
                             channelNumber = channel["channelNumber"]
-                            self.lightDisplay.commitToChannel(channelNumber-1,colour.red(),light.startChannel) #-1 as fixed 0 indexing
+                            self.lightDisplay.commitToChannel(channelNumber-1,colour.red(),light.startChannel,multipleChannelsChanged=True) #-1 as fixed 0 indexing
                         if channel["channelInformation"] == "green":
                             channelNumber = channel["channelNumber"]
-                            self.lightDisplay.commitToChannel(channelNumber-1,colour.green(),light.startChannel)
+                            self.lightDisplay.commitToChannel(channelNumber-1,colour.green(),light.startChannel,multipleChannelsChanged=True)
                         if channel["channelInformation"] == "blue":
                             channelNumber = channel["channelNumber"]
-                            self.lightDisplay.commitToChannel(channelNumber-1,colour.blue(),light.startChannel)
+                            self.lightDisplay.commitToChannel(channelNumber-1,colour.blue(),light.startChannel,multipleChannelsChanged=True)
                     light.updateChannelValues()
-                    light.changeUniverse()
+                    light.changeUniverse(updateUniverse=False)
                     l.changeColourAccordingToFixture()
                 else:
                     self.errorWindow = ErrorWindow(f"The light type {type(l)} cannot change colour as has not been implemented")
-
+        self.lightDisplay.universeChanged()
+        print("test")
 
 
     def snakeButtonClicked(self):
