@@ -48,6 +48,11 @@ class SSHUpdateDatabase(object):
             self.errorWindow = ErrorWindow("Could not connect. Please try again later")
             print("Could not connect. Please try again later")
             return
+        except paramiko.ssh_exception.NoValidConnectionsError: #this happend when the address is of something else so you cannot ssh into it
+            self.errorWindow = ErrorWindow("The ipv4 is incorrect. Please try again.")
+            print("The ipv4 is incorrect. Please try again.")
+            return
+
         self.updateDatabase()
         self.lightDisplay.sshPasswordInputed(piIpv4)
         self.raspberryPiLoginWindow.close()
