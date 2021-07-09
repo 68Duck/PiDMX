@@ -33,3 +33,7 @@ class ConfirmWindow(QMessageBox):  #creates a class window
     def cancelClicked(self):
         self.parentWindow.removeConfirmed = False
         self.close()
+
+    def closeEvent(self):
+        self.parentWindow.removeConfirmed = False
+        self.close()
