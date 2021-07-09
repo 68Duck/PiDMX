@@ -10,6 +10,7 @@ from messageWindow import MessageWindow
 from errorWindow import ErrorWindow
 from confirmWindow import ConfirmWindow
 from inputWindow import InputWindow
+from barClass import Bar
 
 class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindow.ui"))[0]):
     def __init__(self,app):
@@ -25,15 +26,19 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         self.show()
 
     def initUI(self):
+        self.previousBarLocation = None
         self.bars = []
         self.squareParts = []
-        self.tempBarInformation = []
+        self.tempBar = None
+        self.movingPoint = None
+        self.movingBar = None
         self.tempSquares = []
         self.currentBarLetter = None
         self.creatingHorizontalBar = False
         self.creatingVerticalBar = False
         self.creatingInitialSquarePoint = False
         self.creatingFinalSquarePoint = False
+        self.changingBarSize = False
         self.menuAdd_new_bar.setEnabled(False)
         self.actionAddStageSquare.setEnabled(False)
         self.submitButton.clicked.connect(self.submitButtonPressed)
@@ -43,12 +48,17 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         self.actionVertical.triggered.connect(self.createVerticalBar)
         self.actionOpen_location.triggered.connect(self.openWidget)
         self.actionAddStageSquare.triggered.connect(self.actionAddStageSquareClicked)
+        self.changeBarSizeButton.triggered.connect(self.changeBarSizeButtonClicked)
+        self.changeBarSizeButtonClicked()
         self.locations = self.dataBaseManager.getAllData("locations")
         for location in self.locations:
             self.openDropDown.addItem(location["locationName"])
 
         self.creatingSquareLabel.hide()
         self.creatingSquareLabel_2.hide()
+
+    def changeBarSizeButtonClicked(self):
+        self.changingBarSize = self.changeBarSizeButton.isChecked()
 
     def getLetterInput(self):
         try:
@@ -140,7 +150,63 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         for side in self.sides:
             self.squareParts.append(side)
 
+
+    # def mouseMoveEvent(self,e):   #FIX ME
+    #     if e.buttons() == Qt.LeftButton:
+    #         if not self.movingPoint:
+    #             for bar in self.bars:
+    #                 if bar.selected:
+    #                     for point in bar.points:
+    #                         if point.checkIfInRange(e.x(),e.y()):
+    #                             self.movingPoint = point
+    #                     if not self.movingPoint:
+    #                         if bar.checkIfInRange(e.x(),e.y()):
+    #                             self.movingBar = bar  #FINISH ME
+    #         else:
+    #             self.movingPoint.setPosition(e.x(),e.y())
+    #     else:
+    #         self.movingPoint = None
+
     def eventFilter(self,source,event):
+        if event.type() == QEvent.MouseButtonRelease:
+            self.movingPoint = None
+            self.movingBar = False
+        if event.type() == QEvent.MouseButtonPress:
+            if event.buttons() == Qt.LeftButton:
+                selected = False
+                if not self.movingPoint:
+                    for bar in self.bars:
+                        if bar.selected:
+                            for point in bar.points:
+                                if point.checkIfInRange(event.x(),event.y()):
+                                    self.movingPoint = point
+                                    selected = True
+                            if not self.movingPoint:
+                                if bar.checkIfInRange(event.x(),event.y()):
+                                    self.movingBar = bar  #FINISH ME
+                                    self.previousBarLocation = (event.x(),event.y()) #moves relative to the current location of the mouse
+                                    selected = True
+                if not selected:
+                    for bar in self.bars:
+                        bar.setSelected(False)
+        if event.type() == QEvent.MouseMove:
+            if event.x() != 0 and event.y() != 0:
+                if self.movingPoint:
+                        self.movingPoint.setPosition(event.x(),event.y())
+                if self.movingBar:
+                    dx = event.x() - self.previousBarLocation[0]
+                    dy = event.y() - self.previousBarLocation[1]
+                    x = self.movingBar.pos[0] + dx
+                    y = self.movingBar.pos[1] + dy
+                    self.movingBar.setPosition((x,y))
+                    self.previousBarLocation = (event.x(),event.y())
+
+        if self.changingBarSize:
+            if event.type() == QEvent.MouseButtonPress:
+                if event.buttons() == Qt.LeftButton:
+                    for bar in self.bars:
+                        if bar.checkIfInRange(event.x(),event.y()):
+                            bar.setSelected(not bar.selected)
         if self.creatingInitialSquarePoint:
             if event.type() == QEvent.MouseButtonPress:
                 if event.buttons() == Qt.LeftButton:
@@ -183,19 +249,12 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         return super(BarsEditWindow, self).eventFilter(source, event)
 
     def previewBar(self,x,y,barName,horizontal):
-        for l in self.tempBarInformation:
-            l.hide()
-            self.tempBarInformation = []
-        self.tempBar = QLabel(self)
-        self.tempBar.move(x,y)
-        self.tempBar.setStyleSheet("background-color:white; border: 1px solid white;")
-        self.tempBarInformation.append(self.tempBar)
+        if self.tempBar is not None:
+            self.tempBar.hide()
         if horizontal:
-            self.tempBar.setFixedSize(900,25)
-            self.createBarLabel(barName,x+900+50,y-15,temp=True)
-        else: #so vertical
-            self.tempBar.setFixedSize(25,400)
-            self.createBarLabel(barName,x-15,y-75,temp=True)
+            self.tempBar = Bar(barName,x,y,900,25,horizontal,self)
+        else:
+            self.tempBar = Bar(barName,x,y,25,400,horizontal,self)
         self.tempBar.show()
 
     def createBarFromDatabase(self,bar):
@@ -205,52 +264,24 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         xPos = bar["xPos"]
         yPos = bar["yPos"]
         horizontal = True if bar["isHorizontal"] else False
-        self.a = QLabel(self)
-        self.a.move(xPos,yPos)
-        self.a.setFixedSize(width,height)
-        self.a.setStyleSheet("background-color:white; border: 1px solid white;")
-        if horizontal:
-            self.barLabel = self.createBarLabel(barName,xPos+width+50,yPos-15)
-        else: #so vertical
-            self.barLabel = self.createBarLabel(barName,xPos-15,yPos-75)
-        self.a.show()
-        self.bars.append((self.a,self.barLabel))
+        self.newBar = Bar(barName,xPos,yPos,width,height,horizontal,self)
+        self.newBar.show()
+        self.bars.append(self.newBar)
 
     def createBar(self):
-        if self.tempBarInformation:
-            self.newBar,self.newBarLabel = self.tempBarInformation
-            self.bars.append((self.newBar,self.newBarLabel))
-            self.tempBarInformation = []
+        if self.tempBar is not None:
+            self.bars.append(self.tempBar)
+            self.tempBar = None
         self.dataBaseManager.deleteAllRows(self.barTableName)
-        for barInformation in self.bars:
-            bar,barLabel = barInformation
-            record = (None,1 if bar.width()>bar.height() else 0,bar.width(),bar.height(),barLabel.text(),bar.x(),bar.y())
+        for bar in self.bars:
+            x,y = bar.pos
+            record = (None,1 if bar.width>bar.height else 0,bar.width,bar.height,bar.name,x,y)
             self.dataBaseManager.insertRecord(self.barTableName,record)
 
 
     def actionAddStageSquareClicked(self):
         self.creatingSquareLabel.show()
         self.creatingInitialSquarePoint = True
-
-    def createBarLabel(self,barName,xPos,yPos,temp=False):
-        if temp:
-            self.tempBarLabel = QLabel(self)
-            self.tempBarLabel.move(int(xPos),int(yPos))
-            self.tempBarLabel.setFixedSize(50,50)
-            self.tempBarLabel.setStyleSheet("background-color:white; border: 1px solid white;font-size: 30px;")
-            self.tempBarLabel.setText(barName)
-            self.tempBarLabel.setAlignment(Qt.AlignCenter)
-            self.tempBarLabel.show()
-            self.tempBarInformation.append(self.tempBarLabel)
-        else:
-            self.barLabel = QLabel(self)
-            self.barLabel.move(int(xPos),int(yPos))
-            self.barLabel.setFixedSize(50,50)
-            self.barLabel.setStyleSheet("background-color:white; border: 1px solid white;font-size: 30px;")
-            self.barLabel.setText(barName)
-            self.barLabel.setAlignment(Qt.AlignCenter)
-            self.barLabel.show()
-            return self.barLabel
 
     def submitButtonPressed(self):
         self.tableName = self.newNameInput.text()
@@ -309,9 +340,8 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         self.widget.hide()
 
     def openWidget(self):
-        for barInformation in self.bars:
-            for part in barInformation:
-                part.hide()
+        for bar in self.bars:
+            bar.hide()
         for part in self.squareParts:
             part.hide()
         self.bars = []

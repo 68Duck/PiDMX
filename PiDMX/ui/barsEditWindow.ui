@@ -242,8 +242,15 @@ QPushButton{background-color:lightgrey}</string>
     </property>
     <addaction name="actionOpen_location"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="changeBarSizeButton"/>
+   </widget>
    <addaction name="menuAdd"/>
    <addaction name="menuopen"/>
+   <addaction name="menuEdit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionHorizontal">
@@ -264,6 +271,17 @@ QPushButton{background-color:lightgrey}</string>
   <action name="actionAddStageSquare">
    <property name="text">
     <string>Add Stage Square</string>
+   </property>
+  </action>
+  <action name="changeBarSizeButton">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Change Bar Size</string>
    </property>
   </action>
  </widget>
