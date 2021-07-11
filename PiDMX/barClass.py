@@ -133,6 +133,7 @@ class Bar(object):
         self.createShapes()
         self.bar.show()
         self.label.show()
+        self.barsEditWindow.updateBarsInDatabase()
 
     def setPosition(self,pos):
         self.pos = pos
@@ -143,6 +144,7 @@ class Bar(object):
         self.setSelected(True) #so creats new points
         self.bar.show()
         self.label.show()
+        self.barsEditWindow.updateBarsInDatabase()
 
 
 class Point(object):

@@ -151,23 +151,6 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         for side in self.sides:
             self.squareParts.append(side)
 
-
-    # def mouseMoveEvent(self,e):   #FIX ME
-    #     if e.buttons() == Qt.LeftButton:
-    #         if not self.movingPoint:
-    #             for bar in self.bars:
-    #                 if bar.selected:
-    #                     for point in bar.points:
-    #                         if point.checkIfInRange(e.x(),e.y()):
-    #                             self.movingPoint = point
-    #                     if not self.movingPoint:
-    #                         if bar.checkIfInRange(e.x(),e.y()):
-    #                             self.movingBar = bar  #FINISH ME
-    #         else:
-    #             self.movingPoint.setPosition(e.x(),e.y())
-    #     else:
-    #         self.movingPoint = None
-
     def eventFilter(self,source,event):
         if event.type() == QEvent.MouseButtonRelease:
             self.movingPoint = None
@@ -349,7 +332,8 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         self.openDropDown.clear()
         self.locations = self.dataBaseManager.getAllData("locations")
         for location in self.locations:
-            self.openDropDown.addItem(location["locationName"])
+            if location["locationName"] != "default":
+                self.openDropDown.addItem(location["locationName"])
         self.menuAdd_new_bar.setEnabled(False)
         self.widget.show()
 
@@ -357,7 +341,12 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
     def hasSpaces(self,inputString):
         return any(char == " " for char in inputString)
 
-
+    def updateBarsInDatabase(self):
+        self.dataBaseManager.deleteAllRows(self.barTableName)
+        for bar in self.bars:
+            x,y = bar.pos
+            record = (None,1 if bar.width>bar.height else 0,bar.width,bar.height,bar.name,x,y)
+            self.dataBaseManager.insertRecord(self.barTableName,record)
 
 
 
