@@ -52,7 +52,8 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         self.changeBarSizeButtonClicked()
         self.locations = self.dataBaseManager.getAllData("locations")
         for location in self.locations:
-            self.openDropDown.addItem(location["locationName"])
+            if location["locationName"] != "default":
+                self.openDropDown.addItem(location["locationName"])
 
         self.creatingSquareLabel.hide()
         self.creatingSquareLabel_2.hide()
