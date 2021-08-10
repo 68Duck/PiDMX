@@ -43,6 +43,8 @@ class Bar(object):
     def hide(self):
         self.bar.hide()
         self.label.hide()
+        for point in self.points:
+            point.hide()
 
     def checkIfInRange(self,xPos,yPos):
         x,y = self.pos

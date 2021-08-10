@@ -58,6 +58,14 @@ class BarsEditWindow(QMainWindow,uic.loadUiType(os.path.join("ui","BarsEditWindo
         self.creatingSquareLabel.hide()
         self.creatingSquareLabel_2.hide()
 
+    def keyPressEvent(self,e):
+        if e.key() == Qt.Key_Backspace or e.key() == Qt.Key_Delete:
+            for bar in self.bars:
+                if bar.selected:
+                    bar.hide()
+                    self.bars.remove(bar)
+                    self.updateBarsInDatabase()
+
     def changeBarSizeButtonClicked(self):
         self.changingBarSize = self.changeBarSizeButton.isChecked()
 
