@@ -45,7 +45,7 @@ class LightDisplay(QWidget):
         self.counter = 0
         self.timer = QTimer()
         self.timer.timeout.connect(self.run)
-        self.timer.start(1)
+        self.timer.start(0)
         self.effectLastRun = time.time()
         self.updateOccupiedChannels()
         self.databaseManager = DataBaseManager("universeValues.db")
@@ -92,9 +92,7 @@ class LightDisplay(QWidget):
         self.logonWindow.show()
 
     def runDMX(self):
-        self.counter += 1
-        if self.counter % 15 == 0:
-            self.displayLights()
+        self.displayLights()
         self.sendEffectsToLights()
 
     def displayLights(self):
