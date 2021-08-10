@@ -151,7 +151,22 @@ class LightDisplay(QWidget):
                             light.channelValues[2] = self.blueRainbow
 
                         else:
-                            update=False  #probably no way of doing rainbow e.g. in generic dimmer
+                            if light.lightType != "Miniscan" and light.lightType != "GenericDimmer":
+                                #therefore database display light
+                                if light.isRGB:
+                                    lightChannelInformation = light.channelInformation
+                                    for row in lightChannelInformation:
+                                        channelNumber = row["channelNumber"] - 1
+                                        if row["channelInformation"] == "red":
+                                            light.channelValues[channelNumber] = self.redRainbow
+                                        if row["channelInformation"] == "green":
+                                            light.channelValues[channelNumber] = self.greenRainbow
+                                        if row["channelInformation"] == "blue":
+                                            light.channelValues[channelNumber] = self.blueRainbow
+                                else:
+                                    update=False
+                            else:
+                                update=False  #no way of doing rainbow e.g. in generic dimmer and miniscan
                         if update:
                             light.updateChannelValues()
                             light.changeUniverse(updateUniverse=False)
