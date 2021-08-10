@@ -148,7 +148,6 @@ class PatchingWindow(QWidget):
                                 self.lightDisplay.updateOccupiedChannels()
                                 if self.displayWindow:
                                     self.displayOnWindow(self.newLight,lightInformation,True)
-                            self.lightDisplay.updateUniverse()
                             self.close()
 
 
