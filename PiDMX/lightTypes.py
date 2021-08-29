@@ -4,6 +4,7 @@ from PyQt5.QtGui import*
 from PyQt5.QtCore import*
 
 from order_dictionaries import order_dictionaries
+from errorWindow import ErrorWindow
 
 class Light(object):
     def __init__(self,startChannel,infoMode = False):
