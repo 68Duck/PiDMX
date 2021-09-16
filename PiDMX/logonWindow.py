@@ -20,6 +20,7 @@ class LogonWindow(QMainWindow,uic.loadUiType(os.path.join("ui","logon.ui"))[0]):
         self.lightDisplay = lightDisplay
         if not self.devMode:
             self.setupUi(self)
+            self.setWindowTitle("Login Window")
             self.tabs.setCurrentIndex(0)
             self.logonValid = False
             self.logonDatabaseManager = DataBaseManager("logon.db")
