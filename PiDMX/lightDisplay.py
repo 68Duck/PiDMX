@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import psutil
 
 from pydmx import PyDMX
 from lightTypes import *
@@ -17,6 +18,7 @@ from sshUpdateDatabase import SSHUpdateDatabase
 from sshRunFile import SSHRunFile
 from logonWindow import LogonWindow
 from errorWindow import ErrorWindow
+from batteryWarningWindow import BatteryWarningWindow
 
 class LightDisplay(QWidget):
     def __init__(self,lights = [],interval = 1,app=None,devMode = False):
@@ -43,9 +45,12 @@ class LightDisplay(QWidget):
         self.universeLock = False
         self.createBlankUniverse()
         self.counter = 0
+        self.batteryTimer = QTimer()
+        self.batteryTimer.timeout.connect(self.checkBattery)
+        self.batteryTimer.start(60000)
         self.timer = QTimer()
         self.timer.timeout.connect(self.run)
-        self.timer.start(0)
+        self.timer.start(1)
         self.effectLastRun = time.time()
         self.updateOccupiedChannels()
         self.databaseManager = DataBaseManager("universeValues.db")
@@ -54,6 +59,11 @@ class LightDisplay(QWidget):
         if self.devMode:
             self.sshUpdateDatabase.raspberryPiLoginWindow.hide()
             self.sshUpdateDatabase.runWithoutDMX()
+
+    def checkBattery(self):
+        percentage = psutil.sensors_battery().percent
+        if percentage < 25:
+            self.batteryWarningWindow = BatteryWarningWindow(percentage)
 
 
     def updateLightTypes(self):
