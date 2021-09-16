@@ -52,11 +52,11 @@ import random
 
 class PyDMX(object):
     def __init__(self,port="COM3"):
-        self.working = True
         self.universeData = [0]*1025  #the first item is the start bit so should not change
         baudrate = 250000
         try:
             self.ser = serial.Serial(port,baudrate)
+            self.working = True
         except:
             self.working = False
             raise Exception("The serial is not working. Please make sure the lights are plugged in and that you don't have any other dmx scripts running and make sure the port is correct")
