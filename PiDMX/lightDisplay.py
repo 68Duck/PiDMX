@@ -30,6 +30,7 @@ class LightDisplay(QWidget):
         self.lightsInformation = [RGBLight(0,True),GenericDimmer(0,True),LEDBar24ChannelMode(0,True),RGB6Channel(0,True),Miniscan(0,True),RGBWLight(0,True),RGB8Channel(0,True)]
         self.lightTypes = ["GenericDimmer","RGBLight","LEDBar24ChannelMode","RGB6Channel","Miniscan","RGBWLight","RGB8Channel"]
         self.noHardCodedLightTypes = len(self.lightsInformation)
+        self.databaseManager = DataBaseManager("universeValues.db")
         self.getLightTypesFromDatabase()
         self.runLoop = True
         self.chaseOn = False
@@ -53,7 +54,6 @@ class LightDisplay(QWidget):
         self.timer.start(1)
         self.effectLastRun = time.time()
         self.updateOccupiedChannels()
-        self.databaseManager = DataBaseManager("universeValues.db")
         self.password = None
         self.sshUpdateDatabase = SSHUpdateDatabase(self)
         if self.devMode:
