@@ -31,3 +31,7 @@ if __name__ == "__main__":
     # win = LogonWindow(lightDisplay)
     # win.show()
     sys.exit(app.exec_())
+
+
+#curl -L "https://api.codetabs.com/v1/loc?github=68Duck/PiDMX"
+#Run this to ge the number of lines in the program

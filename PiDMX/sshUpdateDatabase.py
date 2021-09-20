@@ -4,7 +4,7 @@ from getpass import getpass
 import os
 from os import path
 
-from raspberryPiLoginWindow import RaspberryPiLoginWindow
+from DMXSelectionWindow import DMXSelectionWindow
 from errorWindow import ErrorWindow
 from ipv4Input import IPv4Input
 
@@ -14,8 +14,8 @@ class SSHUpdateDatabase(object):
         self.client = paramiko.SSHClient()
         self.client.load_system_host_keys()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.raspberryPiLoginWindow = RaspberryPiLoginWindow(self)
-        self.raspberryPiLoginWindow.show()
+        self.DMXSelectionWindow = DMXSelectionWindow(self)
+        self.DMXSelectionWindow.show()
         self.counter = 0
 
     def runComputerDMX(self,port):
@@ -24,13 +24,14 @@ class SSHUpdateDatabase(object):
     def runWithoutDMX(self):
         self.lightDisplay.runWithoutDMX()
 
-    def login(self):
+    def login(self,raspberryPiPassword):
         # password = getpass() #put a paramater for message if want to change
         self.ipv4Input = IPv4Input(self)
+        self.raspberryPiPassword = raspberryPiPassword
 
 
     def connectToPi(self,piIpv4):
-        password = self.raspberryPiLoginWindow.password
+        password = self.raspberryPiPassword
         try:
             # piIpv4 = "192.168.0.70"
             self.client.connect(piIpv4,"22","pi",password)
@@ -64,7 +65,7 @@ class SSHUpdateDatabase(object):
         db = path.join("databases",db)
         scp.put(db,recursive=True,remote_path="/var/www/dmx")
         self.counter += 1
-        print("updated"+str(self.counter))
+        # print("updated"+str(self.counter))
         scp.close()
 
 

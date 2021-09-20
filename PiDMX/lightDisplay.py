@@ -107,7 +107,11 @@ class LightDisplay(QWidget):
 
     def displayLights(self):
         if not self.universeLock:
-            self.dmx.send()
+            try:
+                self.dmx.send()
+            except Exception as e:
+                print(e)
+                self.errorWindow = ErrorWindow("The DMX can no longer be sent. Please check the cable.")
 
     def runWithoutDMX(self):
         self.dmxOffMode = True

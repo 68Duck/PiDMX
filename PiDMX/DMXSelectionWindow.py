@@ -30,18 +30,22 @@ class DMXSelectionWindow(QMainWindow,uic.loadUiType(os.path.join("ui","DMXSelect
 
     def computerDMXSubmitButtonPressed(self):
         port = self.getPort()
+        print(port)
         try:
             dmx = PyDMX(port)
             if dmx.working:
+                del dmx
                 self.parentWindow.runComputerDMX(port)
                 self.close()
             else:
                 raise Exception("The dmx is not working")
         except Exception as e:
+            print(e)
             self.messageWindow = ErrorWindow("The port does NOT work with DMX")
 
     def testButtonPressed(self):
         port = self.getPort()
+        print(port)
         try:
             dmx = PyDMX(port)
             if dmx.working:
