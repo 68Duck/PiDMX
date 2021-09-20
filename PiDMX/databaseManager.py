@@ -52,8 +52,21 @@ class DataBaseManager():
         db = path.join(os.path.join("databases","bars.db"))
         con = lite.connect(db)
         cur = con.cursor()
-        cur.execute('CREATE TABLE "locations" ("id" INTEGER NOT NULL UNIQUE,"locationName" TEXT NOT NULL,"barsTableName" TEXT NOT NULL, PRIMARY KEY("id" AUTOINCREMENT));')
+        cur.execute('CREATE TABLE "locations" ("id" INTEGER NOT NULL UNIQUE,"locationName" TEXT NOT NULL,"barsTableName" TEXT NOT NULL, "squaresTableName" TEXT NOT NULL, PRIMARY KEY("id" AUTOINCREMENT));')
         con.commit()
+        record = [None,"default","defaultBars","defaultSquares"]#none is for the id
+        self.insertRecord("locations",record)
+
+        self.createBarsTable("defaultBars")
+        self.createSquaresTable("defaultSquares")
+
+        bars = [[1,1,900,25,"A",500,700],[2,1,900,25,"B",500,900],[3,1,900,25,"F",500,500],[4,1,900,25,"M",500,300],[5,1,900,25,"C",500,100],[6,0,25,400,"L",200,570],[7,0,25,400,"L",1700,570]]
+        for bar in bars:
+            self.insertRecord("defaultBars",bar)
+
+        squares = [[1,350,50,1550,600]]
+        for square in squares:
+            self.insertRecord("defaultSquares",square)
 
     def createBarsTable(self,tableName):
         cur = self.con.cursor()
