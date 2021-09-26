@@ -67,8 +67,8 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
         for light in self.visualLightDisplay.lightList: #set all to unselected First
             if light.selected == True:
                 light.toggleSelected()
-        self.firstTimeDelay = self.sequenceToOpen[0][2]
-        timeDelayTotal = self.sequenceToOpen[0][2] * -1  #negates the first one so opened immediately
+        self.firstTimeDelay = self.sequenceToOpen[0]["timeDelay"]
+        timeDelayTotal = self.sequenceToOpen[0]["timeDelay"] * -1  #negates the first one so opened immediately
         self.timers = []
         for sequence in self.sequenceToOpen:
             self.nextSequence = sequence
