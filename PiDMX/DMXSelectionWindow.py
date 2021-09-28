@@ -64,4 +64,17 @@ class DMXSelectionWindow(QMainWindow,uic.loadUiType(os.path.join("ui","DMXSelect
 
     def keyPressEvent(self,e):
         if e.key() == Qt.Key_Return:
-            self.submitButtonPressed()
+            if self.tabWidget.currentIndex() == 0:
+                self.raspberryPiSubmitButtonPressed()
+            elif self.tabWidget.currentIndex() == 1:
+                self.computerDMXSubmitButtonPressed()
+            elif self.tabWidget.currentIndex() == 2:
+                self.runWithoutDMX()
+            else:
+                self.errorWindow = ErrorWindow("The program should never reach here.")
+        if e.key() == Qt.Key_1:
+            self.tabWidget.setCurrentIndex(0)
+        if e.key() == Qt.Key_2:
+            self.tabWidget.setCurrentIndex(1)
+        if e.key() == Qt.Key_3:
+            self.tabWidget.setCurrentIndex(2)
