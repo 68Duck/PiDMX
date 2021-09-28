@@ -78,6 +78,7 @@ class DatabaseSequenceDisplayLight(SequenceParentDisplayLight):
         self.indicators = []
         for light in lightDisplay.lights:
             if int(self.channelNumber) == int(light.startChannel):
+                self.light = light
                 self.lightInformation = light.lightInformation
                 try:
                     a = self.lightInformation
@@ -156,6 +157,37 @@ class DatabaseSequenceDisplayLight(SequenceParentDisplayLight):
             indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"background-color",f'#{colour}'))
             indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"border",f'3px solid#{colour}'))
 
+    def changeColourAccordingToFixture(self):
+        channelInformation = self.lightInformation["channelInformation"]
+        isRGB = False
+        if self.lightInformation["isRGB"] == "1":
+            isRGB = True
+        for channel in channelInformation:
+            if channel["channelInformation"] is not None:
+                if isRGB:
+                    if channel["channelInformation"] == "red":
+                        redChannelName = channel["channelName"]
+                    if channel["channelInformation"] == "green":
+                        greenChannelName = channel["channelName"]
+                    if channel["channelInformation"] == "blue":
+                        blueChannelName = channel["channelName"]
+                else:
+                    if channel["channelInformation"] == "intensity":
+                        intensityChannelName = channel["channelName"]
+
+        light = getattr(self,"light")
+        if isRGB:
+            colour = self.hexValueForRGB(getattr(light,redChannelName),getattr(light,greenChannelName),getattr(light,blueChannelName))
+            for indicator in self.indicators:
+                indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"background-color",f'#{colour}'))
+                indicator.setStyleSheet(update_stylesheet(indicator.styleSheet(),"border",f'3px solid#{colour}'))
+        else:
+            #finish me
+            for indicator in self.indicators:
+                styleSheet = indicator.styleSheet() + f'background-color: rgba(255,255,0,{getattr(light,intensityChannelName)});'
+                indicator.setStyleSheet(styleSheet)
+                # indicator.setStyleSheet(indicator.styleSheet().append(QString(f'background-color: rgba(255,255,0,{getattr(light,intensityChannelName)});')))
+
 class SequenceDisplayLight(SequenceParentDisplayLight):
     def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
         SequenceParentDisplayLight.__init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType)
@@ -212,6 +244,27 @@ class SequenceDisplayLight(SequenceParentDisplayLight):
         for i in range(5):
             self.shapes[1+i].setStyleSheet(f'background-color: #{colour}; border-radius: {self.circle1.borderWidth}px;border: 3px solid #{colour};')
 
+    def changeColourAccordingToFixture(self):
+        channelNumber = int(self.lightName[len(self.lightType):len(self.lightName)])
+        for light in self.lightDisplay.lights:
+            if channelNumber == light.startChannel:
+                red = hex(self.light.red)
+                red = red[2:len(red)]
+                if len(red) < 2:
+                    red = "0"+red
+                green = hex(self.light.green)
+                green = green[2:len(green)]
+                if len(green) < 2:
+                    green = "0"+green
+                blue = hex(self.light.blue)
+                blue = blue[2:len(blue)]
+                if len(blue) < 2:
+                    blue = "0"+blue
+                colour = str(red)+str(green)+str(blue)
+                for i in range(5):
+                    self.shapes[1+i].setStyleSheet(f'background-color: #{colour}; border-radius: {self.circle1.borderWidth}px;border: 3px solid #{colour};')  #all borderwidths should be the same
+
+
 
     def changeColour(self,colour):
         colour = self.convertColour(colour)
@@ -219,10 +272,11 @@ class SequenceDisplayLight(SequenceParentDisplayLight):
             self.shapes[1+i].setStyleSheet(f'background-color: #{colour}; border-radius: {self.circle1.borderWidth}px;border: 3px solid #{colour};')
 
 class SequenceDisplayLight2Small(SequenceParentDisplayLight):
-    def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType,parentClass):
+    def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType,parentClass,boxNumber):
         self.setClickableRegion()
         SequenceParentDisplayLight.__init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType)
         self.parentClass = parentClass
+        self.boxNumber = boxNumber
     def createShapes(self):
         self.box = self.createShape(self.xPos,self.yPos,20,20)
         return [self.box]
@@ -253,6 +307,29 @@ class SequenceDisplayLight2Small(SequenceParentDisplayLight):
         colour = self.convertColour(colour)
         self.box.setStyleSheet(f'background-color: #{colour}; border-radius: {1}px;border: 3px solid #{colour};')
 
+    def hexValueForChannel(self,channel):
+        channel = hex(channel)
+        channel = channel[2:len(channel)]
+        if len(channel) < 2:
+            channel = "0" + channel
+        return str(channel)
+
+    def hexValueForRGB(self,red,green,blue):
+        red = self.hexValueForChannel(red)
+        green = self.hexValueForChannel(green)
+        blue = self.hexValueForChannel(blue)
+        return red+green+blue
+
+    def changeColourAccordingToFixture(self):
+        channelNumber = int(self.lightName[len(self.lightType):len(self.lightName)])-3*(self.boxNumber-1)
+        for light in self.lightDisplay.lights:
+            if channelNumber == light.startChannel:
+                self.red = getattr(light,f"red{self.boxNumber}")
+                self.green = getattr(light,f"green{self.boxNumber}")
+                self.blue = getattr(light,f"blue{self.boxNumber}")
+                colour = self.hexValueForRGB(self.red,self.green,self.blue)
+                self.box.setStyleSheet(f'background-color: #{colour};')
+
     def changeColourRGB(self,red=None,green=None,blue=None):
         if red == None:
             red = self.red
@@ -280,7 +357,7 @@ class SequenceDisplayLight2(object):
         lightType = addingLightType
         channel = int(lightName[len(addingLightType):len(lightName)])
         for i in range(8):
-            setattr(self,f"box{i+1}",SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+3*i),self.xPos,self.yPos+20*i,addingLightType,self))
+            setattr(self,f"box{i+1}",SequenceDisplayLight2Small(lightDisplay,sequenceWindow,lightType+str(channel+3*i),self.xPos,self.yPos+20*i,addingLightType,self,i+1))
 
 
 class SequenceDisplayLight3(SequenceParentDisplayLight):

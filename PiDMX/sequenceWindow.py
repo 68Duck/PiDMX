@@ -106,29 +106,36 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
         for record in playbackData:
             channel = int(record["channelNumber"])
             channelValue = record["channelValue"]
-            for displayLight in self.displayLights:
-                displayLightChannel = int(displayLight.lightName[len(displayLight.lightType):len(displayLight.lightName)])
-                if displayLight.lightType == "RGBLight" or displayLight.lightType == "RGB6Channel":
-                    displayLightChannel+=1
-                if int(displayLightChannel) == int(channel):
-                    displayLight.changeColourRGB(red=channelValue)
+            self.lightDisplay.universeChannelValues[channel] = channelValue
+        for light in self.lightDisplay.lights:
+            light.updateChannelValuesFromUniverse()
+            light.updateChannelValues()
+        for displayLight in self.displayLights:
+            displayLight.changeColourAccordingToFixture()
+            # for displayLight in self.displayLights:
 
-                if int(displayLightChannel)+1 == int(channel):
-                    displayLight.changeColourRGB(green=channelValue)
-                if int(displayLightChannel)+2 == int(channel):
-                    displayLight.changeColourRGB(blue=channelValue)
-                if displayLight.lightType == "Miniscan":
-                    for i in range(7):
-                        if int(displayLightChannel+i) == int(channel):
-                            self.lightDisplay.universeChannelValues[channel] = channelValue
-                            displayLight.changeColourAccordingToFixture()
-                if displayLight.lightType == "GenericDimmer":
-                    if int(displayLightChannel) == int(channel):
-                        self.lightDisplay.universeChannelValues[channel] = channelValue
-                        for light in self.lightDisplay.lights:
-                            light.updateChannelValuesFromUniverse()
-                            light.updateChannelValues()
-                        displayLight.changeColourAccordingToFixture()
+                # displayLightChannel = int(displayLight.lightName[len(displayLight.lightType):len(displayLight.lightName)])
+                # if displayLight.lightType == "RGBLight" or displayLight.lightType == "RGB6Channel":
+                #     displayLightChannel+=1
+                # if int(displayLightChannel) == int(channel):
+                #     displayLight.changeColourRGB(red=channelValue)
+                #
+                # if int(displayLightChannel)+1 == int(channel):
+                #     displayLight.changeColourRGB(green=channelValue)
+                # if int(displayLightChannel)+2 == int(channel):
+                #     displayLight.changeColourRGB(blue=channelValue)
+                # if displayLight.lightType == "Miniscan":
+                #     for i in range(7):
+                #         if int(displayLightChannel+i) == int(channel):
+                #             self.lightDisplay.universeChannelValues[channel] = channelValue
+                #             displayLight.changeColourAccordingToFixture()
+                # if displayLight.lightType == "GenericDimmer":
+                #     if int(displayLightChannel) == int(channel):
+                #         self.lightDisplay.universeChannelValues[channel] = channelValue
+                #         for light in self.lightDisplay.lights:
+                #             light.updateChannelValuesFromUniverse()
+                #             light.updateChannelValues()
+                #         displayLight.changeColourAccordingToFixture()
 
         self.updateChannels()
 
