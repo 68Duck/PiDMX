@@ -29,6 +29,7 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
         self.moveOnSpace = self.spacebarCheckBox.isChecked()
         self.loopSequence = self.loopCheckBox.isChecked()
         self.sequence = self.dropDown.currentText()
+        del self.visualLightDisplay.sequenceSelectionWindowCopy
         self.visualLightDisplay.runningSequence = True
         self.setupSequence()
 

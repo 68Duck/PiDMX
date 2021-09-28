@@ -54,6 +54,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.runningSequence = False
         self.checkForSpace = False
         self.finishedSequence = False
+        self.sequenceSelectionWindow = None
         self.effectsWindow = EffectsWindow(self.lightDisplay,self.selectedLights,self,True)
         self.initUI()
     def initUI(self):   #create UI
@@ -242,6 +243,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         if self.rigID == None:
             self.errorWindow = ErrorWindow("You have not saved or opened a rig. Please do this first.")
             return
+        self.sequenceSelectionWindowCopy = self.sequenceSelectionWindow
         self.sequenceSelectionWindow = SequenceSelectionWindow(self.dataBaseManager,self.lightDisplay,self)
         self.sequenceSelectionWindow.show()
 
