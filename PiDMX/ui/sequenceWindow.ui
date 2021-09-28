@@ -54,10 +54,10 @@ QMainWindow{color:white;background-color:black;}
    <widget class="QLabel" name="currentPlaybackLabel">
     <property name="geometry">
      <rect>
-      <x>1670</x>
+      <x>1590</x>
       <y>70</y>
-      <width>221</width>
-      <height>16</height>
+      <width>281</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -82,7 +82,7 @@ QMainWindow{color:white;background-color:black;}
      <x>0</x>
      <y>0</y>
      <width>1900</width>
-     <height>22</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdd_Light">
@@ -127,6 +127,9 @@ QMainWindow{color:white;background-color:black;}
    </property>
   </action>
   <action name="selectColourButton">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Colour Mode</string>
    </property>
