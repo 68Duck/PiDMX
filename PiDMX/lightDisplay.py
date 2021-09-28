@@ -314,4 +314,4 @@ class LightDisplay(QWidget):
                 self.channelsOccupied[light.startChannel+i-1] = 1
 
     def sendzero(self):
-        self.dmx.sendzero()
+        self.dmx.send_zero()
