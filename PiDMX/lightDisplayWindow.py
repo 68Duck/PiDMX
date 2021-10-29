@@ -81,6 +81,15 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.selectLightTypeButton.triggered.connect(self.selectLightTypeButtonClicked)
         self.stageCreatorButton.triggered.connect(self.openBarsEditWindow)
         self.openStageButton.triggered.connect(self.openStageButtonClicked)
+        self.blackoutButton.clicked.connect(self.blackoutButtonPressed)
+
+    def blackoutButtonPressed(self):
+        if self.blackoutButton.isChecked():
+            self.lightDisplay.blackout()
+        else:
+            self.lightDisplay.restoreFromBlackout()
+        for light in self.lightList:
+            light.changeColourAccordingToFixture()
 
     def openStageButtonClicked(self):
         self.openStageWindow = OpenStageWindow(self)

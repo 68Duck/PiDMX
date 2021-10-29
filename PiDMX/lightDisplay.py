@@ -219,6 +219,29 @@ class LightDisplay(QWidget):
             self.universeChannelValues.append(0)
         self.universeLock = False
 
+    def blackout(self):
+        for light in self.lights:
+            light.setToBlack()
+        # self.previousUniverse = self.universeChannelValues[:]
+        # self.createBlankUniverse()
+        # self.universeChanged()
+        # for light in self.lights:
+        #     light.updateChannelValuesFromUniverse()
+        # print(self.universeChannelValues)
+        # # print("test")
+
+    def restoreFromBlackout(self):
+        for light in self.lights:
+            light.setToOrigional()
+        # try:
+        #     self.universeChannelValues = self.previousUniverse[:]
+        #     self.universeChanged()
+        #     for light in self.lights:
+        #         light.updateChannelValuesFromUniverse()
+        #     print(self.universeChannelValues)
+        # except:
+        #     raise Exception("There has not been a blackout so it cannot be restored")
+
 
     def run(self):
         self.sendEffectsToLights()

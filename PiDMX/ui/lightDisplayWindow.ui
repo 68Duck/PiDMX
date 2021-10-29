@@ -190,7 +190,27 @@
 QMainWindow{color:white;background-color:black;}
 </string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="blackoutButton">
+    <property name="geometry">
+     <rect>
+      <x>1770</x>
+      <y>10</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{background-color:white;}</string>
+    </property>
+    <property name="text">
+     <string>Blackout</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
