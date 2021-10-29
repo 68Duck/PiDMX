@@ -18,10 +18,17 @@ class SliderPannelWindow(QWidget):  #creates a class window
         self.channel = channelNumber
         self.lightDisplay = lightDisplay
         self.light = light
-        xpos = 200
-        ypos = 200
-        width = 700
-        height = 500
+        if len(self.light.channels) > 12:
+            height = 900
+            ypos = 100
+            xpos = 10
+            width = 100+150*12
+        else:
+            xpos = 10
+            ypos = 100
+            height = 500
+            width = max(100+(len(self.light.channels))*150,800)
+        # width = 800
         self.copyValue = None
         self.colourMode = False
         self.setGeometry(int(xpos),int(ypos),int(width),int(height)) #sets window parameters top left is (0,0)
