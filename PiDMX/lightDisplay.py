@@ -57,7 +57,7 @@ class LightDisplay(QWidget):
         self.password = None
         self.sshUpdateDatabase = SSHUpdateDatabase(self)
         if self.devMode:
-            self.sshUpdateDatabase.raspberryPiLoginWindow.hide()
+            self.sshUpdateDatabase.DMXSelectionWindow.hide()
             self.sshUpdateDatabase.runWithoutDMX()
 
     def checkBattery(self):
