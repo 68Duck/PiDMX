@@ -84,7 +84,18 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
                 self.timers.append(self.newTimer)
                 self.newTimer.start(int(timeDelayTotal*1000))
 
-    def openIndividualSequence(self):
+    def openIndividualSequence(self,backwards=False):
+        if backwards:
+            sequenceNumber = len(self.sequenceToOpen)
+            print(sequenceNumber)
+            self.setupSequence()
+            print(len(self.sequenceToOpen))
+            if len(self.sequenceToOpen) == sequenceNumber+1:
+                for i in range(len(self.sequenceToOpen)-1):
+                    self.sequenceToOpen.pop(0)
+            else:
+                for i in range(len(self.sequenceToOpen)-sequenceNumber-2):
+                    self.sequenceToOpen.pop(0)
         sequence = self.sequenceToOpen[0]
         self.sequenceToOpen.pop(0)
         playbackID = sequence["playbackID"]

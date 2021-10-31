@@ -418,6 +418,11 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                         self.checkForSpace = False
                         self.sequenceSelectionWindow.openIndividualSequence()
                         return 1 #needed to stop double trigger
+                if key == Qt.Key_Backspace:
+                    if self.checkForSpace == True:
+                        self.checkForSpace = False
+                        self.sequenceSelectionWindow.openIndividualSequence(backwards=True)
+                        return 1 #needed to stop double trigger
 
         return super(LightDisplayWindow, self).eventFilter(source, event)
 
