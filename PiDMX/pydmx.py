@@ -58,7 +58,7 @@ class PyDMX(object):
             self.ser = serial.Serial(port,baudrate,bytesize=8,stopbits=2)
             self.working = True
         except Exception as e:
-            print(e)
+            # print(e)
             self.working = False
             raise Exception("The serial is not working. Please make sure the lights are plugged in and that you don't have any other dmx scripts running and make sure the port is correct")
 
@@ -88,7 +88,8 @@ class PyDMX(object):
             self.ser.write(0)
             self.ser.write(bytearray(self.universeData))
         except:
-            raise Excpetion("The serial cannot write. Check the cable is plugged in.")
+            self.ser.close()
+            raise Exception("The serial cannot write. Check the cable is plugged in.")
         time.sleep(10/1000)
 
     def send_zero(self):

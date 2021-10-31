@@ -19,6 +19,7 @@ from sshRunFile import SSHRunFile
 from logonWindow import LogonWindow
 from errorWindow import ErrorWindow
 from batteryWarningWindow import BatteryWarningWindow
+from messageWindow import MessageWindow
 
 class LightDisplay(QWidget):
     def __init__(self,lights = [],interval = 1,app=None,devMode = False):
@@ -86,7 +87,8 @@ class LightDisplay(QWidget):
         # print(lightTypes)
 
     def runComputerDMX(self,port):
-        self.dmx = PyDMX(port)
+        self.port = port #needed for testDMX()
+        self.dmx = PyDMX(self.port)
         if self.dmx.working:
             pass
         else:
@@ -110,8 +112,27 @@ class LightDisplay(QWidget):
             try:
                 self.dmx.send()
             except Exception as e:
-                print(e)
+                self.dmx.ser.close()
+                del self.dmx
                 self.errorWindow = ErrorWindow("The DMX can no longer be sent. Please check the cable.")
+                self.timer.stop()
+                self.testDMXTimer = QTimer()
+                self.testDMXTimer.timeout.connect(self.testDMX)
+                self.testDMXTimer.start(1000)
+
+    def testDMX(self):
+        try:
+            dmx = PyDMX(self.port)
+            dmx.ser.close()
+            if dmx.working:
+                del dmx
+                self.testDMXTimer.stop()
+                # time.sleep(1)
+                self.dmx = PyDMX(self.port)
+                self.messageWindow = MessageWindow("The DMX is now working again")
+                self.timer.start(1)
+        except Exception as e:
+            pass#as testing so no exception needs to be raised
 
     def runWithoutDMX(self):
         self.dmxOffMode = True
