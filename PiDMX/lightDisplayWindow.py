@@ -472,8 +472,14 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                             for fixture in self.lightDisplay.lights:
                                 if light.channelNumber == fixture.startChannel:
                                     channelValid = True
-                                    self.sliderPannelWindow = SliderPannelWindow(light.channelNumber,self.lightDisplay,fixture,light,self)
-                                    self.sliderPannelWindow.show()
+                                    windowsHidden = True
+                                    for window in self.lightDisplay.app.topLevelWidgets():
+                                        if not isinstance(window,LightDisplayWindow):
+                                            if not window.isHidden():
+                                                windowsHidden = False
+                                    if windowsHidden:
+                                        self.sliderPannelWindow = SliderPannelWindow(light.channelNumber,self.lightDisplay,fixture,light,self)
+                                        self.sliderPannelWindow.show()
                                     return False
                             if not channelValid:
                                 self.errorWindow = ErrorWindow("Channel Error not valid")
