@@ -87,9 +87,7 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
     def openIndividualSequence(self,backwards=False):
         if backwards:
             sequenceNumber = len(self.sequenceToOpen)
-            print(sequenceNumber)
             self.setupSequence()
-            print(len(self.sequenceToOpen))
             if len(self.sequenceToOpen) == sequenceNumber+1:
                 for i in range(len(self.sequenceToOpen)-1):
                     self.sequenceToOpen.pop(0)
