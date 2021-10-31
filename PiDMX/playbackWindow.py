@@ -70,7 +70,7 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
                 else:
                     self.visualLightDisplay.effectsWindow.rainbowDelay = channelValue
                     self.visualLightDisplay.effectsWindow.toggleRainbow()
-                    self.visualLightDisplay.effectsWindow.rainbowIO[0].setChecked(True)
+                    # self.visualLightDisplay.effectsWindow.rainbowIO[0].setChecked(True)
             elif channelNumber == "chaser":
                 if channelValue == 0:
                     self.lightDisplay.runningChaser = False
