@@ -61,8 +61,12 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
         self.close()
 
     def closeRig(self):
-        for light in self.lightDisplay.lights:
-            self.lightDisplay.lights.remove(light)
+        # print("test")
+        # print(self.lightDisplay.lights)
+        # for light in self.lightDisplay.lights:
+        #     self.lightDisplay.lights.remove(light)
+        # print(self.lightDisplay.lights)
+        self.lightDisplay.lights = []
         self.lightDisplay.updateOccupiedChannels()
         self.lightDisplay.createBlankUniverse()
         for i in range(len(self.visualLightDisplay.lightList)):
@@ -82,11 +86,13 @@ class OpenRigWindow(QWidget,uic.loadUiType(os.path.join("ui","openRigWindow.ui")
             self.errorWindow = ErrorWindow("The rig you have selected does not exist. Please try again")
         else:
             for light in self.rigToOpen:
+                # print(light)
                 lightType = light["lightType"]
                 xpos = light["xPos"]
                 ypos = light["yPos"]
                 startChannel = light["startChannel"]
                 lightInformation = self.getLightInformation(lightType)
+                # print(lightInformation)
                 self.newLight = lightInformation.generateNewLight(startChannel)
                 self.newLight.lightDisplay = self.lightDisplay
                 self.newLight.changeUniverse(updateUniverse = False)
