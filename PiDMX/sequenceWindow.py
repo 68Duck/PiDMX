@@ -93,6 +93,13 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
                 self.displayingPlaybackID = 1  #go back to the start
             self.openPlayback()
 
+    def updateCurrentPlaybackLabel(self):
+        sequenceData = self.dataBaseManager.getAllData("sequence"+str(self.sequenceID))
+        if len (sequenceData) > 0:
+            playbackID = sequenceData[self.displayingPlaybackID-1]["playbackID"]  #-1 as the first will be 0
+            playbackName = sequenceData[self.displayingPlaybackID-1]["playbackName"]
+            self.currentPlaybackLabel.setText(f"Current playback name: {playbackName}")
+
     def openPlayback(self):
         sequenceData = self.dataBaseManager.getAllData("sequence"+str(self.sequenceID))
         if len(sequenceData) > 0:

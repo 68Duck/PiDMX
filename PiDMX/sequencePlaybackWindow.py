@@ -77,6 +77,7 @@ class SequencePlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","SequenceP
         self.dataBaseManager.insertMultipleRecords(sequencePlabackTable,recordsToInsert)
         savedPlaybacks = self.dataBaseManager.getAllData("sequence"+str(self.sequenceWindow.sequenceID))
         self.sequenceWindow.displayingPlaybackID = len(savedPlaybacks)
+        self.sequenceWindow.updateCurrentPlaybackLabel()
 
     def getNextSequencePlaybackID(self):
         exisits = True
