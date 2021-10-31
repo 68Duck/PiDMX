@@ -7,6 +7,7 @@ import math as maths
 from confirmWindow import ConfirmWindow
 from errorWindow import ErrorWindow
 from panTiltGridWindow import PanTiltGridWindow
+from messageWindow import MessageWindow
 
 
 class SliderPannelWindow(QWidget):  #creates a class window
@@ -98,8 +99,17 @@ class SliderPannelWindow(QWidget):  #creates a class window
             self.moveFixtureButton.setStyleSheet("background-color:lightgrey")
             self.moveFixtureButton.clicked.connect(self.moveFixtureButtonClicked)
 
+        if self.light.lightType == "LEDBar24ChannelMode":
+            self.invertButton = QPushButton(self)
+            self.invertButton.setFixedWidth(150)
+            self.invertButton.move(520 ,10)
+            self.invertButton.setText("Invert fixture")
+            self.invertButton.setStyleSheet("background-color:lightgrey")
+            self.invertButton.clicked.connect(self.invertButtonClicked)
 
-
+    def invertButtonClicked(self):
+        self.light.invert()
+        self.messageWindow = MessageWindow("The light was inverted so the channels will convert the channels in the opposite order")
 
     def moveFixtureButtonClicked(self): #create duplicate and then remove the current light
         self.displayWindow.numberOfLightsToCreate += 1

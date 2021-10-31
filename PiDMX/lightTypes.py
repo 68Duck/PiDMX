@@ -199,6 +199,7 @@ class LEDBar24ChannelMode(Light):
         Light.__init__(self,startChannel,infoMode)
         self.lightType = "LEDBar24ChannelMode"
         self.dropdownName = "LED bar 24 channel mode"
+        self.inverted = False
         colours = ["red","green","blue"]
         self.channelNames = []
         for i in range(1,9,1):
@@ -215,10 +216,47 @@ class LEDBar24ChannelMode(Light):
     def updateChannelValues(self):
         counter = 0
         colours = ["red","green","blue"]
-        for i in range(1,9,1):
-            for colour in colours:
-                setattr(self,f"{colour}{i}",self.channelValues[counter])
-                counter += 1
+        if self.inverted:
+            for i in range(8,0,-1):
+                for colour in colours:
+                    setattr(self,f"{colour}{i}",self.channelValues[counter])
+                    counter += 1
+        else:
+            for i in range(1,9,1):
+                for colour in colours:
+                    setattr(self,f"{colour}{i}",self.channelValues[counter])
+                    counter += 1
     def generateNewLight(self,channel):
         newLight = LEDBar24ChannelMode(channel)
         return newLight
+    def invert(self): #so changes from top to bottom to bottom to top in case lights are placed the wrong way around
+        if self.inverted:
+            self.inverted = False
+            self.channelNames = []
+            colours = ["red","green","blue"]
+            for i in range(1,9,1):
+                for colour in colours:
+                    setattr(self,f"{colour}{i}",255)
+                    self.channelNames.append(f"{colour}{i}")
+
+            coloursCaptialised = ["Red","Green","Blue"]
+            self.channels = []
+            for i in range(1,9,1):
+                for colour in coloursCaptialised:
+                    self.channels.append(f"{colour}{i}")
+            self.createChannelValues()
+        else:
+            self.inverted = True
+            self.channelNames = []
+            colours = ["red","green","blue"]
+            for i in range(8,0,-1):
+                for colour in colours:
+                    setattr(self,f"{colour}{i}",255)
+                    self.channelNames.append(f"{colour}{i}")
+
+            coloursCaptialised = ["Red","Green","Blue"]
+            self.channels = []
+            for i in range(8,0,-1):
+                for colour in coloursCaptialised:
+                    self.channels.append(f"{colour}{i}")
+            self.createChannelValues()
