@@ -84,16 +84,25 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
                 self.timers.append(self.newTimer)
                 self.newTimer.start(int(timeDelayTotal*1000))
 
-    def openIndividualSequence(self,backwards=False):
-        if backwards:
+    def openIndividualSequence(self,backwards=False,playbackNumber=None):
+        if playbackNumber is not None:
+            self.setupSequence()
+            for i in range(playbackNumber):
+                self.sequenceToOpen.pop(0)
+                self.timers.pop(0) #as timers are used to keep track of the sequence
+        if backwards: #as it cannot be backwards as well as skipping to a playback
             sequenceNumber = len(self.sequenceToOpen)
             self.setupSequence()
-            if len(self.sequenceToOpen) == sequenceNumber+1:
+            if len(self.sequenceToOpen)-sequenceNumber-2 < 0 and self.loopSequence:
                 for i in range(len(self.sequenceToOpen)-1):
                     self.sequenceToOpen.pop(0)
+                self.timers = [1]
             else:
                 for i in range(len(self.sequenceToOpen)-sequenceNumber-2):
                     self.sequenceToOpen.pop(0)
+        else:
+            if len(self.sequenceToOpen) == 0:
+                self.setupSequence()
         sequence = self.sequenceToOpen[0]
         self.sequenceToOpen.pop(0)
         playbackID = sequence["playbackID"]
@@ -118,7 +127,8 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
         if len(self.timers) == 0:
             if self.loopSequence:
                 if self.moveOnSpace:
-                    self.setupSequence()
+                    if not backwards:
+                        self.setupSequence()
                 else:
                     self.resetTimer = QTimer()
                     self.resetTimer.timeout.connect(self.replaySequence)

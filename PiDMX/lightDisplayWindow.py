@@ -24,6 +24,7 @@ from lightTypeWindow import LightTypeWindow
 from barsEditWindow import BarsEditWindow
 from openStageWindow import OpenStageWindow
 from databaseManager import DataBaseManager
+from skipToSequenceWindow import SkipToSequenceWindow
 
 class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisplayWindow.ui"))[0]):  #creates a class window
     def __init__(self,lightDisplay,dataBaseManager):
@@ -423,9 +424,19 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                         self.checkForSpace = False
                         self.sequenceSelectionWindow.openIndividualSequence(backwards=True)
                         return 1 #needed to stop double trigger
-
+                if key == Qt.Key_Return:
+                    if self.checkForSpace == True:
+                        self.checkForSpace = False
+                        self.skipToSequenceWindow = SkipToSequenceWindow(self.dataBaseManager,self)
+                        self.skipToSequenceWindow.show()
+                        return 1
         return super(LightDisplayWindow, self).eventFilter(source, event)
 
+    def skipToPlaybackInSequence(self,playbackNumber):
+        if self.sequenceSelectionWindow is None:
+            raise Exception("The sequence selection has not been defined so the playback cannot be skipped to")
+        else:
+            self.sequenceSelectionWindow.openIndividualSequence(playbackNumber=playbackNumber)
 
     def mousePressed(self,x,y,resetMode = False):
         if not resetMode:

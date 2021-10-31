@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>150</height>
+    <height>187</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -86,23 +86,47 @@ color: white;
    <property name="text">
     <string>Loop?</string>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="tristate">
+    <bool>false</bool>
+   </property>
   </widget>
   <widget class="QCheckBox" name="spacebarCheckBox">
    <property name="geometry">
     <rect>
      <x>40</x>
      <y>120</y>
-     <width>211</width>
-     <height>18</height>
+     <width>331</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>10</pointsize>
+     <kerning>true</kerning>
     </font>
    </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <property name="text">
-    <string>Change playback on Spacebar</string>
+    <string>Change playback on Spacebar,
+ go back on Backspace,
+ and skip using Enter</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="tristate">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
