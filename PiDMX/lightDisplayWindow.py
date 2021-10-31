@@ -508,6 +508,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
                 for i in range(len(self.selectedLights)):
                     if light == self.selectedLights[i]:
                         light.toggleSelected()
+                    self.selectedLights.remove(light)
                 self.lightList.remove(l)
 
         if removed == False:
