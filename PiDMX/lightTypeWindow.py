@@ -16,7 +16,13 @@ class LightTypeWindow(QWidget,uic.loadUiType(os.path.join("ui","lightTypeWindow.
         self.initUI()
     def initUI(self):
         for light in self.parentWindow.lightDisplay.lightTypes:
-            self.dropDown.addItem(light)
+            lightTypeInRig = False
+            for l in self.parentWindow.lightList:
+                if l.lightType == light:
+                    lightTypeInRig = True
+            if lightTypeInRig:
+                self.dropDown.addItem(light)
+
         self.selectLightTypeButton.clicked.connect(self.selectLightTypeButtonClicked)
 
     def selectLightTypeButtonClicked(self):

@@ -133,6 +133,9 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         if self.selectAllLightsButton.isChecked():
             self.selectAllLightsButtonClicked()
             self.selectAllLightsButton.setChecked(False)
+        if len(self.lightList) == 0:
+            self.errroWindow = ErrorWindow("There are no lights to select. Try patching some lights first.")
+            return
         self.lightTypeWindow = LightTypeWindow(self)
         self.lightTypeWindow.show()
 
