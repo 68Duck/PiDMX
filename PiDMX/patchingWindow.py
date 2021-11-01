@@ -1,13 +1,15 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import*
 from PyQt5.QtGui import*
 from PyQt5.QtCore import*
+import os
 
 from errorWindow import ErrorWindow
 
-class PatchingWindow(QWidget):
+class PatchingWindow(QMainWindow,uic.loadUiType(os.path.join("ui","patchingWindow.ui"))[0]):
     def __init__(self,lightDisplay,displayWindow = False):
         super().__init__()
+        self.setupUi(self)
         xpos = 200
         ypos = 200
         width = 1050
@@ -19,46 +21,25 @@ class PatchingWindow(QWidget):
         self.lightDisplay.updateLightTypes()
         self.initUI()
     def initUI(self):
-        self.startChannelBox = QLineEdit(self)
-        self.startChannelBox.setPlaceholderText("Enter Start Channel")
-        self.startChannelBox.move(50,50)
-
-        self.lightType = QComboBox(self) #drop down menu
         for light in self.lightDisplay.lightsInformation:
             self.lightType.addItem(light.dropdownName)
-        self.lightType.move(250,50)
-
-        self.submitButton = QtWidgets.QPushButton(self)
-        self.submitButton.move(50,250)
-        self.submitButton.setText("Submit")
         self.submitButton.clicked.connect(self.submitButtonPressed)
-
-        self.radio1 = QRadioButton(self)
-        self.radio1.move(50,100)
-        self.radio1.setText("Patch One Light")
-        self.radio1.setChecked(True)
-
-
-        self.radio2 = QRadioButton(self)
-        self.radio2.move(50,120)
-        self.radio2.setText("Patch Multiple Lights")
-
-
-        self.numberOfFixturesBox = QLineEdit(self)
+        self.startChannelBox.setPlaceholderText("Enter Start Channel")
         self.numberOfFixturesBox.setPlaceholderText("Enter number of fixtures")
-        self.numberOfFixturesBox.move(50,150)
-
-        self.channelGap = QLineEdit(self)
         self.channelGap.setPlaceholderText("Enter the channel gap")
-        self.channelGap.move(50,180)
+        self.radio1.clicked.connect(self.patchOneRadioClicked)
+        self.radio2.clicked.connect(self.patchMultipleRadioClicked)
+        self.multipleLightsWidget.hide()
 
         self.labelList = []
-        startXPos = 15
-        startYPos = 400
-        xGap = 32  #change back to 24
-        yGap = 20
+        startXPos = 0
+        startYPos = 0
+        xGap = 30  #change back to 24
+        yGap = 16
         noX = 32
         noY = 16
+        width = 28
+        height = 15
         xCoords = []
         yCoords = []
         for i in range(noX):
@@ -69,13 +50,21 @@ class PatchingWindow(QWidget):
 
         for i in range(noX):
             for j in range(noY):
-                self.newLabel = self.createLabelForGrid(xCoords[i],yCoords[j],j*noX+i+1)  #+1 as counting from 1 not 0
+                self.newLabel = self.createLabelForGrid(xCoords[i],yCoords[j],j*noX+i+1,width,height)  #+1 as counting from 1 not 0
                 self.labelList.append(self.newLabel)
 
-    def createLabelForGrid(self,moveX,moveY,number):
-        self.newLabel = QtWidgets.QLabel(self)
+    def patchOneRadioClicked(self):
+        self.multipleLightsWidget.hide()
+
+    def patchMultipleRadioClicked(self):
+        self.multipleLightsWidget.show()
+
+    def createLabelForGrid(self,moveX,moveY,number,width,height):
+        self.newLabel = QtWidgets.QLabel(self.channelDisplayWidget)
         self.newLabel.setText(str(number))
-        self.newLabel.setFixedWidth(30)   #change back to 22
+        self.newLabel.setFixedSize(width,height)
+        # self.newLabel.setFixedWidth(30)   #change back to 22
+        # self.newLabel.setFixedHeight(20)
         self.newLabel.move(moveX,moveY)
         if self.lightDisplay.channelsOccupied[number-1] == 0:  #-1 as number dosen't count from 0 but the list does
             self.newLabel.setStyleSheet("background-color: lightgrey;color: black; border: 2px solid green;")
@@ -83,6 +72,7 @@ class PatchingWindow(QWidget):
             self.newLabel.setStyleSheet("background-color: lightgrey;color: black; border: 2px solid red;")
 
         self.newLabel.setAlignment(Qt.AlignCenter)
+        self.newLabel.show()
 
 
     def submitButtonPressed(self):
