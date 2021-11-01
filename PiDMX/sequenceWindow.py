@@ -12,6 +12,7 @@ from errorWindow import ErrorWindow
 from sequencePlaybackWindow import SequencePlaybackWindow
 from editSequenceWindow import EditSequenceWindow
 from sliderPannelWindow import SliderPannelWindow
+from helpWindow import HelpWindow
 
 class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindow.ui"))[0]):
     def __init__(self,lightDisplay,visualLightDisplay,dataBaseManager,rigID):
@@ -47,6 +48,11 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
         self.colourReplaceButton.triggered.connect(self.colourReplaceButtonClicked)
         self.editSequenceButton.triggered.connect(self.editSequenceButtonClicked)
         self.addWholeRigButton.triggered.connect(self.addWholeRigButtonClicked)
+        self.helpButton.triggered.connect(self.helpButtonClicked)
+
+    def helpButtonClicked(self):
+        self.helpWindow = HelpWindow()
+        self.helpWindow.show()
 
     def addWholeRigButtonClicked(self):
         for light in self.lights:
