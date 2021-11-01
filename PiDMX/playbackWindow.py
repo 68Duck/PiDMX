@@ -63,7 +63,8 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
             except:
                 pass
             if type(channelNumber) == int:
-                self.lightDisplay.universeChannelValues[channelNumber] = channelValue
+                self.lightDisplay.updateChannel(channelNumber,channelValue)
+                # self.lightDisplay.universeChannelValues[channelNumber] = channelValue
             elif channelNumber == "rainbow":
                 if channelValue == 0:
                     self.lightDisplay.runningRainbow = False

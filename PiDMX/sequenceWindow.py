@@ -113,7 +113,8 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
         for record in playbackData:
             channel = int(record["channelNumber"])
             channelValue = record["channelValue"]
-            self.lightDisplay.universeChannelValues[channel] = channelValue
+            self.lightDisplay.updateChannel(channel,channelValue)
+            # self.lightDisplay.universeChannelValues[channel] = channelValue
         for light in self.lightDisplay.lights:
             light.updateChannelValuesFromUniverse()
             light.updateChannelValues()
@@ -348,16 +349,23 @@ class SequenceWindow(QMainWindow,uic.loadUiType(os.path.join("ui","sequenceWindo
         for light in self.displayLights:
             channelNumber = int(light.lightName[len(light.lightType):len(light.lightName)])
             if light.lightType == "GenericDimmer":
-                self.lightDisplay.universeChannelValues[channelNumber] = light.red
+                self.lightDisplay.updateChannel(channelNumber,light.red)
+                # self.lightDisplay.universeChannelValues[channelNumber] = light.red
             elif light.lightType == "RGBLight" or light.lightType == "RGB6Channel":
                 channelNumber += 1   #as the first is intensity
-                self.lightDisplay.universeChannelValues[channelNumber] = light.red
-                self.lightDisplay.universeChannelValues[channelNumber+1] = light.green
-                self.lightDisplay.universeChannelValues[channelNumber+2] = light.blue
+                self.lightDisplay.updateChannel(channelNumber,light.red)
+                self.lightDisplay.updateChannel(channelNumber+1,light.green)
+                self.lightDisplay.updateChannel(channelNumber+2,light.blue)
+                # self.lightDisplay.universeChannelValues[channelNumber] = light.red
+                # self.lightDisplay.universeChannelValues[channelNumber+1] = light.green
+                # self.lightDisplay.universeChannelValues[channelNumber+2] = light.blue
             else:
-                self.lightDisplay.universeChannelValues[channelNumber] = light.red
-                self.lightDisplay.universeChannelValues[channelNumber+1] = light.green
-                self.lightDisplay.universeChannelValues[channelNumber+2] = light.blue
+                self.lightDisplay.updateChannel(channelNumber,light.red)
+                self.lightDisplay.updateChannel(channelNumber+1,light.green)
+                self.lightDisplay.updateChannel(channelNumber+2,light.blue)
+                # self.lightDisplay.universeChannelValues[channelNumber] = light.red
+                # self.lightDisplay.universeChannelValues[channelNumber+1] = light.green
+                # self.lightDisplay.universeChannelValues[channelNumber+2] = light.blue
         for light in self.lightDisplay.lights:
             light.updateChannelValuesFromUniverse()
             light.updateChannelValues()

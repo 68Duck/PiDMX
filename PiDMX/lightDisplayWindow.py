@@ -295,10 +295,10 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.dataBaseManager.createPlaybackTable(nextPlaybackID)
         self.dataBaseManager.insertRecord("Playbacks",[None,nextPlaybackID,self.rigID,self.playbackName])
         #possbly needs universe lock here
-        currentChannelValues = self.lightDisplay.universeChannelValues
-        for i in range(len(currentChannelValues)):
+        # currentChannelValues = self.lightDisplay.universeChannelValues
+        for i in range(len(self.lightDisplay.channelsOccupied)):
             if self.lightDisplay.channelsOccupied[i] == 1:
-                self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,i+1,currentChannelValues[i+1]])
+                self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,i+1,self.lightDisplay.getChannelValue(i+1)])
         if self.lightDisplay.runningRainbow:
             rainbowValue = self.effectsWindow.rainbowDelay
         else:

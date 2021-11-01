@@ -157,7 +157,7 @@ class PatchingWindow(QMainWindow,uic.loadUiType(os.path.join("ui","patchingWindo
 
     def checkIfChannelsOverlapping(self,startChannel,endChannel):
         for i in range(endChannel-startChannel):
-            if startChannel + i >= len(self.lightDisplay.channelsOccupied):
+            if startChannel + i > len(self.lightDisplay.channelsOccupied):
                 self.errorWindow = ErrorWindow("The lights you have tried to patch are out of range. Please try again.")
                 return False
             if self.lightDisplay.channelsOccupied[startChannel+i-1] == 1: #startChannel+i-1 as list starts from 0

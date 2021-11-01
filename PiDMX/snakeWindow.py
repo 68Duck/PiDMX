@@ -77,7 +77,8 @@ class SnakeWindow(QWidget,uic.loadUiType(os.path.join("ui","snakeWindow.ui"))[0]
         if not self.finished:
             self.lightDisplay.universeLock = True
             for i in range(24*self.noBars):
-                self.lightDisplay.universeChannelValues[i+self.firstChannel+(i*self.channelGap)//24] = 0
+                self.lightDisplay.updateChannel(i+self.firstChannel+(i*self.channelGap)//24,0)
+                # self.lightDisplay.universeChannelValues[i+self.firstChannel+(i*self.channelGap)//24] = 0
             # counter = 0
             self.initialiseRainbow()
             for bodyPiece in self.snake.bodyPieces:
@@ -85,17 +86,23 @@ class SnakeWindow(QWidget,uic.loadUiType(os.path.join("ui","snakeWindow.ui"))[0]
                 redChannelNumber = self.firstChannel + (bodyPiece.xPos)*(24) + bodyPiece.xPos*self.channelGap + bodyPiece.yPos*3
                 greenChannelNumber = redChannelNumber + 1
                 blueChannelNumber = greenChannelNumber + 1
-                self.lightDisplay.universeChannelValues[redChannelNumber] = self.redRainbow
-                self.lightDisplay.universeChannelValues[greenChannelNumber] = self.greenRainbow
-                self.lightDisplay.universeChannelValues[blueChannelNumber] = self.blueRainbow
+                self.lightDisplay.updateChannel(redChannelNumber,self.redRainbow) 
+                self.lightDisplay.updateChannel(greenChannelNumber,self.greenRainbow)
+                self.lightDisplay.updateChannel(blueChannelNumber,self.blueRainbow)
+                # self.lightDisplay.universeChannelValues[redChannelNumber] = self.redRainbow
+                # self.lightDisplay.universeChannelValues[greenChannelNumber] = self.greenRainbow
+                # self.lightDisplay.universeChannelValues[blueChannelNumber] = self.blueRainbow
                 # counter += 1
 
             redChannelNumber = self.firstChannel + self.pelletX*(24) + self.pelletX*self.channelGap + self.pelletY*3  #turn on pellet light
             greenChannelNumber = redChannelNumber + 1
             blueChannelNumber = greenChannelNumber + 1
-            self.lightDisplay.universeChannelValues[redChannelNumber] = 3
-            self.lightDisplay.universeChannelValues[greenChannelNumber] = 255
-            self.lightDisplay.universeChannelValues[blueChannelNumber] = 3
+            self.lightDisplay.updateChannel(redChannelNumber,3)
+            self.lightDisplay.updateChannel(greenChannelNumber,255)
+            self.lightDisplay.updateChannel(blueChannelNumber,3)
+            # self.lightDisplay.universeChannelValues[redChannelNumber] = 3
+            # self.lightDisplay.universeChannelValues[greenChannelNumber] = 255
+            # self.lightDisplay.universeChannelValues[blueChannelNumber] = 3
 
             for light in self.lightDisplay.lights:
                 light.updateChannelValuesFromUniverse()

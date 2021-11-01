@@ -111,7 +111,8 @@ class SequenceSelectionWindow(QWidget,uic.loadUiType(os.path.join("ui","sequence
         for playback in self.playbackToOpen:
             channelNumber = int(playback["channelNumber"])
             channelValue = int(playback["channelValue"])
-            self.lightDisplay.universeChannelValues[channelNumber] = channelValue
+            self.lightDisplay.updateChannel(channelNumber,channelValue)
+            # self.lightDisplay.universeChannelValues[channelNumber] = channelValue
         for light in self.lightDisplay.lights:
             light.updateChannelValuesFromUniverse()
             light.updateChannelValues()

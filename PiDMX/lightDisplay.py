@@ -208,6 +208,34 @@ class LightDisplay(QWidget):
                             finished = displayLight.changeColourAccordingToFixture()
                     self.universeChanged()
 
+    def updateChannel(self,channelNumber,channelValue):
+        numberIsInteger = self.checkIfInteger(channelNumber)
+        if numberIsInteger:
+            if channelNumber > 512 or channelNumber < 1:
+                raise Exception("The channel number input is not in the range 1-512")
+            else:
+                valueIsInteger = self.checkIfInteger(channelValue)
+                if valueIsInteger:
+                    if channelValue > 255 or channelValue < 0:
+                        raise Exception("The channel value input is not in the range 0-255")
+                    else:
+                        self.universeChannelValues[channelNumber-1] = channelValue #-1 as the array is 0 indexed but the channels are not
+
+    def getChannelValue(self,channelNumber):
+        numberIsInteger = self.checkIfInteger(channelNumber)
+        if numberIsInteger:
+            if channelNumber > 512 or channelNumber < 1:
+                raise Exception("The channel number input is not in the range 1-512")
+            else:
+                return self.universeChannelValues[channelNumber-1]#-1 as the array is 0 indexed but the channels are not
+
+    def checkIfInteger(self,channel):
+        try:
+            channel = int(channel)
+            return True
+        except:
+            raise Exception("The channel trying to be changed is not an integer.")
+            return False
 
     def universeChanged(self):
         if self.raspberryPiDMXMode:
@@ -222,11 +250,7 @@ class LightDisplay(QWidget):
                 pass
             if not self.universeLock:
                 for i in range(len(self.universeChannelValues)):
-                    # print(int(i),int(self.universeChannelValues[i]))
-                    if i==0:
-                        pass
-                    else:
-                        self.dmx.set_data(int(i),int(self.universeChannelValues[i]))  #should be int(i+1) Dont know why I have done it like this
+                    self.dmx.set_data(int(i+1),int(self.universeChannelValues[i+1]))  #should be int(i+1) Dont know why I have done it like this
         elif self.dmxOffMode:
             pass
         else:

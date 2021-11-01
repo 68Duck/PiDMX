@@ -30,13 +30,14 @@ class Light(object):
         else:
             self.lightDisplay.universeLock = True
             for i in range(len(self.channelValues)):
-                self.lightDisplay.universeChannelValues[self.startChannel+i] = self.channelValues[i]
+                self.lightDisplay.updateChannel(self.startChannel+i,self.channelValues[i])
+                # self.lightDisplay.universeChannelValues[self.startChannel+i] = self.channelValues[i]
             self.lightDisplay.universeLock = False
             if updateUniverse:
                 self.lightDisplay.universeChanged()
     def updateChannelValuesFromUniverse(self):
         for i in range(len(self.channelValues)):
-            self.channelValues[i] = self.lightDisplay.universeChannelValues[self.startChannel+i]
+            self.channelValues[i] = self.lightDisplay.getChannelValue(self.startChannel+i)
     def returnChannelValues(self):
         return self.channelValues
     def updateChannelValues(self):
