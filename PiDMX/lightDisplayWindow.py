@@ -269,7 +269,7 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
 
     def playbackButtonClicked(self):
         self.playbackWindow = PlaybackWindow(self,self.dataBaseManager,self.lightDisplay)
-        self.playbackWindow.show()
+        # self.playbackWindow.show()
 
     def recordPlaybackClicked(self):
         if self.rigID == None:

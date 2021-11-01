@@ -23,6 +23,11 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
         self.deleteButton.clicked.connect(self.deleteButtonClicked)
 
         self.savedPlaybacks = self.dataBaseManager.getCurrentRigsPlaybacks(self.visualLightDisplay.rigID)
+        if len(self.savedPlaybacks) == 0:
+            self.errorWindow = ErrorWindow("There are no playbacks saved. Try saving a playback first.")
+            self.close()
+        else:
+            self.show()
 
         for playback in self.savedPlaybacks:
             self.dropDown.addItem(playback["Name"])  #playback[3] is the playback name
