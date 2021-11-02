@@ -25,6 +25,19 @@ class SequenceParentDisplayLight(QWidget):
         for shape in self.shapes:
             shape.hide()
 
+    def hexValueForChannel(self,channel):
+        channel = hex(channel)
+        channel = channel[2:len(channel)]
+        if len(channel) < 2:
+            channel = "0" + channel
+        return str(channel)
+
+    def hexValueForRGB(self,red,green,blue):
+        red = self.hexValueForChannel(red)
+        green = self.hexValueForChannel(green)
+        blue = self.hexValueForChannel(blue)
+        return red+green+blue
+
     def convertColour(self,colour):
         red = colour.red()
         green = colour.green()
@@ -191,6 +204,11 @@ class DatabaseSequenceDisplayLight(SequenceParentDisplayLight):
 class SequenceDisplayLight(SequenceParentDisplayLight):
     def __init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType):
         SequenceParentDisplayLight.__init__(self,lightDisplay,sequenceWindow,lightName,xPos,yPos,addingLightType)
+        self.channelNumber = lightName[len(addingLightType):len(lightName)]
+        # self.indicators = []
+        for light in lightDisplay.lights:
+            if int(self.channelNumber) == int(light.startChannel):
+                self.light = light
 
     def createShapes(self):
         self.border = self.createShape(self.xPos-35,self.yPos-35,80,80,20)
@@ -306,19 +324,6 @@ class SequenceDisplayLight2Small(SequenceParentDisplayLight):
     def changeColour(self,colour):
         colour = self.convertColour(colour)
         self.box.setStyleSheet(f'background-color: #{colour}; border-radius: {1}px;border: 3px solid #{colour};')
-
-    def hexValueForChannel(self,channel):
-        channel = hex(channel)
-        channel = channel[2:len(channel)]
-        if len(channel) < 2:
-            channel = "0" + channel
-        return str(channel)
-
-    def hexValueForRGB(self,red,green,blue):
-        red = self.hexValueForChannel(red)
-        green = self.hexValueForChannel(green)
-        blue = self.hexValueForChannel(blue)
-        return red+green+blue
 
     def changeColourAccordingToFixture(self):
         channelNumber = int(self.lightName[len(self.lightType):len(self.lightName)])-3*(self.boxNumber-1)
