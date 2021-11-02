@@ -299,9 +299,11 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
         self.dataBaseManager.insertRecord("Playbacks",[None,nextPlaybackID,self.rigID,self.playbackName])
         #possbly needs universe lock here
         # currentChannelValues = self.lightDisplay.universeChannelValues
+        self.recordsToInsert = []
         for i in range(len(self.lightDisplay.channelsOccupied)):
             if self.lightDisplay.channelsOccupied[i] == 1:
-                self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,i+1,self.lightDisplay.getChannelValue(i+1)])
+                self.recordsToInsert.append([None,i+1,self.lightDisplay.getChannelValue(i+1)])
+                # self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,i+1,self.lightDisplay.getChannelValue(i+1)])
         if self.lightDisplay.runningRainbow:
             rainbowValue = self.effectsWindow.rainbowDelay
         else:
@@ -310,11 +312,15 @@ class LightDisplayWindow(QMainWindow,uic.loadUiType(os.path.join("ui","lightDisp
             chaserValue = self.effectsWindow.chaserDelay
         else:
             chaserValue = False
-        self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,"rainbow",rainbowValue])
-        self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,"chaser",chaserValue])  #add other effects when created here
+        self.recordsToInsert.append([None,"rainbow",rainbowValue])
+        self.recordsToInsert.append([None,"chaser",chaserValue])
+        # self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,"rainbow",rainbowValue])
+        # self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,"chaser",chaserValue])  #add other effects when created here
         for i in range(len(self.selectedLights)):
-            self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,"SelectedLight",str(self.selectedLights[i].channelNumber)])
+            self.recordsToInsert.append([None,"SelectedLight",str(self.selectedLights[i].channelNumber)])
+            # self.dataBaseManager.insertRecord("playback"+str(nextPlaybackID),[None,"SelectedLight",str(self.selectedLights[i].channelNumber)])
         self.playbackName = None  #reset to none for next time
+        self.dataBaseManager.insertMultipleRecords("playback"+str(nextPlaybackID),self.recordsToInsert)
 
     def getNextPlaybackID(self):
         exisits = True

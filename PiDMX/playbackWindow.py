@@ -113,3 +113,7 @@ class PlaybackWindow(QWidget,uic.loadUiType(os.path.join("ui","playbackWindow.ui
                 self.dataBaseManager.dropPlaybackTable(self.visualLightDisplay.rigID,playbackToDelete)
                 self.dataBaseManager.deletePlaybackFromPlaybacksTable(self.visualLightDisplay.rigID,playbackToDelete)
             self.close()
+
+    def keyPressEvent(self,e):
+        if e.key() == Qt.Key_Return:
+            self.runButtonClicked()
