@@ -15,7 +15,7 @@ to install all of the required imports.
 
 # Features
 
-Allows the controlling of lights using DMX (digital multiplex) with a USB to DMX cable. This can be plugged directly into a computer or plugged into a raspberry pi and run though there via SSH. 
+Allows the controlling of lights using DMX (digital multiplex) with a USB to DMX cable. This can be plugged directly into a computer or plugged into a raspberry pi and run through there via SSH. 
 
 You can create your own lighting rig by moving around fixtures on the screen by patching them using the patch button. Then just click on the light to control the light.
 
